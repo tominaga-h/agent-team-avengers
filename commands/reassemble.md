@@ -1,7 +1,7 @@
 # /reassemble - リアセンブル
 
 全チームのコンテキストをコンパクトし、ロール（役割指示）を再注入する。
-チームの陣形を整え直すコマンド。
+チーム体制を再構築するコマンド。
 
 ## 実行手順
 
@@ -35,7 +35,7 @@ SendMessage(type="broadcast", content="/compact を実行せよ。完了した�
 1. `${AVENGERS_ROOT}/instructions/nick_fury_core.md` — Fury の指示書（コア）
 2. `${AVENGERS_ROOT}/CLAUDE.md` — 全体ルール
 3. `.avengers/status/fury_context.md` — Fury の状況認識
-4. `.avengers/dashboard.md` — 現在の戦況
+4. `.avengers/dashboard.md` — 現在のダッシュボード
 5. `TaskList` — 全タスクの進捗
 
 **「Fury のみ」モードの場合はここで完了。** 以下を Hayato に報告:
@@ -53,7 +53,7 @@ SendMessage(type="broadcast", content="/compact を実行せよ。完了した�
 ■ 現在の状況認識
 （fury_context.md と dashboard.md から要約）
 
-チームの陣形を整え直した。続行する。
+チーム体制を再構築した。続行する。
 ```
 
 ### 4. Agent Teams でロール再注入を指示
@@ -101,7 +101,7 @@ SendMessage(type="message", recipient="shuri", content="コンパクション復
 | Marvel | 完了 | 完了 |
 | Shuri | 完了 | 完了 |
 
-チームの陣形を整え直した。続行する。
+チーム体制を再構築した。続行する。
 ```
 
 ## 注意事項

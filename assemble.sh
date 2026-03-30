@@ -28,7 +28,7 @@ fi
 # JARVIS / Bruce / Strange / Tony / Peter / Cap / Marvel / Shuri
 TEAM_MEMBER_COUNT=8
 
-# 色付きログ関数（戦国風）
+# 色付きログ関数
 log_info() {
     echo -e "\033[1;33m【報】\033[0m $1"
 }
@@ -37,8 +37,8 @@ log_success() {
     echo -e "\033[1;32m【成】\033[0m $1"
 }
 
-log_war() {
-    echo -e "\033[1;31m【戦】\033[0m $1"
+log_action() {
+    echo -e "\033[1;31m【⚡】\033[0m $1"
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -90,20 +90,20 @@ done
 # 出典: https://github.com/syntax-samurai/ryu
 # "all files and scripts in this repo are released CC0 / kopimi!"
 # ═══════════════════════════════════════════════════════════════════════════════
-show_battle_cry() {
+show_assemble_banner() {
     clear
 
     # タイトルバナー（色付き）
     echo ""
     echo -e "\033[1;31m╔══════════════════════════════════════════════════════════════════════════════════╗\033[0m"
-    echo -e "\033[1;31m║\033[0m \033[1;33m███████╗██╗  ██╗██╗   ██╗████████╗███████╗██╗   ██╗     ██╗██╗███╗   ██╗\033[0m \033[1;31m║\033[0m"
-    echo -e "\033[1;31m║\033[0m \033[1;33m██╔════╝██║  ██║██║   ██║╚══██╔══╝██╔════╝██║   ██║     ██║██║████╗  ██║\033[0m \033[1;31m║\033[0m"
-    echo -e "\033[1;31m║\033[0m \033[1;33m███████╗███████║██║   ██║   ██║   ███████╗██║   ██║     ██║██║██╔██╗ ██║\033[0m \033[1;31m║\033[0m"
-    echo -e "\033[1;31m║\033[0m \033[1;33m╚════██║██╔══██║██║   ██║   ██║   ╚════██║██║   ██║██   ██║██║██║╚██╗██║\033[0m \033[1;31m║\033[0m"
-    echo -e "\033[1;31m║\033[0m \033[1;33m███████║██║  ██║╚██████╔╝   ██║   ███████║╚██████╔╝╚█████╔╝██║██║ ╚████║\033[0m \033[1;31m║\033[0m"
-    echo -e "\033[1;31m║\033[0m \033[1;33m╚══════╝╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚══════╝ ╚═════╝  ╚════╝ ╚═╝╚═╝  ╚═══╝\033[0m \033[1;31m║\033[0m"
+    echo -e "\033[1;31m║\033[0m \033[1;33m █████╗ ███████╗███████╗███████╗███╗   ███╗██████╗ ██╗     ███████╗\033[0m \033[1;31m║\033[0m"
+    echo -e "\033[1;31m║\033[0m \033[1;33m██╔══██╗██╔════╝██╔════╝██╔════╝████╗ ████║██╔══██╗██║     ██╔════╝\033[0m \033[1;31m║\033[0m"
+    echo -e "\033[1;31m║\033[0m \033[1;33m███████║███████╗███████╗█████╗  ██╔████╔██║██████╔╝██║     █████╗  \033[0m \033[1;31m║\033[0m"
+    echo -e "\033[1;31m║\033[0m \033[1;33m██╔══██║╚════██║╚════██║██╔══╝  ██║╚██╔╝██║██╔══██╗██║     ██╔══╝  \033[0m \033[1;31m║\033[0m"
+    echo -e "\033[1;31m║\033[0m \033[1;33m██║  ██║███████║███████║███████╗██║ ╚═╝ ██║██████╔╝███████╗███████╗\033[0m \033[1;31m║\033[0m"
+    echo -e "\033[1;31m║\033[0m \033[1;33m╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝     ╚═╝╚═════╝ ╚══════╝╚══════╝\033[0m \033[1;31m║\033[0m"
     echo -e "\033[1;31m╠══════════════════════════════════════════════════════════════════════════════════╣\033[0m"
-    echo -e "\033[1;31m║\033[0m       \033[1;37mAvengers Assembleじゃーーー！！！\033[0m    \033[1;36m⚔\033[0m    \033[1;35m天下布武！\033[0m                          \033[1;31m║\033[0m"
+    echo -e "\033[1;31m║\033[0m       \033[1;37mAvengers Assemble！！！\033[0m    \033[1;36m⚡\033[0m    \033[1;35mEarth's Mightiest Heroes！\033[0m                          \033[1;31m║\033[0m"
     echo -e "\033[1;31m╚══════════════════════════════════════════════════════════════════════════════════╝\033[0m"
     echo ""
 
@@ -124,7 +124,7 @@ show_battle_cry() {
     echo "     JARVIS  Bruce  Strange  Tony   Peter    Cap   Marvel  Shuri  "
     echo ""
 
-    echo -e "                    \033[1;36m「「「 はっ！！ Avengers Assembleいたす！！ 」」」\033[0m"
+    echo -e "                    \033[1;36m「「「 Avengers Assemble！！ 」」」\033[0m"
     echo ""
 
     # ═══════════════════════════════════════════════════════════════════════════
@@ -140,12 +140,12 @@ show_battle_cry() {
 }
 
 # バナー表示実行
-show_battle_cry
+show_assemble_banner
 
 if [ "$RESUME_MODE" = true ]; then
-    echo -e "  \033[1;33m再開！前回の陣を引き継ぐぞ\033[0m"
+    echo -e "  \033[1;33m再開！前回のセッションを引き継ぐぞ\033[0m"
 else
-    echo -e "  \033[1;33m天下布武！Avengers Assemble準備を開始いたす\033[0m"
+    echo -e "  \033[1;33mAvengers Assemble 準備を開始する\033[0m"
 fi
 echo ""
 log_info "作業ディレクトリ: ${WORK_DIR}"
@@ -331,25 +331,25 @@ fi
 # STEP 5: ダッシュボード初期化（resume 時はスキップ）
 # ═══════════════════════════════════════════════════════════════════════════════
 if [ "$RESUME_MODE" = true ] && [ -f "${DASHBOARD_PATH}" ]; then
-    log_info "📊 戦況報告板は前回のものを引き継ぎ"
+    log_info "📊 ダッシュボードは前回のものを引き継ぎ"
     echo ""
 else
-    log_info "📊 戦況報告板を初期化中..."
+    log_info "📊 ダッシュボードを初期化中..."
     TIMESTAMP=$(date "+%Y-%m-%d %H:%M")
 
     if [ "$LANG_SETTING" = "ja" ]; then
         cat > "${DASHBOARD_PATH}" << EOF
-# 📊 戦況報告
+# 📊 ダッシュボード
 最終更新: ${TIMESTAMP}
 
-## 🚨 要対応 - Hayato のご判断をお待ちしております
+## 🚨 要対応 - Hayato の判断をお待ちしています
 なし
 
-## 🔄 進行中 - 只今、戦闘中でござる
+## 🔄 進行中
 なし
 
-## ✅ 本日の戦果
-| 時刻 | 戦場 | 任務 | 結果 |
+## ✅ 本日の成果
+| 時刻 | プロジェクト | 任務 | 結果 |
 |------|------|------|------|
 
 ## 🎯 スキル化候補 - 承認待ち
@@ -366,17 +366,17 @@ else
 EOF
     else
         cat > "${DASHBOARD_PATH}" << EOF
-# 📊 戦況報告 (Battle Status Report)
+# 📊 Dashboard (ダッシュボード)
 最終更新 (Last Updated): ${TIMESTAMP}
 
-## 🚨 要対応 - Hayato のご判断をお待ちしております (Action Required - Awaiting Hayato's Decision)
+## 🚨 Action Required (要対応)
 なし (None)
 
-## 🔄 進行中 - 只今、戦闘中でござる (In Progress - Currently in Battle)
+## 🔄 In Progress (進行中)
 なし (None)
 
-## ✅ 本日の戦果 (Today's Achievements)
-| 時刻 (Time) | 戦場 (Battlefield) | 任務 (Mission) | 結果 (Result) |
+## ✅ Today's Results (本日の成果)
+| Time (時刻) | Project (プロジェクト) | Mission (任務) | Result (結果) |
 |------|------|------|------|
 
 ## 🎯 スキル化候補 - 承認待ち (Skill Candidates - Pending Approval)
@@ -481,7 +481,7 @@ fi
 # tmux hook (after-split-window) により、Agent Teams が fury 内に spawn した
 # チームメイトの pane を自動的に avengers セッションに移動する。
 
-log_war "👑 Fury の本陣を構築中..."
+log_action "👑 Fury の司令室を構築中..."
 
 # 既存セッションをクリーンアップ
 tmux kill-session -t "${TMUX_FURY}" 2>/dev/null && log_info "  └─ 既存の ${TMUX_FURY} セッション撤収" || true
@@ -503,7 +503,7 @@ tmux new-session -d -s "${TMUX_FURY}" -n "fury" \
     "cd '${WORK_DIR}' && WORK_DIR='${WORK_DIR}' AVENGERS_DATA_DIR='${AVENGERS_DATA_DIR}' '${AVENGERS_ROOT}/scripts/claude-avengers' --dangerously-skip-permissions ${CLAUDE_EXTRA_ARGS}"
 tmux set-option -t "${TMUX_FURY}" pane-base-index 0
 
-# チームメイト用 tmux セッション（配下の陣）
+# チームメイト用 tmux セッション
 tmux new-session -d -s "${TMUX_AVENGERS}" -n "agents"
 tmux set-option -t "${TMUX_AVENGERS}" pane-base-index 0
 INITIAL_PANE=$(tmux display-message -t "${TMUX_AVENGERS}:agents" -p '#{pane_id}')
@@ -544,8 +544,8 @@ chmod +x "${HOOK_SCRIPT}"
 tmux set-hook -t "${TMUX_FURY}" after-split-window \
     "move-pane -t ${TMUX_AVENGERS}:agents ; run-shell -b '${HOOK_SCRIPT}'"
 
-log_success "  └─ Fury の本陣（${TMUX_FURY}）構築完了"
-log_success "  └─ 配下の陣（${TMUX_AVENGERS}）構築完了"
+log_success "  └─ Fury の司令室（${TMUX_FURY}）構築完了"
+log_success "  └─ チーム基地（${TMUX_AVENGERS}）構築完了"
 log_success "  └─ 自動配備フック設定完了"
 echo ""
 
@@ -555,7 +555,7 @@ echo ""
 # Claude Code が起動完了するまで待機し、チーム構成指示を自動送信する。
 # これにより、旧システムと同様に起動時に全エージェントが配備される。
 
-log_war "⏳ Fury の起動を待機中..."
+log_action "⏳ Fury の起動を待機中..."
 
 # Claude Code の起動完了を待つ（プロンプト表示を検知）
 READY=false
@@ -640,11 +640,11 @@ echo ""
 echo ""
 if [ "$RESUME_MODE" = true ]; then
     echo "  ╔══════════════════════════════════════════════════════════╗"
-    echo "  ║  🛡️ 再開完了！前回の陣を引き継ぐ！                     ║"
+    echo "  ║  🛡️ 再開完了！前回のセッションを引き継ぐ！                     ║"
     echo "  ╚══════════════════════════════════════════════════════════╝"
 else
     echo "  ╔══════════════════════════════════════════════════════════╗"
-    echo "  ║  🛡️ Avengers Assemble準備完了！天下布武！                              ║"
+    echo "  ║  🛡️ Avengers Assemble 準備完了！                              ║"
     echo "  ╚══════════════════════════════════════════════════════════╝"
 fi
 echo ""
@@ -652,7 +652,7 @@ echo ""
 echo "  ┌──────────────────────────────────────────────────────────┐"
 echo "  │  Agent Teams 方式（tmux モード）                         │"
 echo "  │                                                          │"
-echo "  │  Fury（${TMUX_FURY}）と配下（${TMUX_AVENGERS}）の2陣を構築。"
+echo "  │  Fury（${TMUX_FURY}）とチーム（${TMUX_AVENGERS}）の2セッションを構築。"
 echo "  │  チーム構成指示を自動送信済み。                          │"
 echo "  │  Agent Teams がチームメイトを avengers に自動配備。    │"
 echo "  │                                                          │"
@@ -678,6 +678,6 @@ echo "  │    .avengers/bin/disassemble.sh                            │"
 echo "  └──────────────────────────────────────────────────────────┘"
 echo ""
 echo "  ════════════════════════════════════════════════════════════"
-echo "   天下布武！勝利を掴め！ (Tenka Fubu! Seize victory!)"
+echo "   Avengers Assemble！ Earth's Mightiest Heroes！"
 echo "  ════════════════════════════════════════════════════════════"
 echo ""

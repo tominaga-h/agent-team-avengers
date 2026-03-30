@@ -14,7 +14,7 @@ set -e
 # Avengers Multi-Agent System のルートディレクトリ
 AVENGERS_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# 色付きログ関数（戦国風）
+# 色付きログ関数
 log_info() {
     echo -e "\033[1;33m【報】\033[0m $1"
 }
@@ -133,13 +133,13 @@ if [ -d "$TEAM_DIR" ] || [ -d "$TASK_DIR" ]; then
 fi
 
 if [ "$FURY_EXISTS" = false ] && [ "$AVENGERS_EXISTS" = false ] && [ "$TEAM_DATA_EXISTS" = false ]; then
-    log_info "陣は既に撤収済みでござる（セッション・チームデータなし）"
+    log_info "既に解散済みです（セッション・チームデータなし）"
     echo ""
     exit 0
 fi
 
 # 現在の状態を表示
-log_info "現在の陣容:"
+log_info "現在の状態:"
 [ "$FURY_EXISTS" = true ] && log_info "  ├─ tmux: ${TMUX_FURY} セッション ... 稼働中"
 [ "$AVENGERS_EXISTS" = true ] && log_info "  ├─ tmux: ${TMUX_AVENGERS} セッション ... 稼働中"
 [ "$TEAM_DATA_EXISTS" = true ] && log_info "  ├─ Agent Teams: チームデータ (${TEAM_NAME}) ... 存在"
@@ -165,7 +165,7 @@ if [ "$FORCE_MODE" = false ]; then
     fi
 
     if [ "$NEED_BACKUP" = true ]; then
-        log_info "📦 戦況記録をバックアップ中..."
+        log_info "📦 ダッシュボードをバックアップ中..."
         mkdir -p "$BACKUP_DIR" || true
 
         # dashboard.md のバックアップ
@@ -228,16 +228,16 @@ $(echo "$task_description" | sed 's/^/      /')
         SAVED_AT=$(date "+%Y-%m-%d %H:%M")
         {
             echo "# 未完了タスク一覧（Disassemble時自動保存）"
-            echo "# 再出陣時にFuryが読み込み、JARVISにタスクを再割り当てする"
+            echo "# 再アセンブル時にFuryが読み込み、JARVISにタスクを再割り当てする"
             echo "saved_at: \"${SAVED_AT}\""
             echo "tasks:"
             printf '%s' "$PENDING_ENTRIES"
         } > "$PENDING_YAML"
-        log_info "📜 未完了の陣立て ${PENDING_COUNT} 件を保存いたした"
+        log_info "📜 未完了タスク ${PENDING_COUNT} 件を保存した"
         log_success "  └─ 保存先: ${PENDING_YAML}"
         echo ""
     else
-        log_info "📜 未完了の陣立てなし（全任務完了済み）"
+        log_info "📜 未完了タスクなし（全任務完了済み）"
         echo ""
     fi
 fi
@@ -246,7 +246,7 @@ fi
 # FuryセッションID保存（-f モードでない場合）
 # ═══════════════════════════════════════════════════════════════════════════════
 # Claude Code のセッションファイルは ~/.claude/projects/<sanitized-path>/<uuid>.jsonl
-# に保存される。FuryのセッションIDを保存しておくと再出陣時に --continue で復元できる。
+# に保存される。FuryのセッションIDを保存しておくと再アセンブル時に --continue で復元できる。
 SESSION_ID_FILE="${STATUS_DIR}/fury_session_id"
 
 if [ "$FORCE_MODE" = false ] && [ "$FURY_EXISTS" = true ]; then
@@ -274,20 +274,20 @@ fi
 # ═══════════════════════════════════════════════════════════════════════════════
 # Disassemble処理
 # ═══════════════════════════════════════════════════════════════════════════════
-log_disassemble "🏯 全軍Disassemble開始..."
+log_disassemble "🏯 全チーム Disassemble 開始..."
 echo ""
 
 # STEP 1: tmux セッション終了（Claude Code プロセスも終了する）
 if [ "$AVENGERS_EXISTS" = true ]; then
-    log_disassemble "  └─ JARVIS・Bruce・Workerの陣を撤収中..."
+    log_disassemble "  └─ JARVIS・Bruce・Worker のセッションを終了中..."
     tmux kill-session -t "${TMUX_AVENGERS}" 2>/dev/null
-    log_success "     └─ ${TMUX_AVENGERS} 陣、撤収完了"
+    log_success "     └─ ${TMUX_AVENGERS} セッション終了"
 fi
 
 if [ "$FURY_EXISTS" = true ]; then
-    log_disassemble "  └─ Furyの本陣を撤収中..."
+    log_disassemble "  └─ Fury の司令室を終了中..."
     tmux kill-session -t "${TMUX_FURY}" 2>/dev/null
-    log_success "     └─ ${TMUX_FURY} 本陣、撤収完了"
+    log_success "     └─ ${TMUX_FURY} セッション終了"
 fi
 
 # STEP 2: Agent Teams チームデータのクリーンアップ
@@ -311,12 +311,12 @@ echo ""
 # 完了メッセージ
 # ═══════════════════════════════════════════════════════════════════════════════
 echo -e "\033[1;36m  ╔══════════════════════════════════════════════════════════╗\033[0m"
-echo -e "\033[1;36m  ║\033[0m  \033[1;37m🏯 Disassemble完了！本日の戦、お疲れ様でござった！\033[0m              \033[1;36m║\033[0m"
+echo -e "\033[1;36m  ║\033[0m  \033[1;37m🏯 Disassemble 完了！お疲れ様でした！\033[0m              \033[1;36m║\033[0m"
 echo -e "\033[1;36m  ╚══════════════════════════════════════════════════════════╝\033[0m"
 echo ""
-echo "  次回出陣するには:"
+echo "  次回アセンブルするには:"
 echo "  ┌──────────────────────────────────────────────────────────┐"
-echo "  │  新規出陣:                                                │"
+echo "  │  新規アセンブル:                                                │"
 echo "  │    .avengers/bin/assemble.sh                               │"
 if [ -f "$SESSION_ID_FILE" ]; then
 echo "  │                                                          │"
@@ -326,6 +326,6 @@ fi
 echo "  └──────────────────────────────────────────────────────────┘"
 echo ""
 echo "  ════════════════════════════════════════════════════════════"
-echo "   また明日も勝利を掴もうぞ！ (Let's seize victory again!)"
+echo "   See you next mission！"
 echo "  ════════════════════════════════════════════════════════════"
 echo ""
