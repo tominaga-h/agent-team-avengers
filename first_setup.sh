@@ -21,19 +21,19 @@ BOLD='\033[1m'
 
 # アイコン付きログ関数
 log_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
+    echo -e "${BLUE}[J.A.R.V.I.S.]${NC} $1"
 }
 
 log_success() {
-    echo -e "${GREEN}[OK]${NC} $1"
+    echo -e "${GREEN}[J.A.R.V.I.S.]${NC} $1"
 }
 
 log_warn() {
-    echo -e "${YELLOW}[WARN]${NC} $1"
+    echo -e "${YELLOW}[J.A.R.V.I.S.]${NC} $1"
 }
 
 log_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
+    echo -e "${RED}[J.A.R.V.I.S.]${NC} $1"
 }
 
 log_step() {
@@ -62,14 +62,14 @@ echo ""
 # ============================================================
 # STEP 1: OS チェック
 # ============================================================
-log_step "STEP 1: システム環境チェック"
+log_step "STEP 1: システム環境のチェックを行います"
 
 # OS情報を取得
 if [ -f /etc/os-release ]; then
     . /etc/os-release
     OS_NAME=$NAME
     OS_VERSION=$VERSION_ID
-    log_info "OS: $OS_NAME $OS_VERSION"
+    log_info "OS を確認いたしました: $OS_NAME $OS_VERSION"
 else
     OS_NAME="Unknown"
     log_warn "OS情報を取得できませんでした"
@@ -77,10 +77,10 @@ fi
 
 # WSL チェック
 if grep -qi microsoft /proc/version 2>/dev/null; then
-    log_info "環境: WSL (Windows Subsystem for Linux)"
+    log_info "環境を確認いたしました: WSL (Windows Subsystem for Linux)"
     IS_WSL=true
 else
-    log_info "環境: Native Linux"
+    log_info "環境を確認いたしました: Native Linux"
     IS_WSL=false
 fi
 
@@ -89,14 +89,14 @@ RESULTS+=("システム環境: OK")
 # ============================================================
 # STEP 2: tmux チェック・インストール
 # ============================================================
-log_step "STEP 2: tmux チェック"
+log_step "STEP 2: tmux のチェックを行います"
 
 if command -v tmux &> /dev/null; then
     TMUX_VERSION=$(tmux -V | awk '{print $2}')
-    log_success "tmux がインストール済みです (v$TMUX_VERSION)"
+    log_success "tmux のインストールを確認いたしました (v$TMUX_VERSION)"
     RESULTS+=("tmux: OK (v$TMUX_VERSION)")
 else
-    log_warn "tmux がインストールされていません"
+    log_warn "tmux がインストールされておりません"
     echo ""
 
     # Ubuntu/Debian系かチェック
@@ -108,10 +108,10 @@ else
         fi
         REPLY=${REPLY:-Y}
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-            log_info "tmux をインストール中..."
+            log_info "tmux のインストールを行っております..."
             if ! sudo -n apt-get update -qq 2>/dev/null; then
                 if ! sudo apt-get update -qq 2>/dev/null; then
-                    log_error "sudo の実行に失敗しました。ターミナルから直接実行してください"
+                    log_error "sudo の実行に失敗いたしました。ターミナルから直接実行してください"
                     RESULTS+=("tmux: インストール失敗 (sudo失敗)")
                     HAS_ERROR=true
                 fi
@@ -120,7 +120,7 @@ else
             if [ "$HAS_ERROR" != true ]; then
                 if ! sudo -n apt-get install -y tmux 2>/dev/null; then
                     if ! sudo apt-get install -y tmux 2>/dev/null; then
-                        log_error "tmux のインストールに失敗しました"
+                        log_error "tmux のインストールに失敗いたしました"
                         RESULTS+=("tmux: インストール失敗")
                         HAS_ERROR=true
                     fi
@@ -129,20 +129,20 @@ else
 
             if command -v tmux &> /dev/null; then
                 TMUX_VERSION=$(tmux -V | awk '{print $2}')
-                log_success "tmux インストール完了 (v$TMUX_VERSION)"
+                log_success "tmux のインストールが完了いたしました (v$TMUX_VERSION)"
                 RESULTS+=("tmux: インストール完了 (v$TMUX_VERSION)")
             else
-                log_error "tmux のインストールに失敗しました"
+                log_error "tmux のインストールに失敗いたしました"
                 RESULTS+=("tmux: インストール失敗")
                 HAS_ERROR=true
             fi
         else
-            log_warn "tmux のインストールをスキップしました"
+            log_warn "tmux のインストールをスキップいたしました"
             RESULTS+=("tmux: 未インストール (スキップ)")
             HAS_ERROR=true
         fi
     else
-        log_error "apt-get が見つかりません。手動で tmux をインストールしてください"
+        log_error "apt-get が見つかりません。恐れ入りますが手動で tmux をインストールしてください"
         echo ""
         echo "  インストール方法:"
         echo "    Ubuntu/Debian: sudo apt-get install tmux"
@@ -156,31 +156,31 @@ fi
 # ============================================================
 # STEP 2.5: tmux マウススクロール設定
 # ============================================================
-log_step "STEP 2.5: tmux マウススクロール設定"
+log_step "STEP 2.5: tmux マウススクロール設定を確認いたします"
 
 TMUX_CONF="$HOME/.tmux.conf"
 TMUX_MOUSE_SETTING="set -g mouse on"
 
 if [ -f "$TMUX_CONF" ] && grep -qF "$TMUX_MOUSE_SETTING" "$TMUX_CONF" 2>/dev/null; then
-    log_info "tmux マウス設定は既に ~/.tmux.conf に存在します"
+    log_info "tmux マウス設定は既に ~/.tmux.conf に存在しております"
 else
-    log_info "~/.tmux.conf に '$TMUX_MOUSE_SETTING' を追加中..."
+    log_info "~/.tmux.conf に '$TMUX_MOUSE_SETTING' を追加いたします..."
     echo "" >> "$TMUX_CONF"
     echo "# マウススクロール有効化 (added by first_setup.sh)" >> "$TMUX_CONF"
     echo "$TMUX_MOUSE_SETTING" >> "$TMUX_CONF"
-    log_success "tmux マウス設定を追加しました"
+    log_success "tmux マウス設定を追加いたしました"
 fi
 
 # tmux が起動中の場合は即反映
 if command -v tmux &> /dev/null && tmux list-sessions &> /dev/null; then
-    log_info "tmux が起動中のため、設定を即反映します..."
+    log_info "tmux が起動中のため、設定を即座に反映いたします..."
     if tmux source-file "$TMUX_CONF" 2>/dev/null; then
-        log_success "tmux 設定を再読み込みしました"
+        log_success "tmux 設定を再読み込みいたしました"
     else
-        log_warn "tmux 設定の再読み込みに失敗しました（手動で tmux source-file ~/.tmux.conf を実行してください）"
+        log_warn "tmux 設定の再読み込みに失敗いたしました（手動で tmux source-file ~/.tmux.conf を実行してください）"
     fi
 else
-    log_info "tmux は起動していないため、次回起動時に反映されます"
+    log_info "tmux は起動しておりません。次回起動時に反映されます"
 fi
 
 RESULTS+=("tmux マウス設定: OK")
@@ -188,28 +188,28 @@ RESULTS+=("tmux マウス設定: OK")
 # ============================================================
 # STEP 3: Node.js チェック
 # ============================================================
-log_step "STEP 3: Node.js チェック"
+log_step "STEP 3: Node.js のチェックを行います"
 
 if command -v node &> /dev/null; then
     NODE_VERSION=$(node -v)
-    log_success "Node.js がインストール済みです ($NODE_VERSION)"
+    log_success "Node.js のインストールを確認いたしました ($NODE_VERSION)"
 
     # バージョンチェック（18以上推奨）
     NODE_MAJOR=$(echo $NODE_VERSION | cut -d'.' -f1 | tr -d 'v')
     if [ "$NODE_MAJOR" -lt 18 ]; then
-        log_warn "Node.js 18以上を推奨します（現在: $NODE_VERSION）"
+        log_warn "Node.js 18以上を推奨いたします（現在: $NODE_VERSION）"
         RESULTS+=("Node.js: OK (v$NODE_MAJOR - 要アップグレード推奨)")
     else
         RESULTS+=("Node.js: OK ($NODE_VERSION)")
     fi
 else
-    log_warn "Node.js がインストールされていません"
+    log_warn "Node.js がインストールされておりません"
     echo ""
 
     # nvm が既にインストール済みか確認
     export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
     if [ -s "$NVM_DIR/nvm.sh" ]; then
-        log_info "nvm が既にインストール済みです。Node.js をセットアップ中..."
+        log_info "nvm のインストールを確認いたしました。Node.js をセットアップいたします..."
         \. "$NVM_DIR/nvm.sh"
     else
         # nvm 自動インストール
@@ -220,12 +220,12 @@ else
         fi
         REPLY=${REPLY:-Y}
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-            log_info "nvm をインストール中..."
+            log_info "nvm のインストールを行っております..."
             curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
         else
-            log_warn "Node.js のインストールをスキップしました"
+            log_warn "Node.js のインストールをスキップいたしました"
             echo ""
             echo "  手動でインストールする場合:"
             echo "    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash"
@@ -239,21 +239,21 @@ else
 
     # nvm が利用可能なら Node.js をインストール
     if command -v nvm &> /dev/null; then
-        log_info "Node.js 20 をインストール中..."
+        log_info "Node.js 20 のインストールを行っております..."
         nvm install 20 || true
         nvm use 20 || true
 
         if command -v node &> /dev/null; then
             NODE_VERSION=$(node -v)
-            log_success "Node.js インストール完了 ($NODE_VERSION)"
+            log_success "Node.js のインストールが完了いたしました ($NODE_VERSION)"
             RESULTS+=("Node.js: インストール完了 ($NODE_VERSION)")
         else
-            log_error "Node.js のインストールに失敗しました"
+            log_error "Node.js のインストールに失敗いたしました"
             RESULTS+=("Node.js: インストール失敗")
             HAS_ERROR=true
         fi
     elif [ "$HAS_ERROR" != true ]; then
-        log_error "nvm のインストールに失敗しました"
+        log_error "nvm のインストールに失敗いたしました"
         echo ""
         echo "  手動でインストールしてください:"
         echo "    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash"
@@ -268,10 +268,10 @@ fi
 # npm チェック
 if command -v npm &> /dev/null; then
     NPM_VERSION=$(npm -v)
-    log_success "npm がインストール済みです (v$NPM_VERSION)"
+    log_success "npm のインストールを確認いたしました (v$NPM_VERSION)"
 else
     if command -v node &> /dev/null; then
-        log_warn "npm が見つかりません（Node.js と一緒にインストールされるはずです）"
+        log_warn "npm が見つかりません（Node.js と一緒にインストールされるはずでございます）"
     fi
 fi
 
@@ -280,7 +280,7 @@ fi
 # ※ npm版は公式非推奨（deprecated）。ネイティブ版を使用する。
 #    Node.jsはMCPサーバー（npx経由）で引き続き必要。
 # ============================================================
-log_step "STEP 4: Claude Code CLI チェック"
+log_step "STEP 4: Claude Code CLI のチェックを行います"
 
 # ネイティブ版の既存インストールを検出するため、PATHに ~/.local/bin を含める
 export PATH="$HOME/.local/bin:$PATH"
@@ -298,7 +298,7 @@ if command -v claude &> /dev/null; then
         if echo "$CLAUDE_PATH" | grep -qi "npm\|node_modules\|AppData"; then
             # npm版が動いている
             HAS_NPM_CLAUDE=true
-            log_warn "npm版 Claude Code CLI が検出されました（公式非推奨）"
+            log_warn "npm版 Claude Code CLI が検出されました（公式非推奨でございます）"
             log_info "検出パス: $CLAUDE_PATH"
             log_info "バージョン: $CLAUDE_VERSION"
             echo ""
@@ -315,7 +315,7 @@ if command -v claude &> /dev/null; then
                 NEED_CLAUDE_INSTALL=true
                 # npm版のアンインストール案内
                 echo ""
-                log_info "先にnpm版をアンインストールしてください:"
+                log_info "先にnpm版をアンインストールしてください、Sir:"
                 if echo "$CLAUDE_PATH" | grep -qi "mnt/c\|AppData"; then
                     echo "  Windows の PowerShell で:"
                     echo "    npm uninstall -g @anthropic-ai/claude-code"
@@ -324,24 +324,24 @@ if command -v claude &> /dev/null; then
                 fi
                 echo ""
             else
-                log_warn "ネイティブ版への移行をスキップしました（npm版で続行）"
+                log_warn "ネイティブ版への移行をスキップいたしました（npm版で続行いたします）"
                 RESULTS+=("Claude Code CLI: OK (npm版・移行推奨)")
             fi
         else
             # ネイティブ版が正常に動作している
-            log_success "Claude Code CLI がインストール済みです（ネイティブ版）"
-            log_info "バージョン: $CLAUDE_VERSION"
+            log_success "Claude Code CLI のインストールを確認いたしました（ネイティブ版）"
+            log_info "バージョン: $CLAUDE_VERSION でございます"
             RESULTS+=("Claude Code CLI: OK")
         fi
     else
         # command -v で見つかるが動かない（npm版でNode.js無し等）
-        log_warn "Claude Code CLI が見つかりましたが正常に動作しません"
+        log_warn "Claude Code CLI が見つかりましたが正常に動作しておりません"
         log_info "検出パス: $CLAUDE_PATH"
         if echo "$CLAUDE_PATH" | grep -qi "npm\|node_modules\|AppData"; then
             HAS_NPM_CLAUDE=true
-            log_info "→ npm版（Node.js依存）が検出されました"
+            log_info "→ npm版（Node.js依存）が検出されております"
         else
-            log_info "→ バージョン取得に失敗しました"
+            log_info "→ バージョン取得に失敗いたしました"
         fi
         NEED_CLAUDE_INSTALL=true
     fi
@@ -351,7 +351,7 @@ else
 fi
 
 if [ "$NEED_CLAUDE_INSTALL" = true ]; then
-    log_info "ネイティブ版 Claude Code CLI をインストールします"
+    log_info "ネイティブ版 Claude Code CLI をインストールいたします"
     echo ""
     if [ ! -t 0 ]; then
         REPLY="Y"
@@ -360,7 +360,7 @@ if [ "$NEED_CLAUDE_INSTALL" = true ]; then
     fi
     REPLY=${REPLY:-Y}
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        log_info "Claude Code CLI をインストール中（ネイティブ版）..."
+        log_info "Claude Code CLI のインストールを行っております（ネイティブ版）..."
         curl -fsSL https://claude.ai/install.sh | bash
 
         # PATHを更新（インストール直後は反映されていない可能性）
@@ -371,19 +371,19 @@ if [ "$NEED_CLAUDE_INSTALL" = true ]; then
             echo '' >> "$HOME/.bashrc"
             echo '# Claude Code CLI PATH (added by first_setup.sh)' >> "$HOME/.bashrc"
             echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
-            log_info "~/.local/bin を ~/.bashrc の PATH に追加しました"
+            log_info "~/.local/bin を ~/.bashrc の PATH に追加いたしました"
         fi
 
         if command -v claude &> /dev/null; then
             CLAUDE_VERSION=$(claude --version 2>/dev/null || echo "unknown")
-            log_success "Claude Code CLI インストール完了（ネイティブ版）"
-            log_info "バージョン: $CLAUDE_VERSION"
+            log_success "Claude Code CLI のインストールが完了いたしました（ネイティブ版）"
+            log_info "バージョン: $CLAUDE_VERSION でございます"
             RESULTS+=("Claude Code CLI: インストール完了")
 
             # npm版が残っている場合の案内
             if [ "$HAS_NPM_CLAUDE" = true ]; then
                 echo ""
-                log_info "ネイティブ版がPATHで優先されるため、npm版は無効化されます"
+                log_info "ネイティブ版がPATHで優先されるため、npm版は無効化されております"
                 log_info "npm版を完全に削除するには以下を実行してください:"
                 if echo "$CLAUDE_PATH" | grep -qi "mnt/c\|AppData"; then
                     echo "  Windows の PowerShell で:"
@@ -393,13 +393,13 @@ if [ "$NEED_CLAUDE_INSTALL" = true ]; then
                 fi
             fi
         else
-            log_error "インストールに失敗しました。パスを確認してください"
-            log_info "~/.local/bin がPATHに含まれているか確認してください"
+            log_error "インストールに失敗いたしました。パスをご確認ください"
+            log_info "~/.local/bin がPATHに含まれているかご確認ください"
             RESULTS+=("Claude Code CLI: インストール失敗")
             HAS_ERROR=true
         fi
     else
-        log_warn "インストールをスキップしました"
+        log_warn "インストールをスキップいたしました"
         RESULTS+=("Claude Code CLI: 未インストール (スキップ)")
         HAS_ERROR=true
     fi
@@ -408,7 +408,7 @@ fi
 # ============================================================
 # STEP 5: ディレクトリ構造作成
 # ============================================================
-log_step "STEP 5: ディレクトリ構造作成"
+log_step "STEP 5: ディレクトリ構造を構築いたします"
 
 # 必要なディレクトリ一覧
 DIRECTORIES=(
@@ -425,7 +425,7 @@ EXISTED_COUNT=0
 for dir in "${DIRECTORIES[@]}"; do
     if [ ! -d "$AVENGERS_ROOT/$dir" ]; then
         mkdir -p "$AVENGERS_ROOT/$dir"
-        log_info "作成: $dir/"
+        log_info "作成いたしました: $dir/"
         CREATED_COUNT=$((CREATED_COUNT + 1))
     else
         EXISTED_COUNT=$((EXISTED_COUNT + 1))
@@ -433,10 +433,10 @@ for dir in "${DIRECTORIES[@]}"; do
 done
 
 if [ $CREATED_COUNT -gt 0 ]; then
-    log_success "$CREATED_COUNT 個のディレクトリを作成しました"
+    log_success "$CREATED_COUNT 個のディレクトリを作成いたしました"
 fi
 if [ $EXISTED_COUNT -gt 0 ]; then
-    log_info "$EXISTED_COUNT 個のディレクトリは既に存在します"
+    log_info "$EXISTED_COUNT 個のディレクトリは既に存在しております"
 fi
 
 RESULTS+=("ディレクトリ構造: OK (作成:$CREATED_COUNT, 既存:$EXISTED_COUNT)")
@@ -444,11 +444,11 @@ RESULTS+=("ディレクトリ構造: OK (作成:$CREATED_COUNT, 既存:$EXISTED_
 # ============================================================
 # STEP 6: 設定ファイル初期化
 # ============================================================
-log_step "STEP 6: 設定ファイル確認"
+log_step "STEP 6: 設定ファイルを確認いたします"
 
 # config/settings.yaml
 if [ ! -f "$AVENGERS_ROOT/config/settings.yaml" ]; then
-    log_info "config/settings.yaml を作成中..."
+    log_info "config/settings.yaml を作成いたします..."
     cat > "$AVENGERS_ROOT/config/settings.yaml" << EOF
 # Avengers Multi-Agent System 設定ファイル
 
@@ -479,14 +479,14 @@ logging:
   level: info  # debug | info | warn | error
   path: "$AVENGERS_ROOT/logs/"
 EOF
-    log_success "settings.yaml を作成しました"
+    log_success "settings.yaml を作成いたしました"
 else
-    log_info "config/settings.yaml は既に存在します"
+    log_info "config/settings.yaml は既に存在しております"
 fi
 
 # config/projects.yaml
 if [ ! -f "$AVENGERS_ROOT/config/projects.yaml" ]; then
-    log_info "config/projects.yaml を作成中..."
+    log_info "config/projects.yaml を作成いたします..."
     cat > "$AVENGERS_ROOT/config/projects.yaml" << 'EOF'
 projects:
   - id: sample_project
@@ -497,14 +497,14 @@ projects:
 
 current_project: sample_project
 EOF
-    log_success "projects.yaml を作成しました"
+    log_success "projects.yaml を作成いたしました"
 else
-    log_info "config/projects.yaml は既に存在します"
+    log_info "config/projects.yaml は既に存在しております"
 fi
 
 # memory/global_context.md（システム全体のコンテキスト）
 if [ ! -f "$AVENGERS_ROOT/memory/global_context.md" ]; then
-    log_info "memory/global_context.md を作成中..."
+    log_info "memory/global_context.md を作成いたします..."
     cat > "$AVENGERS_ROOT/memory/global_context.md" << 'EOF'
 # グローバルコンテキスト
 最終更新: (未設定)
@@ -518,9 +518,9 @@ if [ ! -f "$AVENGERS_ROOT/memory/global_context.md" ]; then
 ## 注意事項
 - (全エージェントが知るべき注意点をここに記載)
 EOF
-    log_success "global_context.md を作成しました"
+    log_success "global_context.md を作成いたしました"
 else
-    log_info "memory/global_context.md は既に存在します"
+    log_info "memory/global_context.md は既に存在しております"
 fi
 
 RESULTS+=("設定ファイル: OK")
@@ -530,14 +530,14 @@ RESULTS+=("設定ファイル: OK")
 # ============================================================
 # 旧キューファイル初期化は Agent Teams 移行により不要。
 # タスク管理は Agent Teams の TaskCreate/TaskList で行う。
-log_step "STEP 7: Agent Teams 確認"
-log_info "Agent Teams 方式のため、旧キューファイル初期化はスキップ"
+log_step "STEP 7: Agent Teams の確認を行います"
+log_info "Agent Teams 方式のため、旧キューファイル初期化はスキップいたします"
 RESULTS+=("Agent Teams: OK (キューファイル不要)")
 
 # ============================================================
 # STEP 8: スクリプト実行権限付与
 # ============================================================
-log_step "STEP 8: 実行権限設定"
+log_step "STEP 8: 実行権限の設定を行います, Sir"
 
 SCRIPTS=(
     "setup.sh"
@@ -549,7 +549,7 @@ SCRIPTS=(
 for script in "${SCRIPTS[@]}"; do
     if [ -f "$AVENGERS_ROOT/$script" ]; then
         chmod +x "$AVENGERS_ROOT/$script"
-        log_info "$script に実行権限を付与しました"
+        log_info "$script に実行権限を付与いたしました"
     fi
 done
 

@@ -16,15 +16,15 @@ AVENGERS_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # 色付きログ関数
 log_info() {
-    echo -e "\033[1;33m【報】\033[0m $1"
+    echo -e "\033[1;33m[J.A.R.V.I.S.]\033[0m $1"
 }
 
 log_success() {
-    echo -e "\033[1;32m【成】\033[0m $1"
+    echo -e "\033[1;32m[J.A.R.V.I.S.]\033[0m $1"
 }
 
 log_disassemble() {
-    echo -e "\033[1;36m【退】\033[0m $1"
+    echo -e "\033[1;36m[J.A.R.V.I.S.]\033[0m $1"
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -110,7 +110,7 @@ show_disassemble_banner() {
 # バナー表示
 show_disassemble_banner
 
-log_info "プロジェクト: ${PROJECT_NAME_SAFE} (${WORK_DIR})"
+log_info "対象プロジェクトを確認いたしました: ${PROJECT_NAME_SAFE} (${WORK_DIR})"
 echo ""
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -133,16 +133,16 @@ if [ -d "$TEAM_DIR" ] || [ -d "$TASK_DIR" ]; then
 fi
 
 if [ "$FURY_EXISTS" = false ] && [ "$AVENGERS_EXISTS" = false ] && [ "$TEAM_DATA_EXISTS" = false ]; then
-    log_info "既に解散済みです（セッション・チームデータなし）"
+    log_info "既に全システムは停止済みでございます、Sir（セッション・チームデータなし）"
     echo ""
     exit 0
 fi
 
 # 現在の状態を表示
-log_info "現在の状態:"
+log_info "現在のシステム稼働状況をご報告いたします:"
 [ "$FURY_EXISTS" = true ] && log_info "  ├─ tmux: ${TMUX_FURY} セッション ... 稼働中"
 [ "$AVENGERS_EXISTS" = true ] && log_info "  ├─ tmux: ${TMUX_AVENGERS} セッション ... 稼働中"
-[ "$TEAM_DATA_EXISTS" = true ] && log_info "  ├─ Agent Teams: チームデータ (${TEAM_NAME}) ... 存在"
+[ "$TEAM_DATA_EXISTS" = true ] && log_info "  ├─ Agent Teams: チームデータ (${TEAM_NAME}) ... 存在を確認"
 echo ""
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -165,22 +165,22 @@ if [ "$FORCE_MODE" = false ]; then
     fi
 
     if [ "$NEED_BACKUP" = true ]; then
-        log_info "📦 ダッシュボードをバックアップ中..."
+        log_info "📦 ダッシュボードのバックアップを実施いたします、Sir"
         mkdir -p "$BACKUP_DIR" || true
 
         # dashboard.md のバックアップ
         if [ -f "${DASHBOARD_PATH}" ]; then
             cp "${DASHBOARD_PATH}" "$BACKUP_DIR/" 2>/dev/null || true
-            log_success "  ├─ dashboard.md バックアップ完了"
+            log_success "  ├─ dashboard.md のバックアップ、完了いたしました"
         fi
 
         # Agent Teams タスクデータのバックアップ
         if [ -d "$TASK_DIR" ]; then
             cp -r "$TASK_DIR" "$BACKUP_DIR/tasks-${TEAM_NAME}" 2>/dev/null || true
-            log_success "  ├─ Agent Teams タスクデータ バックアップ完了"
+            log_success "  ├─ Agent Teams タスクデータのバックアップ、完了いたしました"
         fi
 
-        log_success "  └─ バックアップ先: $BACKUP_DIR"
+        log_success "  └─ バックアップ先はこちらでございます: $BACKUP_DIR"
         echo ""
     fi
 fi
@@ -233,11 +233,11 @@ $(echo "$task_description" | sed 's/^/      /')
             echo "tasks:"
             printf '%s' "$PENDING_ENTRIES"
         } > "$PENDING_YAML"
-        log_info "📜 未完了タスク ${PENDING_COUNT} 件を保存した"
-        log_success "  └─ 保存先: ${PENDING_YAML}"
+        log_info "📜 未完了タスクが ${PENDING_COUNT} 件ございます。記録を保存いたしました"
+        log_success "  └─ 保存先はこちらでございます: ${PENDING_YAML}"
         echo ""
     else
-        log_info "📜 未完了タスクなし（全任務完了済み）"
+        log_info "📜 未完了タスクはございません。全任務完了済みでございます、Sir"
         echo ""
     fi
 fi
@@ -260,48 +260,48 @@ if [ "$FORCE_MODE" = false ] && [ "$FURY_EXISTS" = true ]; then
             SESSION_ID=$(basename "$LATEST_SESSION" .jsonl)
             mkdir -p "${STATUS_DIR}"
             echo "$SESSION_ID" > "$SESSION_ID_FILE"
-            log_info "📎 FuryのセッションID を保存: ${SESSION_ID:0:8}..."
+            log_info "📎 Fury 長官のセッションIDを保存いたしました: ${SESSION_ID:0:8}..."
         fi
     fi
 elif [ "$FORCE_MODE" = true ]; then
     # 強制Disassemble: セッションIDファイルを削除（再開不可にする）
     if [ -f "$SESSION_ID_FILE" ]; then
         trash "$SESSION_ID_FILE" 2>/dev/null || true
-        log_info "📎 強制Disassembleのため、セッションID を破棄"
+        log_info "📎 強制Disassembleにつき、セッションIDを破棄いたします"
     fi
 fi
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Disassemble処理
 # ═══════════════════════════════════════════════════════════════════════════════
-log_disassemble "🏯 全チーム Disassemble 開始..."
+log_disassemble "🏯 全チームの Disassemble を開始いたします、Sir"
 echo ""
 
 # STEP 1: tmux セッション終了（Claude Code プロセスも終了する）
 if [ "$AVENGERS_EXISTS" = true ]; then
-    log_disassemble "  └─ JARVIS・Bruce・Worker のセッションを終了中..."
+    log_disassemble "  └─ JARVIS・Bruce・Worker のセッションを終了いたします..."
     tmux kill-session -t "${TMUX_AVENGERS}" 2>/dev/null
-    log_success "     └─ ${TMUX_AVENGERS} セッション終了"
+    log_success "     └─ ${TMUX_AVENGERS} セッション、終了いたしました"
 fi
 
 if [ "$FURY_EXISTS" = true ]; then
-    log_disassemble "  └─ Fury の司令室を終了中..."
+    log_disassemble "  └─ Fury 長官の司令室を終了いたします..."
     tmux kill-session -t "${TMUX_FURY}" 2>/dev/null
-    log_success "     └─ ${TMUX_FURY} セッション終了"
+    log_success "     └─ ${TMUX_FURY} セッション、終了いたしました"
 fi
 
 # STEP 2: Agent Teams チームデータのクリーンアップ
 if [ "$TEAM_DATA_EXISTS" = true ]; then
-    log_disassemble "  └─ Agent Teams チームデータを撤収中..."
+    log_disassemble "  └─ Agent Teams チームデータの撤収を行います..."
 
     if [ -d "$TEAM_DIR" ]; then
         trash "$TEAM_DIR" 2>/dev/null || true
-        log_success "     └─ チーム設定（teams/${TEAM_NAME}）撤収完了"
+        log_success "     └─ チーム設定（teams/${TEAM_NAME}）の撤収、完了いたしました"
     fi
 
     if [ -d "$TASK_DIR" ]; then
         trash "$TASK_DIR" 2>/dev/null || true
-        log_success "     └─ タスクデータ（tasks/${TEAM_NAME}）撤収完了"
+        log_success "     └─ タスクデータ（tasks/${TEAM_NAME}）の撤収、完了いたしました"
     fi
 fi
 

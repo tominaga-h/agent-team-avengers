@@ -30,15 +30,15 @@ TEAM_MEMBER_COUNT=8
 
 # 色付きログ関数
 log_info() {
-    echo -e "\033[1;33m[INFO   ]\033[0m $1"
+    echo -e "\033[1;33m[J.A.R.V.I.S.]\033[0m $1"
 }
 
 log_success() {
-    echo -e "\033[1;32m[SUCCESS]\033[0m $1"
+    echo -e "\033[1;32m[J.A.R.V.I.S.]\033[0m $1"
 }
 
 log_action() {
-    echo -e "\033[1;31m[ACTION ]\033[0m $1"
+    echo -e "\033[1;31m[J.A.R.V.I.S.]\033[0m $1"
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -120,13 +120,13 @@ show_assemble_banner
 
 
 if [ "$RESUME_MODE" = true ]; then
-    echo -e "  \033[1;33m再開！前回のセッションを引き継ぐぞ\033[0m"
+    echo -e "  \033[1;33m前回のセッションを復元いたします、Sir\033[0m"
 else
-    echo -e "  \033[1;33mAvengers Assemble 準備を開始する\033[0m"
+    echo -e "  \033[1;33mAvengers Assemble の準備を開始いたします\033[0m"
 fi
 echo ""
-log_info "作業ディレクトリ: ${WORK_DIR}"
-log_info "プロジェクト名: ${PROJECT_NAME_SAFE}"
+log_info "作業ディレクトリを確認いたしました: ${WORK_DIR}"
+log_info "プロジェクト名: ${PROJECT_NAME_SAFE} でございます"
 
 # resume モード時のセッションID確認
 SESSION_ID_FILE="${STATUS_DIR}/fury_session_id"
@@ -134,9 +134,9 @@ SAVED_SESSION_ID=""
 if [ "$RESUME_MODE" = true ]; then
     if [ -f "$SESSION_ID_FILE" ]; then
         SAVED_SESSION_ID=$(cat "$SESSION_ID_FILE")
-        log_info "前回セッションID: ${SAVED_SESSION_ID:0:8}..."
+        log_info "前回のセッションIDを検出いたしました: ${SAVED_SESSION_ID:0:8}..."
     else
-        log_info "⚠️  保存済みセッションIDなし（--continue で最新セッションを使用）"
+        log_info "⚠️  保存済みセッションIDが見つかりません。最新セッションで再開いたします"
     fi
 fi
 echo ""
@@ -144,13 +144,13 @@ echo ""
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 1: .avengers/ ディレクトリ構造を作成
 # ═══════════════════════════════════════════════════════════════════════════════
-log_info "📁 .avengers/ ディレクトリ構造を構築中..."
+log_info "📁 .avengers/ ディレクトリ構造を構築いたします"
 
 mkdir -p "${BIN_DIR}"
 mkdir -p "${STATUS_DIR}"
 mkdir -p "${LOGS_DIR}"
 
-log_success "  └─ ${AVENGERS_DATA_DIR}/ 構築完了"
+log_success "  └─ ${AVENGERS_DATA_DIR}/ の構築が完了いたしました"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 2: project.env 生成
@@ -166,7 +166,7 @@ TMUX_AVENGERS="${TMUX_AVENGERS}"
 TEAM_NAME="${TEAM_NAME}"
 EOF
 
-log_success "  └─ project.env 生成完了"
+log_success "  └─ project.env を生成いたしました"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 3: bin/ ラッパースクリプト生成
@@ -200,7 +200,7 @@ tmux attach-session -t "${TMUX_AVENGERS}"
 EOF
 
 chmod +x "${BIN_DIR}"/*.sh
-log_success "  └─ bin/ ラッパースクリプト生成完了"
+log_success "  └─ bin/ ラッパースクリプトの生成が完了いたしました"
 echo ""
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -209,7 +209,7 @@ echo ""
 # JARVIS・Worker がチームメンバーを追加するのを物理的に防ぐフック。
 # - シンボリックリンク: ~/.claude/hooks/check-team-spawn.sh → AVENGERS_ROOT/scripts/
 # - フック設定: ~/.claude/settings.json の hooks.PreToolUse に追加
-log_info "🔒 spawn 制限フックを確認中..."
+log_info "🔒 spawn 制限フックを確認しております..."
 
 HOOK_SCRIPT="${AVENGERS_ROOT}/scripts/check-team-spawn.sh"
 HOOK_LINK="$HOME/.claude/hooks/check-team-spawn.sh"
@@ -218,9 +218,9 @@ HOOK_LINK="$HOME/.claude/hooks/check-team-spawn.sh"
 mkdir -p "$HOME/.claude/hooks"
 if [ ! -L "$HOOK_LINK" ] || [ "$(readlink "$HOOK_LINK")" != "$HOOK_SCRIPT" ]; then
     ln -sf "$HOOK_SCRIPT" "$HOOK_LINK"
-    log_success "  └─ シンボリックリンク更新: ~/.claude/hooks/check-team-spawn.sh"
+    log_success "  └─ シンボリックリンクを更新いたしました: ~/.claude/hooks/check-team-spawn.sh"
 else
-    log_info "  └─ シンボリックリンク確認済み"
+    log_info "  └─ シンボリックリンクは正常でございます"
 fi
 
 # ~/.claude/settings.json にフック設定を追加（jq が必要）
@@ -234,9 +234,9 @@ if command -v jq &> /dev/null; then
                 .hooks = (.hooks // {}) |
                 .hooks.PreToolUse = ((.hooks.PreToolUse // []) + [$entry])
             ' "$SETTINGS_FILE" > "${SETTINGS_FILE}.tmp" && mv "${SETTINGS_FILE}.tmp" "$SETTINGS_FILE"
-            log_success "  └─ settings.json にフック設定を追加"
+            log_success "  └─ settings.json にフック設定を追加いたしました"
         else
-            log_info "  └─ settings.json のフック設定確認済み"
+            log_info "  └─ settings.json のフック設定は正常でございます"
         fi
     else
         # settings.json が存在しない場合は新規作成
@@ -257,18 +257,18 @@ if command -v jq &> /dev/null; then
   }
 }
 SETTINGS_EOF
-        log_success "  └─ settings.json を新規作成（フック設定付き）"
+        log_success "  └─ settings.json を新規作成いたしました（フック設定付き）"
     fi
 else
-    log_info "  ⚠️  jq 未インストール: settings.json の自動設定をスキップ"
-    log_info "     手動で ~/.claude/settings.json に PreToolUse フックを追加してください"
+    log_info "  ⚠️  jq が見つかりません。settings.json の自動設定はスキップいたします"
+    log_info "     恐れ入りますが、手動で ~/.claude/settings.json に PreToolUse フックを追加してください"
 fi
 echo ""
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 3c: commands/ のコピー（スラッシュコマンド配備）
 # ═══════════════════════════════════════════════════════════════════════════════
-log_info "📋 スラッシュコマンドを配備中..."
+log_info "📋 スラッシュコマンドを配備いたします..."
 
 COMMANDS_SRC="${AVENGERS_ROOT}/commands"
 COMMANDS_DST="${WORK_DIR}/.claude/commands"
@@ -278,11 +278,11 @@ if [ -d "$COMMANDS_SRC" ]; then
     for cmd_file in "$COMMANDS_SRC"/*.md; do
         if [ -f "$cmd_file" ]; then
             cp "$cmd_file" "$COMMANDS_DST/"
-            log_success "  └─ $(basename "$cmd_file") 配備完了"
+            log_success "  └─ $(basename "$cmd_file") を配備いたしました"
         fi
     done
 else
-    log_info "  └─ ${COMMANDS_SRC} なし、スキップ"
+    log_info "  └─ ${COMMANDS_SRC} が見つかりません。こちらはスキップいたします"
 fi
 echo ""
 
@@ -301,17 +301,17 @@ fi
 if [ "$NEED_BACKUP" = true ]; then
     mkdir -p "$BACKUP_DIR" || true
     cp "${DASHBOARD_PATH}" "$BACKUP_DIR/" 2>/dev/null || true
-    log_info "📦 前回の記録をバックアップ: $BACKUP_DIR"
+    log_info "📦 前回の記録をバックアップしております: $BACKUP_DIR"
 fi
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 5: ダッシュボード初期化（resume 時はスキップ）
 # ═══════════════════════════════════════════════════════════════════════════════
 if [ "$RESUME_MODE" = true ] && [ -f "${DASHBOARD_PATH}" ]; then
-    log_info "📊 ダッシュボードは前回のものを引き継ぎ"
+    log_info "📊 ダッシュボードは前回のものを引き継ぎます、Sir"
     echo ""
 else
-    log_info "📊 ダッシュボードを初期化中..."
+    log_info "📊 ダッシュボードを初期化いたします..."
     TIMESTAMP=$(date "+%Y-%m-%d %H:%M")
 
     if [ "$LANG_SETTING" = "ja" ]; then
@@ -370,7 +370,7 @@ EOF
 EOF
     fi
 
-    log_success "  └─ ダッシュボード初期化完了 (言語: $LANG_SETTING)"
+    log_success "  └─ ダッシュボードの初期化が完了いたしました (言語: $LANG_SETTING)"
     echo ""
 fi
 
@@ -379,7 +379,7 @@ fi
 # ═══════════════════════════════════════════════════════════════════════════════
 LESSONS_PATH="${AVENGERS_DATA_DIR}/lessons.md"
 if [ ! -f "${LESSONS_PATH}" ]; then
-    log_info "📝 教訓帳を初期化中..."
+    log_info "📝 教訓帳を初期化いたします..."
     cat > "${LESSONS_PATH}" << 'EOF'
 # 📝 教訓帳（Lessons Learned）
 
@@ -391,9 +391,9 @@ if [ ! -f "${LESSONS_PATH}" ]; then
 
 （なし）
 EOF
-    log_success "  └─ lessons.md 初期化完了"
+    log_success "  └─ lessons.md の初期化が完了いたしました"
 else
-    log_info "📝 教訓帳は既存のものを引き継ぎ"
+    log_info "📝 教訓帳は既存のものを引き継ぎます"
 fi
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -401,7 +401,7 @@ fi
 # ═══════════════════════════════════════════════════════════════════════════════
 FURY_CONTEXT_PATH="${STATUS_DIR}/fury_context.md"
 if [ ! -f "${FURY_CONTEXT_PATH}" ]; then
-    log_info "🧠 Fury の状況認識ファイルを初期化中..."
+    log_info "🧠 Fury の状況認識ファイルを初期化いたします..."
     TIMESTAMP=$(date "+%Y-%m-%d %H:%M")
     cat > "${FURY_CONTEXT_PATH}" << EOF
 # Fury の状況認識
@@ -420,16 +420,16 @@ Hayato の最初の指示を待機中
 ## 判断メモ
 （なし）
 EOF
-    log_success "  └─ fury_context.md 初期化完了"
+    log_success "  └─ fury_context.md の初期化が完了いたしました"
 else
-    log_info "🧠 Fury の状況認識ファイルは既存のものを引き継ぎ"
+    log_info "🧠 Fury の状況認識ファイルは既存のものを引き継ぎます"
 fi
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 5d: plans/ ディレクトリ初期化
 # ═══════════════════════════════════════════════════════════════════════════════
 PLANS_DIR="${AVENGERS_DATA_DIR}/plans"
 mkdir -p "${PLANS_DIR}"
-log_success "  └─ plans/ ディレクトリ初期化完了"
+log_success "  └─ plans/ ディレクトリの初期化が完了いたしました"
 
 echo ""
 
@@ -441,8 +441,8 @@ echo ""
 if ! command -v tmux &> /dev/null; then
     echo ""
     echo "  ╔════════════════════════════════════════════════════════╗"
-    echo "  ║  [ERROR] tmux not found!                              ║"
-    echo "  ║  Agent Teams の tmux モードには tmux が必要です       ║"
+    echo "  ║  問題が検出されました、Sir。tmux が見つかりません    ║"
+    echo "  ║  Agent Teams の tmux モードには tmux が必要でございます║"
     echo "  ╚════════════════════════════════════════════════════════╝"
     echo ""
     exit 1
@@ -458,11 +458,11 @@ fi
 # tmux hook (after-split-window) により、Agent Teams が fury 内に spawn した
 # チームメイトの pane を自動的に avengers セッションに移動する。
 
-log_action "👑 Fury の司令室を構築中..."
+log_action "👑 Fury の司令室を構築いたします、Sir"
 
 # 既存セッションをクリーンアップ
-tmux kill-session -t "${TMUX_FURY}" 2>/dev/null && log_info "  └─ 既存の ${TMUX_FURY} セッション撤収" || true
-tmux kill-session -t "${TMUX_AVENGERS}" 2>/dev/null && log_info "  └─ 既存の ${TMUX_AVENGERS} セッション撤収" || true
+tmux kill-session -t "${TMUX_FURY}" 2>/dev/null && log_info "  └─ 既存の ${TMUX_FURY} セッションを撤収いたしました" || true
+tmux kill-session -t "${TMUX_AVENGERS}" 2>/dev/null && log_info "  └─ 既存の ${TMUX_AVENGERS} セッションを撤収いたしました" || true
 
 # Fury 用 tmux セッション（Claude Code を起動）
 # resume モードでは保存済みセッションIDで復元、なければ --continue にフォールバック
@@ -470,10 +470,10 @@ CLAUDE_EXTRA_ARGS=""
 if [ "$RESUME_MODE" = true ]; then
     if [ -n "$SAVED_SESSION_ID" ]; then
         CLAUDE_EXTRA_ARGS="--resume ${SAVED_SESSION_ID}"
-        log_info "  └─ セッションID指定で復元（--resume ${SAVED_SESSION_ID:0:8}...）"
+        log_info "  └─ セッションIDを指定して復元いたします（--resume ${SAVED_SESSION_ID:0:8}...）"
     else
         CLAUDE_EXTRA_ARGS="--continue"
-        log_info "  └─ セッションIDなし、最新セッションで再開（--continue）"
+        log_info "  └─ セッションIDがございません。最新セッションで再開いたします"
     fi
 fi
 tmux new-session -d -s "${TMUX_FURY}" -n "fury" \
@@ -521,9 +521,9 @@ chmod +x "${HOOK_SCRIPT}"
 tmux set-hook -t "${TMUX_FURY}" after-split-window \
     "move-pane -t ${TMUX_AVENGERS}:agents ; run-shell -b '${HOOK_SCRIPT}'"
 
-log_success "  └─ Fury の司令室（${TMUX_FURY}）構築完了"
-log_success "  └─ チーム基地（${TMUX_AVENGERS}）構築完了"
-log_success "  └─ 自動配備フック設定完了"
+log_success "  └─ Fury の司令室（${TMUX_FURY}）の構築が完了いたしました"
+log_success "  └─ チーム基地（${TMUX_AVENGERS}）の構築が完了いたしました"
+log_success "  └─ 自動配備フックの設定が完了いたしました"
 echo ""
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -532,7 +532,7 @@ echo ""
 # Claude Code が起動完了するまで待機し、チーム構成指示を自動送信する。
 # これにより、旧システムと同様に起動時に全エージェントが配備される。
 
-log_action "⏳ Fury の起動を待機中..."
+log_action "⏳ Fury の起動をお待ちしております..."
 
 # Claude Code の起動完了を待つ（プロンプト表示を検知）
 READY=false
@@ -545,7 +545,7 @@ for i in $(seq 1 30); do
 done
 
 if [ "$READY" = true ]; then
-    log_success "  └─ Fury、起動完了"
+    log_success "  └─ Fury、起動を確認いたしました"
 
     # 固定8名の spawn 指示
     MEMBER_SPAWN="- JARVIS（jarvis）: ${AVENGERS_ROOT}/instructions/jarvis.md を読ませよ。mode は delegate にせよ。
@@ -603,13 +603,13 @@ CLAUDE.md
     sleep 2
     tmux send-keys -t "${TMUX_FURY}:fury" Enter
     if [ "$RESUME_MODE" = true ]; then
-        log_success "  └─ 再開指示を送信（前回セッション引き継ぎ）"
+        log_success "  └─ 再開指示を送信いたしました（前回セッション引き継ぎ）"
     else
-        log_success "  └─ チーム構成指示を送信"
+        log_success "  └─ チーム構成指示を送信いたしました"
     fi
 else
-    log_info "⚠️  Fury の起動に時間がかかっています"
-    log_info "  アタッチ後に手動でチーム構成を指示してください"
+    log_info "⚠️  Fury の起動に想定以上の時間がかかっております、Sir"
+    log_info "  恐れ入りますが、アタッチ後に手動でチーム構成を指示してください"
 fi
 
 echo ""
@@ -617,11 +617,11 @@ echo ""
 echo ""
 if [ "$RESUME_MODE" = true ]; then
     echo "  ╔══════════════════════════════════════════════════════════╗"
-    echo "  ║  🛡️ 再開完了！前回のセッションを引き継ぐ！                     ║"
+    echo "  ║  🛡️ 再開準備が整いました。前回のセッションを復元済みです     ║"
     echo "  ╚══════════════════════════════════════════════════════════╝"
 else
     echo "  ╔══════════════════════════════════════════════════════════╗"
-    echo "  ║  🛡️ Avengers Assemble 準備完了！                              ║"
+    echo "  ║  🛡️ Avengers Assemble の準備が整いました、Sir               ║"
     echo "  ╚══════════════════════════════════════════════════════════╝"
 fi
 echo ""
