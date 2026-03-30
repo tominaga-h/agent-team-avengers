@@ -3,6 +3,20 @@
 [yohey-w/multi-agent-shogun](https://github.com/yohey-w/multi-agent-shogun) の `9e23e2c` からfork。
 以降の変更履歴を記す。
 
+## v5.0.0 — 2026-03-30 — Avengers Migration
+
+- **全面リブランディング**: multi-agent-shogun → Avengers Multi-Agent System v5.0
+- **エージェント体制変更**: 将軍/家老/目付/足軽 → Fury/JARVIS/Bruce/Strange/Tony/Peter/Cap/Marvel/Shuri の固定8名構成
+- **新規ロール追加**: Doctor Strange（設計レビュー）、Shuri（アイデア整理、Fury直属）
+- **Worker 専門化**: Tony/Peter（開発）、Cap/Marvel（テスト/レビュー）
+- **Task Routing**: タスク種別に応じた自動 Worker 振り分けテーブル
+- **ファイルリネーム**: 全指示書・スクリプト・コマンド・スキルのファイル名をAvengers体制に変更
+- **環境変数変更**: SHOGUN_* → AVENGERS_*、.shogun/ → .avengers/
+- **tmuxセッション名変更**: shogun-/multiagent- → fury-/avengers-
+- **新規ルール追加**: Git Workflow、Test Rules、Context Budget Rules、Agent Behavior Rules (F010-F016)
+- **Action Required**: 「上様お伺い」→ 「Action Required」に統一
+- **言語スタイル変更**: 戦国風 → MCU風日本語
+
 ## 2026-03-11
 
 - **upstream マージ**: [yohey-w/multi-agent-shogun](https://github.com/yohey-w/multi-agent-shogun) の `73c4113`〜`2ef81f9`（49コミット）を選択的に取り込み

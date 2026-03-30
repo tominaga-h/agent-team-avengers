@@ -14,12 +14,12 @@
 #
 # 例:
 #   ./scripts/notify.sh multiagent:0.2 'タスクあり。確認せよ。'
-#   ./scripts/notify.sh shogun 'dashboard.md が更新された。確認せよ。'
+#   ./scripts/notify.sh fury 'dashboard.md が更新された。確認せよ。'
 #
 # 送り先一覧:
 #   | 送り先 | pane            |
 #   |--------|-----------------|
-#   | 将軍   | shogun:0.0      |
+#   | Fury   | fury:0.0        |
 #   | 家老   | multiagent:0.0  |
 #   | 目付   | multiagent:0.1  |
 #   | 足軽1  | multiagent:0.2  |

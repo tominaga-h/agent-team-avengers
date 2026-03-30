@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # test_guard.sh — guard.sh の動作確認テストスクリプト
-# Based on halsk/multi-agent-shogun test_hooks.sh, customized for marucc fork.
+# Avengers Multi-Agent System — guard hook test
 # Usage: bash scripts/hooks/test_guard.sh
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"

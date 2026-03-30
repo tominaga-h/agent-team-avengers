@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================
-# first_setup.sh - multi-agent-shogun 初回セットアップスクリプト
+# first_setup.sh - Avengers Multi-Agent System 初回セットアップスクリプト
 # Ubuntu / WSL / Mac 用環境構築ツール
 # ============================================================
 # 実行方法:
@@ -40,8 +40,8 @@ log_step() {
     echo -e "\n${CYAN}${BOLD}━━━ $1 ━━━${NC}\n"
 }
 
-# shogun システムのルートディレクトリ
-SHOGUN_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Avengers Multi-Agent System のルートディレクトリ
+AVENGERS_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # 結果追跡用変数
 RESULTS=()
@@ -49,14 +49,14 @@ HAS_ERROR=false
 
 echo ""
 echo "  ╔══════════════════════════════════════════════════════════════╗"
-echo "  ║  🏯 multi-agent-shogun インストーラー                         ║"
+echo "  ║  🏯 Avengers Multi-Agent System インストーラー                         ║"
 echo "  ║     Initial Setup Script for Ubuntu / WSL                    ║"
 echo "  ╚══════════════════════════════════════════════════════════════╝"
 echo ""
 echo "  このスクリプトは初回セットアップ用です。"
 echo "  依存関係の確認とディレクトリ構造の作成を行います。"
 echo ""
-echo "  インストール先: $SHOGUN_ROOT"
+echo "  インストール先: $AVENGERS_ROOT"
 echo ""
 
 # ============================================================
@@ -423,8 +423,8 @@ CREATED_COUNT=0
 EXISTED_COUNT=0
 
 for dir in "${DIRECTORIES[@]}"; do
-    if [ ! -d "$SHOGUN_ROOT/$dir" ]; then
-        mkdir -p "$SHOGUN_ROOT/$dir"
+    if [ ! -d "$AVENGERS_ROOT/$dir" ]; then
+        mkdir -p "$AVENGERS_ROOT/$dir"
         log_info "作成: $dir/"
         CREATED_COUNT=$((CREATED_COUNT + 1))
     else
@@ -447,20 +447,19 @@ RESULTS+=("ディレクトリ構造: OK (作成:$CREATED_COUNT, 既存:$EXISTED_
 log_step "STEP 6: 設定ファイル確認"
 
 # config/settings.yaml
-if [ ! -f "$SHOGUN_ROOT/config/settings.yaml" ]; then
+if [ ! -f "$AVENGERS_ROOT/config/settings.yaml" ]; then
     log_info "config/settings.yaml を作成中..."
-    cat > "$SHOGUN_ROOT/config/settings.yaml" << EOF
-# multi-agent-shogun 設定ファイル
+    cat > "$AVENGERS_ROOT/config/settings.yaml" << EOF
+# Avengers Multi-Agent System 設定ファイル
 
 # 言語設定
-# ja: 日本語（戦国風日本語のみ、併記なし）
-# en: 英語（戦国風日本語 + 英訳併記）
+# ja: 日本語（MCU風日本語のみ、併記なし）
+# en: 英語（MCU風日本語 + 英訳併記）
 # その他の言語コード（es, zh, ko, fr, de 等）も対応
 language: ja
 
-# 足軽の数（1〜8）
-# tmuxペイン数やタスクファイル数に影響
-ashigaru_count: 3
+# チーム構成は固定（Fury / JARVIS / Bruce / Strange / Tony / Peter / Cap / Marvel / Shuri）
+# 旧「可変Worker数」設定は廃止（Agent Teams 固定メンバー）
 
 # シェル設定
 # bash: bash用プロンプト（デフォルト）
@@ -469,16 +468,16 @@ shell: bash
 
 # スキル設定
 skill:
-  # スキル保存先（スキル名に shogun- プレフィックスを付けて保存）
+  # スキル保存先（スキル名に avengers- プレフィックスを付けて保存）
   save_path: "~/.claude/skills/"
 
   # ローカルスキル保存先（このプロジェクト専用）
-  local_path: "$SHOGUN_ROOT/skills/"
+  local_path: "$AVENGERS_ROOT/skills/"
 
 # ログ設定
 logging:
   level: info  # debug | info | warn | error
-  path: "$SHOGUN_ROOT/logs/"
+  path: "$AVENGERS_ROOT/logs/"
 EOF
     log_success "settings.yaml を作成しました"
 else
@@ -486,9 +485,9 @@ else
 fi
 
 # config/projects.yaml
-if [ ! -f "$SHOGUN_ROOT/config/projects.yaml" ]; then
+if [ ! -f "$AVENGERS_ROOT/config/projects.yaml" ]; then
     log_info "config/projects.yaml を作成中..."
-    cat > "$SHOGUN_ROOT/config/projects.yaml" << 'EOF'
+    cat > "$AVENGERS_ROOT/config/projects.yaml" << 'EOF'
 projects:
   - id: sample_project
     name: "Sample Project"
@@ -504,14 +503,14 @@ else
 fi
 
 # memory/global_context.md（システム全体のコンテキスト）
-if [ ! -f "$SHOGUN_ROOT/memory/global_context.md" ]; then
+if [ ! -f "$AVENGERS_ROOT/memory/global_context.md" ]; then
     log_info "memory/global_context.md を作成中..."
-    cat > "$SHOGUN_ROOT/memory/global_context.md" << 'EOF'
+    cat > "$AVENGERS_ROOT/memory/global_context.md" << 'EOF'
 # グローバルコンテキスト
 最終更新: (未設定)
 
 ## システム方針
-- (殿の好み・方針をここに記載)
+- (Hayatoの好み・方針をここに記載)
 
 ## プロジェクト横断の決定事項
 - (複数プロジェクトに影響する決定をここに記載)
@@ -542,13 +541,14 @@ log_step "STEP 8: 実行権限設定"
 
 SCRIPTS=(
     "setup.sh"
-    "shutsujin_departure.sh"
+    "assemble.sh"
+    "disassemble.sh"
     "first_setup.sh"
 )
 
 for script in "${SCRIPTS[@]}"; do
-    if [ -f "$SHOGUN_ROOT/$script" ]; then
-        chmod +x "$SHOGUN_ROOT/$script"
+    if [ -f "$AVENGERS_ROOT/$script" ]; then
+        chmod +x "$AVENGERS_ROOT/$script"
         log_info "$script に実行権限を付与しました"
     fi
 done
@@ -566,15 +566,15 @@ BASHRC_FILE="$HOME/.bashrc"
 # aliasが既に存在するかチェックし、なければ追加
 ALIAS_ADDED=false
 
-# css alias (出陣コマンド)
+# css alias (Assembleコマンド)
 if [ -f "$BASHRC_FILE" ]; then
-    EXPECTED_CSS="alias css='cd \"$SHOGUN_ROOT\" && ./shutsujin_departure.sh'"
+    EXPECTED_CSS="alias css='cd \"$AVENGERS_ROOT\" && ./assemble.sh'"
     if ! grep -q "alias css=" "$BASHRC_FILE" 2>/dev/null; then
         # alias が存在しない → 新規追加
         echo "" >> "$BASHRC_FILE"
-        echo "# multi-agent-shogun aliases (added by first_setup.sh)" >> "$BASHRC_FILE"
+        echo "# multi-agent-avengers aliases (added by first_setup.sh)" >> "$BASHRC_FILE"
         echo "$EXPECTED_CSS" >> "$BASHRC_FILE"
-        log_info "alias css を追加しました（出陣コマンド）"
+        log_info "alias css を追加しました（Assembleコマンド）"
         ALIAS_ADDED=true
     elif ! grep -qF "$EXPECTED_CSS" "$BASHRC_FILE" 2>/dev/null; then
         # alias は存在するがパスが異なる → 更新
@@ -589,11 +589,11 @@ if [ -f "$BASHRC_FILE" ]; then
     fi
 
     # csm alias (ディレクトリ移動)
-    EXPECTED_CSM="alias csm='cd \"$SHOGUN_ROOT\"'"
+    EXPECTED_CSM="alias csm='cd \"$AVENGERS_ROOT\"'"
     if ! grep -q "alias csm=" "$BASHRC_FILE" 2>/dev/null; then
         if [ "$ALIAS_ADDED" = false ]; then
             echo "" >> "$BASHRC_FILE"
-            echo "# multi-agent-shogun aliases (added by first_setup.sh)" >> "$BASHRC_FILE"
+            echo "# multi-agent-avengers aliases (added by first_setup.sh)" >> "$BASHRC_FILE"
         fi
         echo "$EXPECTED_CSM" >> "$BASHRC_FILE"
         log_info "alias csm を追加しました（ディレクトリ移動）"
@@ -632,7 +632,7 @@ if command -v claude &> /dev/null; then
     else
         log_info "Memory MCP を設定中..."
         if claude mcp add memory \
-            -e MEMORY_FILE_PATH="$SHOGUN_ROOT/memory/shogun_memory.jsonl" \
+            -e MEMORY_FILE_PATH="$AVENGERS_ROOT/memory/avengers_memory.jsonl" \
             -- npx -y @modelcontextprotocol/server-memory 2>/dev/null; then
             log_success "Memory MCP 設定完了"
             RESULTS+=("Memory MCP: 設定完了")
@@ -676,7 +676,7 @@ if [ "$HAS_ERROR" = true ]; then
     echo "  すべての依存関係が揃ったら、再度このスクリプトを実行して確認できます。"
 else
     echo "  ╔══════════════════════════════════════════════════════════════╗"
-    echo "  ║  ✅ セットアップ完了！準備万端でござる！                      ║"
+    echo "  ║  ✅ セットアップ完了！                                       ║"
     echo "  ╚══════════════════════════════════════════════════════════════╝"
 fi
 
@@ -685,21 +685,21 @@ echo "  ┌───────────────────────
 echo "  │  📜 次のステップ                                             │"
 echo "  └──────────────────────────────────────────────────────────────┘"
 echo ""
-echo "  出陣（全エージェント起動）:"
-echo "     ./shutsujin_departure.sh"
+echo "  Assemble（全エージェント起動）:"
+echo "     ./assemble.sh"
 echo ""
 echo "  オプション:"
-echo "     ./shutsujin_departure.sh -s            # セットアップのみ（Claude手動起動）"
-echo "     ./shutsujin_departure.sh -t            # Windows Terminalタブ展開"
-echo "     ./shutsujin_departure.sh -shell bash   # bash用プロンプトで起動"
-echo "     ./shutsujin_departure.sh -shell zsh    # zsh用プロンプトで起動"
+echo "     ./assemble.sh -s            # セットアップのみ（Claude手動起動）"
+echo "     ./assemble.sh -t            # Windows Terminalタブ展開"
+echo "     ./assemble.sh -shell bash   # bash用プロンプトで起動"
+echo "     ./assemble.sh -shell zsh    # zsh用プロンプトで起動"
 echo ""
 echo "  ※ シェル設定は config/settings.yaml の shell: でも変更可能です"
 echo ""
 echo "  詳細は README.md を参照してください。"
 echo ""
 echo "  ════════════════════════════════════════════════════════════════"
-echo "   天下布武！ (Tenka Fubu!)"
+echo "   Assemble! (Avengers Multi-Agent System)"
 echo "  ════════════════════════════════════════════════════════════════"
 echo ""
 

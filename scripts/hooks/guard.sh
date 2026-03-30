@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # guard.sh — Claude Code PreToolUse hook for Bash tool
-# Based on halsk/multi-agent-shogun guard.sh, customized for marucc fork.
+# Avengers Multi-Agent System — destructive operation guard
 #
 # Reads JSON from stdin: {"tool_name": "Bash", "tool_input": {"command": "..."}}
 # exit 0 = allow, exit 2 = block (stderr shown as error message)

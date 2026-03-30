@@ -1,4 +1,4 @@
-# multi-agent-shogun
+# Avengers Multi-Agent System
 
 <div align="center">
 
@@ -21,7 +21,7 @@
 
 ## これは何？
 
-**multi-agent-shogun** は、Claude Code の **Agent Teams** を使って複数のインスタンスを同時に実行し、戦国時代の軍制のように統率するシステムです。
+**agent-team-avengers** は、Claude Code の **Agent Teams** を使って複数のインスタンスを同時に実行し、MCUアベンジャーズのチームのように統率するシステムです。
 
 **なぜ使うのか？**
 - 1つの命令で、複数のAIワーカーが並列で実行
@@ -31,23 +31,23 @@
 - ダッシュボードでリアルタイム進捗確認
 
 ```
-      あなた（上様）
+      あなた（Hayato）
            │
            ▼ 命令を出す
     ┌─────────────┐
-    │   SHOGUN    │  ← 命令を受け取り、即座に委譲
+    │    FURY     │  ← 命令を受け取り、即座に委譲
     └──────┬──────┘
            │ Agent Teams API
     ┌──────▼──────┐
-    │    KARO     │  ← タスクをワーカーに分配
+    │   JARVIS    │  ← タスクをワーカーに分配
     └──────┬──────┘
            │
   ┌────────┼────────┐
   ▼        ▼        ▼
-┌────────┐ ┌──┬──┬──┐
-│METSUKE │ │A1│A2│A3│ ...  ← ワーカーが並列実行
-│(品質)  │ └──┴──┴──┘
-└────────┘   ASHIGARU
+┌────────┐ ┌──────────────┐
+│ BRUCE  │ │Tony│Peter│...│  ← ワーカーが並列実行
+│(品質)  │ └──────────────┘
+└────────┘    WORKERS
 ```
 
 ---
@@ -67,9 +67,9 @@
 
 📥 **リポジトリをダウンロード**
 
-[ZIPダウンロード](https://github.com/marucc/multi-agent-shogun/archive/refs/heads/main.zip) して `C:\tools\multi-agent-shogun` に展開
+[ZIPダウンロード](https://github.com/marucc/agent-team-avengers/archive/refs/heads/main.zip) して `C:\tools\agent-team-avengers` に展開
 
-*または git を使用:* `git clone https://github.com/marucc/multi-agent-shogun.git C:\tools\multi-agent-shogun`
+*または git を使用:* `git clone https://github.com/marucc/agent-team-avengers.git C:\tools\agent-team-avengers`
 
 </td>
 </tr>
@@ -107,7 +107,7 @@
 
 ```bash
 cd /mnt/c/your-project
-/mnt/c/tools/multi-agent-shogun/shutsujin_departure.sh
+/mnt/c/tools/agent-team-avengers/assemble.sh
 ```
 
 ---
@@ -119,8 +119,8 @@ cd /mnt/c/your-project
 
 ```bash
 # 1. リポジトリをクローン
-git clone https://github.com/marucc/multi-agent-shogun.git ~/multi-agent-shogun
-cd ~/multi-agent-shogun
+git clone https://github.com/marucc/agent-team-avengers.git ~/agent-team-avengers
+cd ~/agent-team-avengers
 
 # 2. スクリプトに実行権限を付与
 chmod +x *.sh
@@ -133,7 +133,7 @@ chmod +x *.sh
 
 ```bash
 cd ~/your-project
-~/multi-agent-shogun/shutsujin_departure.sh
+~/agent-team-avengers/assemble.sh
 ```
 
 </details>
@@ -172,7 +172,7 @@ wsl --install
 |-----------|------|---------------|
 | `install.bat` | Windows: 初回セットアップ（WSL経由でfirst_setup.shを実行） | 初回のみ |
 | `first_setup.sh` | tmux、Node.js、Claude Code CLI をインストール | 初回のみ |
-| `shutsujin_departure.sh` | `.shogun/` 生成 + tmuxセッション作成 + Claude Code起動 | 毎日（プロジェクトディレクトリで実行） |
+| `assemble.sh` | `.avengers/` 生成 + tmuxセッション作成 + Claude Code起動 | 毎日（プロジェクトディレクトリで実行） |
 
 ### `install.bat` が自動で行うこと：
 - ✅ WSL2がインストールされているかチェック
@@ -180,12 +180,12 @@ wsl --install
 - ✅ tmux、Node.js、Claude Code CLI をインストール
 - ✅ 必要なディレクトリを作成
 
-### `shutsujin_departure.sh` が行うこと：
-- ✅ プロジェクトに `.shogun/` ディレクトリを作成（ダッシュボード、ログ、ラッパースクリプト）
-- ✅ tmuxセッションを作成（`shogun-<project>` + `multiagent-<project>`）
+### `assemble.sh` が行うこと：
+- ✅ プロジェクトに `.avengers/` ディレクトリを作成（ダッシュボード、ログ、ラッパースクリプト）
+- ✅ tmuxセッションを作成（`fury-<project>` + `avengers-<project>`）
 - ✅ Agent Teams を有効にしてClaude Codeを起動
 - ✅ 各エージェントに指示書を自動読み込み
-- ✅ チーム階層を構築（将軍 → 家老 → 足軽）
+- ✅ チーム階層を構築（Fury → JARVIS → Workers）
 
 **実行後、全エージェントが即座にコマンドを受け付ける準備完了！**
 
@@ -215,57 +215,57 @@ wsl --install
 
 | エージェント | 役割 | 数 |
 |-------------|------|-----|
-| 🏯 将軍（Shogun） | 総大将 — あなたの命令を受ける | 1 |
-| 📋 家老（Karo） | 管理者 — タスクを分配 | 1 |
-| 🔍 目付（Metsuke） | 品質保証 — レビュー担当 | 1 |
-| ⚔️ 足軽（Ashigaru） | ワーカー — 並列でタスク実行 | 設定可能（デフォルト: 3） |
+| 🛡️ Nick Fury | 統括 — あなたの命令を受ける | 1 |
+| 🤖 JARVIS | AIアシスタント — タスクを分配 | 1 |
+| 🧪 Bruce Banner | 戦略家 — 品質保証と分析 | 1 |
+| ⚡ Worker | スペシャリスト — 並列でタスク実行 | 設定可能（デフォルト: 6） |
 
 tmuxセッションが作成されます（プロジェクト名がセッション名に含まれます）：
-- `shogun-<project>` — ここに接続してコマンドを出す
-- `multiagent-<project>` — ワーカーがバックグラウンドで稼働
+- `fury-<project>` — ここに接続してコマンドを出す
+- `avengers-<project>` — ワーカーがバックグラウンドで稼働
 
-`.shogun/bin/` にラッパースクリプトが生成されるので、簡単にアクセスできます。
+`.avengers/bin/` にラッパースクリプトが生成されるので、簡単にアクセスできます。
 
 ---
 
 ## 📖 基本的な使い方
 
-### Step 1: 将軍に接続
+### Step 1: Furyに接続
 
-`shutsujin_departure.sh` 実行後、全エージェントが自動的に指示書を読み込み、作業準備完了となります。
+`assemble.sh` 実行後、全エージェントが自動的に指示書を読み込み、作業準備完了となります。
 
-新しいターミナルを開いて将軍に接続：
+新しいターミナルを開いてFuryに接続：
 
 ```bash
-.shogun/bin/shogun.sh
+.avengers/bin/fury.sh
 ```
 
 ### Step 2: 最初の命令を出す
 
-将軍は既に初期化済み！そのまま命令を出せます：
+Furyは既に初期化済み！そのまま命令を出せます：
 
 ```
 JavaScriptフレームワーク上位5つを調査して比較表を作成せよ
 ```
 
-将軍は：
+Furyは：
 1. Agent Teams API でタスクを作成
-2. SendMessage で家老（管理者）に指示
+2. SendMessage でJARVISに指示
 3. 即座にあなたに制御を返す（待つ必要なし！）
 
-その間、家老はタスクを足軽ワーカーに分配し、並列実行します。
+その間、JARVISはタスクをWorkerに分配し、並列実行します。
 
 ### Step 3: 進捗を確認
 
-エディタで `.shogun/dashboard.md` を開いてリアルタイム状況を確認：
+エディタで `.avengers/dashboard.md` を開いてリアルタイム状況を確認：
 
 ```markdown
 ## 進行中
 | ワーカー | タスク | 状態 |
 |----------|--------|------|
-| 足軽 1 | React調査 | 実行中 |
-| 足軽 2 | Vue調査 | 実行中 |
-| 足軽 3 | Angular調査 | 完了 |
+| Tony | React調査 | 実行中 |
+| Peter | Vue調査 | 実行中 |
+| Cap | Angular調査 | 完了 |
 ```
 
 ---
@@ -278,16 +278,16 @@ JavaScriptフレームワーク上位5つを調査して比較表を作成せよ
 
 ```
 あなた: 「5つのMCPサーバを調査せよ」
-→ 足軽が同時に調査開始
+→ Workerが同時に調査開始
 → 数時間ではなく数分で結果が出る
 ```
 
 ### 🔄 2. ノンブロッキングワークフロー
 
-将軍は即座に委譲して、あなたに制御を返します：
+Furyは即座に委譲して、あなたに制御を返します：
 
 ```
-あなた: 命令 → 将軍: 委譲 → あなた: 次の命令をすぐ出せる
+あなた: 命令 → Fury: 委譲 → あなた: 次の命令をすぐ出せる
                                     ↓
                     ワーカー: バックグラウンドで実行
                                     ↓
@@ -324,7 +324,7 @@ VSCode拡張のClaude Codeはスクショを貼り付けて事象を説明でき
 screenshot:
   path: "/mnt/c/Users/あなたの名前/Pictures/Screenshots"
 
-# 将軍に伝えるだけ:
+# Furyに伝えるだけ:
 あなた: 「最新のスクショを見ろ」
 あなた: 「スクショ2枚見ろ」
 → AIが即座にスクリーンショットを読み取って分析
@@ -338,8 +338,8 @@ screenshot:
 
 | レイヤー | 場所 | 用途 |
 |---------|------|------|
-| Memory MCP | `memory/shogun_memory.jsonl` | セッションを跨ぐ長期記憶 |
-| グローバル | `memory/global_context.md` | システム全体の設定、殿の好み |
+| Memory MCP | `memory/avengers_memory.jsonl` | セッションを跨ぐ長期記憶 |
+| グローバル | `memory/global_context.md` | システム全体の設定、Hayatoの好み |
 | プロジェクト | `context/{project}.md` | プロジェクト固有の知見 |
 
 ### 汎用コンテキストテンプレート
@@ -363,7 +363,7 @@ screenshot:
 初期状態ではスキルはありません。
 運用中にダッシュボード（dashboard.md）の「スキル化候補」から承認して増やしていきます。
 
-スキルは `/スキル名` で呼び出し可能。将軍に「/スキル名 を実行」と伝えるだけ。
+スキルは `/スキル名` で呼び出し可能。Furyに「/スキル名 を実行」と伝えるだけ。
 
 ### スキルの思想
 
@@ -376,25 +376,25 @@ screenshot:
 **2. スキル取得の手順**
 
 ```
-足軽が作業中にパターンを発見
+Workerが作業中にパターンを発見
     ↓
 dashboard.md の「スキル化候補」に上がる
     ↓
-殿（あなた）が内容を確認
+Hayato（あなた）が内容を確認
     ↓
-承認すれば家老に指示してスキルを作成
+承認すればJARVISに指示してスキルを作成
 ```
 
 ---
 
 ## 🏛️ 設計思想
 
-### なぜ階層構造（将軍→家老→足軽）なのか
+### なぜ階層構造（Fury→JARVIS→Workers）なのか
 
-1. **即時応答**: 将軍は即座に委譲してあなたに制御を返す
-2. **並列実行**: 家老が複数の足軽に同時にタスクを分配
-3. **関心の分離**: 将軍は「何を」、家老は「誰に」を決定
-4. **品質ゲート**: 目付が独立してレビューを実施
+1. **即時応答**: Furyは即座に委譲してあなたに制御を返す
+2. **並列実行**: JARVISが複数のWorkerに同時にタスクを分配
+3. **関心の分離**: Furyは「何を」、JARVISは「誰に」を決定
+4. **品質ゲート**: Bruceが独立してレビューを実施
 
 ### なぜ Agent Teams なのか
 
@@ -403,11 +403,11 @@ dashboard.md の「スキル化候補」に上がる
 - **タスク管理**: TaskCreate/TaskUpdate/TaskList が組み込み済み
 - **確実な通信**: SendMessage による配信保証
 
-### なぜ dashboard.md は家老のみが更新するのか
+### なぜ dashboard.md は JARVIS のみが更新するのか
 
 1. **単一更新者**: 競合を防ぐため、更新責任者を1人に限定
-2. **情報集約**: 家老は全足軽の報告を受ける立場なので全体像を把握
-3. **割り込み防止**: 将軍が更新すると、殿の入力中に割り込む恐れあり
+2. **情報集約**: JARVISは全Workerの報告を受ける立場なので全体像を把握
+3. **割り込み防止**: Furyが更新すると、Hayatoの入力中に割り込む恐れあり
 
 ---
 
@@ -441,7 +441,7 @@ claude mcp add github -e GITHUB_PERSONAL_ACCESS_TOKEN=your_pat_here -- npx -y @m
 claude mcp add sequential-thinking -- npx -y @modelcontextprotocol/server-sequential-thinking
 
 # 5. Memory - セッション間の長期記憶（推奨！）
-claude mcp add memory -e MEMORY_FILE_PATH="$PWD/memory/shogun_memory.jsonl" -- npx -y @modelcontextprotocol/server-memory
+claude mcp add memory -e MEMORY_FILE_PATH="$PWD/memory/avengers_memory.jsonl" -- npx -y @modelcontextprotocol/server-memory
 ```
 
 ### インストール確認
@@ -461,7 +461,7 @@ claude mcp list
 `config/settings.yaml` を編集：
 
 ```yaml
-ashigaru_count: 3   # 足軽の数（1〜8）
+worker_count: 6   # Workerの数（1〜8）
 ```
 
 ### 言語設定
@@ -495,13 +495,13 @@ language: en   # 日本語 + 英訳併記
 │                      毎日の起動（毎日実行）                           │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
-│  shutsujin_departure.sh                                             │
+│  assemble.sh                                                        │
 │      │                                                              │
-│      ├──▶ プロジェクトに .shogun/ ディレクトリを作成                    │
+│      ├──▶ プロジェクトに .avengers/ ディレクトリを作成                │
 │      │                                                              │
 │      ├──▶ tmuxセッションを作成                                       │
-│      │         • "shogun-<project>"セッション（将軍）                │
-│      │         • "multiagent-<project>"セッション（家老+目付+足軽）  │
+│      │         • "fury-<project>"セッション（Fury）                  │
+│      │         • "avengers-<project>"セッション（JARVIS+Bruce+Workers）│
 │      │                                                              │
 │      └──▶ Agent Teams を有効にしてClaude Codeを起動                  │
 │                                                                     │
@@ -511,17 +511,17 @@ language: en   # 日本語 + 英訳併記
 </details>
 
 <details>
-<summary><b>shutsujin_departure.sh オプション</b>（クリックで展開）</summary>
+<summary><b>assemble.sh オプション</b>（クリックで展開）</summary>
 
 ```bash
 # プロジェクトディレクトリで実行
 cd /path/to/your/project
 
-# デフォルト: フル起動（.shogun/ 作成 + tmuxセッション + Claude Code起動）
-/path/to/multi-agent-shogun/shutsujin_departure.sh
+# デフォルト: フル起動（.avengers/ 作成 + tmuxセッション + Claude Code起動）
+/path/to/agent-team-avengers/assemble.sh
 
 # ヘルプを表示
-/path/to/multi-agent-shogun/shutsujin_departure.sh -h
+/path/to/agent-team-avengers/assemble.sh -h
 ```
 
 </details>
@@ -532,18 +532,18 @@ cd /path/to/your/project
 **通常の毎日の使用：**
 ```bash
 cd /path/to/your/project
-/path/to/multi-agent-shogun/shutsujin_departure.sh   # 全て起動
-.shogun/bin/shogun.sh                                 # 接続してコマンドを出す
+/path/to/agent-team-avengers/assemble.sh   # 全て起動
+.avengers/bin/fury.sh                       # 接続してコマンドを出す
 ```
 
-**再出陣（撤退後）：**
+**再アセンブル（ディスアセンブル後）：**
 ```bash
-.shogun/bin/shutsujin.sh          # プロジェクトディレクトリから再出陣
+.avengers/bin/assemble.sh          # プロジェクトディレクトリから再アセンブル
 ```
 
-**撤退（終了）：**
+**ディスアセンブル（終了）：**
 ```bash
-.shogun/bin/tettai.sh             # バックアップ付きで終了
+.avengers/bin/disassemble.sh       # バックアップ付きで終了
 ```
 
 </details>
@@ -556,25 +556,25 @@ cd /path/to/your/project
 <summary><b>クリックでファイル構成を展開</b></summary>
 
 ```
-multi-agent-shogun/                      # SHOGUN_ROOT（システムファイル）
+agent-team-avengers/                     # AVENGERS_ROOT（システムファイル）
 │
 │  ┌─────────────────── スクリプト ───────────────────────────┐
 ├── install.bat               # Windows: 初回セットアップ
 ├── first_setup.sh            # Ubuntu/Mac: 初回セットアップ
-├── shutsujin_departure.sh    # 出陣（プロジェクトディレクトリで実行）
-├── tettai_retreat.sh         # 撤退・終了
+├── assemble.sh               # 起動（プロジェクトディレクトリで実行）
+├── disassemble.sh            # 終了
 ├── watchdog.sh               # 監視デーモン
 ├── switch_account.sh         # アカウント切り替え
 │  └────────────────────────────────────────────────────────┘
 │
 ├── instructions/             # エージェント指示書
-│   ├── shogun.md             # 将軍の指示書
-│   ├── karo.md               # 家老の指示書
-│   ├── metsuke.md            # 目付の指示書
-│   └── ashigaru.md           # 足軽の指示書
+│   ├── nick_fury_core.md    # Fury指示書
+│   ├── jarvis.md            # JARVIS指示書
+│   ├── bruce_banner.md      # Bruce指示書
+│   └── tony_stark.md (等)   # Worker指示書
 │
 ├── scripts/
-│   ├── claude-shogun         # Claude Code起動ラッパー
+│   ├── claude-avengers      # Claude Code起動ラッパー
 │   ├── notify.sh             # tmux send-keysラッパー
 │   └── project-env.sh        # 共通変数定義
 │
@@ -585,16 +585,16 @@ multi-agent-shogun/                      # SHOGUN_ROOT（システムファイ�
 ├── memory/                   # Memory MCP保存場所
 └── CLAUDE.md                 # Claude用プロジェクトコンテキスト
 
-your-project/.shogun/                    # プロジェクトごとに生成
+your-project/.avengers/                  # プロジェクトごとに生成
 ├── project.env               # プロジェクトメタデータ
 ├── dashboard.md              # リアルタイム状況一覧
 ├── bin/
-│   ├── shutsujin.sh          # 再出陣ラッパー
-│   ├── tettai.sh             # 撤退ラッパー
-│   ├── shogun.sh             # 将軍セッションにアタッチ
-│   └── multiagent.sh         # 配下セッションにアタッチ
+│   ├── assemble.sh           # 再起動ラッパー
+│   ├── disassemble.sh        # 終了ラッパー
+│   ├── fury.sh               # Furyセッションにアタッチ
+│   └── avengers.sh           # チームセッションにアタッチ
 ├── status/
-│   └── pending_tasks.yaml    # 撤退時に自動保存
+│   └── pending_tasks.yaml    # 終了時に自動保存
 └── logs/
     └── backup_*/             # バックアップ
 ```
@@ -637,7 +637,7 @@ claude --dangerously-skip-permissions --system-prompt "..."
 
 ワーカーのペインを確認：
 ```bash
-.shogun/bin/multiagent.sh
+.avengers/bin/avengers.sh
 # Ctrl+B の後に矢印キーでペインを切り替え
 ```
 
@@ -649,9 +649,9 @@ claude --dangerously-skip-permissions --system-prompt "..."
 
 | コマンド | 説明 |
 |----------|------|
-| `.shogun/bin/shogun.sh` | 将軍に接続 |
-| `.shogun/bin/multiagent.sh` | ワーカーに接続 |
-| `.shogun/bin/tettai.sh` | 撤退（終了） |
+| `.avengers/bin/fury.sh` | Furyに接続 |
+| `.avengers/bin/avengers.sh` | ワーカーに接続 |
+| `.avengers/bin/disassemble.sh` | 終了 |
 | `Ctrl+B` の後 矢印キー | ペイン間を切り替え |
 | `Ctrl+B` の後 `d` | デタッチ（実行継続） |
 | `tmux ls` | 全セッション一覧 |
@@ -674,6 +674,6 @@ MIT License - 詳細は [LICENSE](LICENSE) を参照。
 
 <div align="center">
 
-**AIの軍勢を統率せよ。より速く構築せよ。**
+**AIチームを結集せよ。より速く構築せよ。**
 
 </div>

@@ -1,10 +1,10 @@
 @echo off
 chcp 65001 >nul 2>&1
-title multi-agent-shogun Installer
+title Avengers Multi-Agent System Installer
 
 echo.
 echo   +============================================================+
-echo   |  [SHOGUN] multi-agent-shogun - Auto Installer              |
+echo   |  [AVENGERS] Avengers Multi-Agent System - Auto Installer    |
 echo   |           全自動セットアップ                               |
 echo   +============================================================+
 echo.
@@ -174,7 +174,7 @@ echo   |  Open WSL terminal and run:                                |
 echo   |  WSL ターミナルを開いて実行:                               |
 echo   |                                                            |
 echo   |    cd "%WSL_PATH%"
-echo   |    ./shutsujin_departure.sh                                |
+echo   |    ./assemble.sh                                            |
 echo   |                                                            |
 echo   +------------------------------------------------------------+
 echo.

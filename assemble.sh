@@ -1,33 +1,36 @@
 #!/bin/bash
-# 🏯 multi-agent-shogun 出陣スクリプト（毎日の起動用）
+# 🛡️ Avengers Multi-Agent System — Avengers Assemble（毎日の起動用）
 # Daily Deployment Script for Multi-Agent Orchestration System
 # Agent Teams 版
 #
 # 使用方法:
-#   ./shutsujin_departure.sh           # 将軍起動（Agent Teams がチームを構成）
-#   ./shutsujin_departure.sh -h        # ヘルプ表示
+#   ./assemble.sh           # Fury 起動（Agent Teams がチームを構成）
+#   ./assemble.sh -h        # ヘルプ表示
 
 set -e
 
 # 実行時のカレントディレクトリを作業ディレクトリとして保存
 WORK_DIR="$(pwd)"
 
-# shogun システムのルートディレクトリ（このスクリプトの場所）
-SHOGUN_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Avengers Multi-Agent System のルートディレクトリ（このスクリプトの場所）
+AVENGERS_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # プロジェクト共通変数を読み込み
-source "${SHOGUN_ROOT}/scripts/project-env.sh"
+source "${AVENGERS_ROOT}/scripts/project-env.sh"
 
 # 言語設定を読み取り（デフォルト: ja）
 LANG_SETTING="ja"
-if [ -f "${SHOGUN_ROOT}/config/settings.yaml" ]; then
-    LANG_SETTING=$(grep "^language:" "${SHOGUN_ROOT}/config/settings.yaml" 2>/dev/null | awk '{print $2}' || echo "ja")
+if [ -f "${AVENGERS_ROOT}/config/settings.yaml" ]; then
+    LANG_SETTING=$(grep "^language:" "${AVENGERS_ROOT}/config/settings.yaml" 2>/dev/null | awk '{print $2}' || echo "ja")
 fi
 
-# 足軽数を読み取り（デフォルト: 3）
+# Worker 数を読み取り（デフォルト: 3）
 ASHIGARU_COUNT=3
-if [ -f "${SHOGUN_ROOT}/config/settings.yaml" ]; then
-    ASHIGARU_COUNT=$(grep "^ashigaru_count:" "${SHOGUN_ROOT}/config/settings.yaml" 2>/dev/null | awk '{print $2}' || echo "3")
+if [ -f "${AVENGERS_ROOT}/config/settings.yaml" ]; then
+    ASHIGARU_COUNT=$(grep "^worker_count:" "${AVENGERS_ROOT}/config/settings.yaml" 2>/dev/null | awk '{print $2}' || echo "")
+    if [ -z "$ASHIGARU_COUNT" ]; then
+        ASHIGARU_COUNT=$(grep "^ashigaru_count:" "${AVENGERS_ROOT}/config/settings.yaml" 2>/dev/null | awk '{print $2}' || echo "3")
+    fi
     ASHIGARU_COUNT=${ASHIGARU_COUNT:-3}
 fi
 
@@ -57,36 +60,36 @@ while [[ $# -gt 0 ]]; do
             ;;
         -h|--help)
             echo ""
-            echo "🏯 multi-agent-shogun 出陣スクリプト（Agent Teams 版）"
+            echo "🛡️ Avengers Multi-Agent System（Agent Teams 版）"
             echo ""
-            echo "使用方法: ./shutsujin_departure.sh [オプション]"
+            echo "使用方法: ./assemble.sh [オプション]"
             echo ""
             echo "オプション:"
-            echo "  -r, --resume      前回セッションを引き継いで再出陣（将軍 --continue）"
+            echo "  -r, --resume      前回セッションを引き継いで再開（Fury --continue）"
             echo "  -h, --help        このヘルプを表示"
             echo ""
             echo "例:"
-            echo "  ./shutsujin_departure.sh      # 新規出陣（tmux セッション構築 + 将軍起動）"
-            echo "  ./shutsujin_departure.sh -r   # 再出陣（前回の将軍セッションを引き継ぎ）"
-            echo "  .shogun/bin/shogun.sh          # 将軍にアタッチ"
-            echo "  .shogun/bin/multiagent.sh      # 配下にアタッチ"
+            echo "  ./assemble.sh      # 新規 Avengers Assemble（tmux セッション構築 + Fury 起動）"
+            echo "  ./assemble.sh -r   # 再開（前回の Fury セッションを引き継ぎ）"
+            echo "  .avengers/bin/fury.sh          # Fury にアタッチ"
+            echo "  .avengers/bin/avengers.sh      # 配下にアタッチ"
             echo ""
             echo "2つの tmux セッションを構築します:"
-            echo "  ${TMUX_SHOGUN}     - 将軍（Claude Code）"
-            echo "  ${TMUX_MULTIAGENT} - 家老・目付・足軽（Agent Teams が自動配備）"
+            echo "  ${TMUX_FURY}     - Fury（Claude Code）"
+            echo "  ${TMUX_AVENGERS} - JARVIS・Bruce・Worker（Agent Teams が自動配備）"
             echo ""
             exit 0
             ;;
         *)
             echo "不明なオプション: $1"
-            echo "./shutsujin_departure.sh -h でヘルプを表示"
+            echo "./assemble.sh -h でヘルプを表示"
             exit 1
             ;;
     esac
 done
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# 出陣バナー表示（CC0ライセンスASCIIアート使用）
+# Avengers Assemble バナー表示（CC0ライセンスASCIIアート使用）
 # ───────────────────────────────────────────────────────────────────────────────
 # 【著作権・ライセンス表示】
 # 忍者ASCIIアート: syntax-samurai/ryu - CC0 1.0 Universal (Public Domain)
@@ -106,14 +109,14 @@ show_battle_cry() {
     echo -e "\033[1;31m║\033[0m \033[1;33m███████║██║  ██║╚██████╔╝   ██║   ███████║╚██████╔╝╚█████╔╝██║██║ ╚████║\033[0m \033[1;31m║\033[0m"
     echo -e "\033[1;31m║\033[0m \033[1;33m╚══════╝╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚══════╝ ╚═════╝  ╚════╝ ╚═╝╚═╝  ╚═══╝\033[0m \033[1;31m║\033[0m"
     echo -e "\033[1;31m╠══════════════════════════════════════════════════════════════════════════════════╣\033[0m"
-    echo -e "\033[1;31m║\033[0m       \033[1;37m出陣じゃーーー！！！\033[0m    \033[1;36m⚔\033[0m    \033[1;35m天下布武！\033[0m                          \033[1;31m║\033[0m"
+    echo -e "\033[1;31m║\033[0m       \033[1;37mAvengers Assembleじゃーーー！！！\033[0m    \033[1;36m⚔\033[0m    \033[1;35m天下布武！\033[0m                          \033[1;31m║\033[0m"
     echo -e "\033[1;31m╚══════════════════════════════════════════════════════════════════════════════════╝\033[0m"
     echo ""
 
     # ═══════════════════════════════════════════════════════════════════════════
-    # 足軽隊列（動的生成）
+    # Worker 隊列（動的生成）
     # ═══════════════════════════════════════════════════════════════════════════
-    # 足軽数に応じた漢数字（bash 3.x 互換）
+    # Worker 数に応じた漢数字（bash 3.x 互換）
     case $ASHIGARU_COUNT in
         1) KANJI_COUNT="一" ;;
         2) KANJI_COUNT="二" ;;
@@ -127,10 +130,10 @@ show_battle_cry() {
     esac
 
     echo -e "\033[1;34m  ╔═════════════════════════════════════════════════════════════════════════════╗\033[0m"
-    echo -e "\033[1;34m  ║\033[0m                    \033[1;37m【 足 軽 隊 列 ・ ${KANJI_COUNT} 名 配 備 】\033[0m                      \033[1;34m║\033[0m"
+    echo -e "\033[1;34m  ║\033[0m                    \033[1;37m【 Worker 隊 列 ・ ${KANJI_COUNT} 名 配 備 】\033[0m                      \033[1;34m║\033[0m"
     echo -e "\033[1;34m  ╚═════════════════════════════════════════════════════════════════════════════╝\033[0m"
 
-    # 足軽ASCIIアートを動的に生成
+    # Worker ASCIIアートを動的に生成
     echo ""
     LINE1="      "
     LINE2="      "
@@ -146,7 +149,7 @@ show_battle_cry() {
         LINE4+="||      "
         LINE5+="/||\\    "
         LINE6+="/  \\    "
-        LINE7+="[足$i]   "
+        LINE7+="[W$i]   "
     done
     echo "$LINE1"
     echo "$LINE2"
@@ -157,16 +160,16 @@ show_battle_cry() {
     echo "$LINE7"
     echo ""
 
-    echo -e "                    \033[1;36m「「「 はっ！！ 出陣いたす！！ 」」」\033[0m"
+    echo -e "                    \033[1;36m「「「 はっ！！ Avengers Assembleいたす！！ 」」」\033[0m"
     echo ""
 
     # ═══════════════════════════════════════════════════════════════════════════
     # システム情報
     # ═══════════════════════════════════════════════════════════════════════════
     echo -e "\033[1;33m  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\033[0m"
-    echo -e "\033[1;33m  ┃\033[0m  \033[1;37m🏯 multi-agent-shogun\033[0m  〜 \033[1;36mAgent Teams 戦国マルチエージェント\033[0m 〜           \033[1;33m┃\033[0m"
+    echo -e "\033[1;33m  ┃\033[0m  \033[1;37m🛡️ Avengers Multi-Agent System\033[0m  〜 \033[1;36mAgent Teams マルチエージェント\033[0m 〜           \033[1;33m┃\033[0m"
     echo -e "\033[1;33m  ┃\033[0m                                                                           \033[1;33m┃\033[0m"
-    echo -e "\033[1;33m  ┃\033[0m    \033[1;35m将軍\033[0m: 統括  \033[1;31m家老\033[0m: 管理  \033[1;32m目付\033[0m: 品質保証  \033[1;34m足軽\033[0m×$ASHIGARU_COUNT: 実働      \033[1;33m┃\033[0m"
+    echo -e "\033[1;33m  ┃\033[0m    \033[1;35mFury\033[0m: 統括  \033[1;31mJARVIS\033[0m: 管理  \033[1;32mBruce\033[0m: 品質保証  \033[1;34mWorker\033[0m×$ASHIGARU_COUNT: 実働      \033[1;33m┃\033[0m"
     echo -e "\033[1;33m  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\033[0m"
     echo ""
 }
@@ -175,16 +178,16 @@ show_battle_cry() {
 show_battle_cry
 
 if [ "$RESUME_MODE" = true ]; then
-    echo -e "  \033[1;33m再出陣！前回の陣を引き継ぐぞ\033[0m"
+    echo -e "  \033[1;33m再開！前回の陣を引き継ぐぞ\033[0m"
 else
-    echo -e "  \033[1;33m天下布武！出陣準備を開始いたす\033[0m"
+    echo -e "  \033[1;33m天下布武！Avengers Assemble準備を開始いたす\033[0m"
 fi
 echo ""
 log_info "作業ディレクトリ: ${WORK_DIR}"
 log_info "プロジェクト名: ${PROJECT_NAME_SAFE}"
 
 # resume モード時のセッションID確認
-SESSION_ID_FILE="${STATUS_DIR}/shogun_session_id"
+SESSION_ID_FILE="${STATUS_DIR}/fury_session_id"
 SAVED_SESSION_ID=""
 if [ "$RESUME_MODE" = true ]; then
     if [ -f "$SESSION_ID_FILE" ]; then
@@ -197,27 +200,27 @@ fi
 echo ""
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STEP 1: .shogun/ ディレクトリ構造を作成
+# STEP 1: .avengers/ ディレクトリ構造を作成
 # ═══════════════════════════════════════════════════════════════════════════════
-log_info "📁 .shogun/ ディレクトリ構造を構築中..."
+log_info "📁 .avengers/ ディレクトリ構造を構築中..."
 
 mkdir -p "${BIN_DIR}"
 mkdir -p "${STATUS_DIR}"
 mkdir -p "${LOGS_DIR}"
 
-log_success "  └─ ${SHOGUN_DATA_DIR}/ 構築完了"
+log_success "  └─ ${AVENGERS_DATA_DIR}/ 構築完了"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 2: project.env 生成
 # ═══════════════════════════════════════════════════════════════════════════════
-cat > "${SHOGUN_DATA_DIR}/project.env" << EOF
-# multi-agent-shogun プロジェクトメタデータ
+cat > "${AVENGERS_DATA_DIR}/project.env" << EOF
+# Avengers Multi-Agent System — プロジェクトメタデータ
 # Generated: $(date "+%Y-%m-%d %H:%M:%S")
 WORK_DIR="${WORK_DIR}"
-SHOGUN_ROOT="${SHOGUN_ROOT}"
+AVENGERS_ROOT="${AVENGERS_ROOT}"
 PROJECT_NAME_SAFE="${PROJECT_NAME_SAFE}"
-TMUX_SHOGUN="${TMUX_SHOGUN}"
-TMUX_MULTIAGENT="${TMUX_MULTIAGENT}"
+TMUX_FURY="${TMUX_FURY}"
+TMUX_AVENGERS="${TMUX_AVENGERS}"
 TEAM_NAME="${TEAM_NAME}"
 EOF
 
@@ -226,32 +229,32 @@ log_success "  └─ project.env 生成完了"
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 3: bin/ ラッパースクリプト生成
 # ═══════════════════════════════════════════════════════════════════════════════
-cat > "${BIN_DIR}/shutsujin.sh" << 'WRAPPER_EOF'
+cat > "${BIN_DIR}/assemble.sh" << 'WRAPPER_EOF'
 #!/bin/sh
-# 再出陣ラッパー（引数をパススルー）
+# 再アセンブルラッパー（引数をパススルー）
 # 使い方:
-#   .shogun/bin/shutsujin.sh           # 新規出陣
-#   .shogun/bin/shutsujin.sh --resume  # 前回セッション引き継ぎ
+#   .avengers/bin/assemble.sh           # 新規 Avengers Assemble
+#   .avengers/bin/assemble.sh --resume  # 前回セッション引き継ぎ
 WRAPPER_EOF
 # 変数展開が必要な部分を追記
-echo "cd \"${WORK_DIR}\" && \"${SHOGUN_ROOT}/shutsujin_departure.sh\" \"\$@\"" >> "${BIN_DIR}/shutsujin.sh"
+echo "cd \"${WORK_DIR}\" && \"${AVENGERS_ROOT}/assemble.sh\" \"\$@\"" >> "${BIN_DIR}/assemble.sh"
 
-cat > "${BIN_DIR}/tettai.sh" << EOF
+cat > "${BIN_DIR}/disassemble.sh" << EOF
 #!/bin/sh
 # 撤退ラッパー
-cd "${WORK_DIR}" && "${SHOGUN_ROOT}/tettai_retreat.sh"
+cd "${WORK_DIR}" && "${AVENGERS_ROOT}/disassemble.sh"
 EOF
 
-cat > "${BIN_DIR}/shogun.sh" << EOF
+cat > "${BIN_DIR}/fury.sh" << EOF
 #!/bin/sh
-# 将軍セッションにアタッチ
-tmux attach-session -t "${TMUX_SHOGUN}"
+# Fury セッションにアタッチ
+tmux attach-session -t "${TMUX_FURY}"
 EOF
 
-cat > "${BIN_DIR}/multiagent.sh" << EOF
+cat > "${BIN_DIR}/avengers.sh" << EOF
 #!/bin/sh
 # 配下セッションにアタッチ
-tmux attach-session -t "${TMUX_MULTIAGENT}"
+tmux attach-session -t "${TMUX_AVENGERS}"
 EOF
 
 chmod +x "${BIN_DIR}"/*.sh
@@ -261,12 +264,12 @@ echo ""
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 3b: spawn 制限フック設定（~/.claude/ 配下）
 # ═══════════════════════════════════════════════════════════════════════════════
-# 家老・足軽がチームメンバーを追加するのを物理的に防ぐフック。
-# - シンボリックリンク: ~/.claude/hooks/check-team-spawn.sh → SHOGUN_ROOT/scripts/
+# JARVIS・Worker がチームメンバーを追加するのを物理的に防ぐフック。
+# - シンボリックリンク: ~/.claude/hooks/check-team-spawn.sh → AVENGERS_ROOT/scripts/
 # - フック設定: ~/.claude/settings.json の hooks.PreToolUse に追加
 log_info "🔒 spawn 制限フックを確認中..."
 
-HOOK_SCRIPT="${SHOGUN_ROOT}/scripts/check-team-spawn.sh"
+HOOK_SCRIPT="${AVENGERS_ROOT}/scripts/check-team-spawn.sh"
 HOOK_LINK="$HOME/.claude/hooks/check-team-spawn.sh"
 
 # シンボリックリンクの作成/更新
@@ -325,7 +328,7 @@ echo ""
 # ═══════════════════════════════════════════════════════════════════════════════
 log_info "📋 スラッシュコマンドを配備中..."
 
-COMMANDS_SRC="${SHOGUN_ROOT}/commands"
+COMMANDS_SRC="${AVENGERS_ROOT}/commands"
 COMMANDS_DST="${WORK_DIR}/.claude/commands"
 
 if [ -d "$COMMANDS_SRC" ]; then
@@ -374,7 +377,7 @@ else
 # 📊 戦況報告
 最終更新: ${TIMESTAMP}
 
-## 🚨 要対応 - 殿のご判断をお待ちしております
+## 🚨 要対応 - Hayato のご判断をお待ちしております
 なし
 
 ## 🔄 進行中 - 只今、戦闘中でござる
@@ -401,7 +404,7 @@ EOF
 # 📊 戦況報告 (Battle Status Report)
 最終更新 (Last Updated): ${TIMESTAMP}
 
-## 🚨 要対応 - 殿のご判断をお待ちしております (Action Required - Awaiting Lord's Decision)
+## 🚨 要対応 - Hayato のご判断をお待ちしております (Action Required - Awaiting Hayato's Decision)
 なし (None)
 
 ## 🔄 進行中 - 只今、戦闘中でござる (In Progress - Currently in Battle)
@@ -420,7 +423,7 @@ EOF
 ## ⏸️ 待機中 (On Standby)
 なし (None)
 
-## ❓ 伺い事項 (Questions for Lord)
+## ❓ 伺い事項 (Questions for Hayato)
 なし (None)
 EOF
     fi
@@ -432,7 +435,7 @@ fi
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 5b: lessons.md 初期化（存在しない場合のみ — 教訓は蓄積するため）
 # ═══════════════════════════════════════════════════════════════════════════════
-LESSONS_PATH="${SHOGUN_DATA_DIR}/lessons.md"
+LESSONS_PATH="${AVENGERS_DATA_DIR}/lessons.md"
 if [ ! -f "${LESSONS_PATH}" ]; then
     log_info "📝 教訓帳を初期化中..."
     cat > "${LESSONS_PATH}" << 'EOF'
@@ -452,37 +455,37 @@ else
 fi
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STEP 5c: shogun_context.md 初期化（存在しない場合のみ — 再開時は引き継ぎ）
+# STEP 5c: fury_context.md 初期化（存在しない場合のみ — 再開時は引き継ぎ）
 # ═══════════════════════════════════════════════════════════════════════════════
-SHOGUN_CONTEXT_PATH="${STATUS_DIR}/shogun_context.md"
-if [ ! -f "${SHOGUN_CONTEXT_PATH}" ]; then
-    log_info "🧠 将軍の状況認識ファイルを初期化中..."
+FURY_CONTEXT_PATH="${STATUS_DIR}/fury_context.md"
+if [ ! -f "${FURY_CONTEXT_PATH}" ]; then
+    log_info "🧠 Fury の状況認識ファイルを初期化中..."
     TIMESTAMP=$(date "+%Y-%m-%d %H:%M")
-    cat > "${SHOGUN_CONTEXT_PATH}" << EOF
-# 将軍の状況認識
+    cat > "${FURY_CONTEXT_PATH}" << EOF
+# Fury の状況認識
 最終更新: ${TIMESTAMP}
 
-## 殿の指示と作戦書
-- 指示: （初期状態 — 殿の指示を待っている）
+## Hayato の指示と作戦書
+- 指示: （初期状態 — Hayato の指示を待っている）
 - 作戦書: なし
 
 ## タスク状況
 （なし）
 
 ## 待ち状態
-殿の最初の指示を待機中
+Hayato の最初の指示を待機中
 
 ## 判断メモ
 （なし）
 EOF
-    log_success "  └─ shogun_context.md 初期化完了"
+    log_success "  └─ fury_context.md 初期化完了"
 else
-    log_info "🧠 将軍の状況認識ファイルは既存のものを引き継ぎ"
+    log_info "🧠 Fury の状況認識ファイルは既存のものを引き継ぎ"
 fi
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 5d: plans/ ディレクトリ初期化
 # ═══════════════════════════════════════════════════════════════════════════════
-PLANS_DIR="${SHOGUN_DATA_DIR}/plans"
+PLANS_DIR="${AVENGERS_DATA_DIR}/plans"
 mkdir -p "${PLANS_DIR}"
 log_success "  └─ plans/ ディレクトリ初期化完了"
 
@@ -507,19 +510,19 @@ fi
 # STEP 7: tmux セッション構築
 # ═══════════════════════════════════════════════════════════════════════════════
 # Agent Teams (teammateMode: tmux) は tmux 内で Claude を実行する必要がある。
-# 将軍 → ${TMUX_SHOGUN} セッション（単独）
-# 家老・目付・足軽 → ${TMUX_MULTIAGENT} セッション（自動移動）
+# Fury → ${TMUX_FURY} セッション（単独）
+# JARVIS・Bruce・Worker → ${TMUX_AVENGERS} セッション（自動移動）
 #
-# tmux hook (after-split-window) により、Agent Teams が shogun 内に spawn した
-# チームメイトの pane を自動的に multiagent セッションに移動する。
+# tmux hook (after-split-window) により、Agent Teams が fury 内に spawn した
+# チームメイトの pane を自動的に avengers セッションに移動する。
 
-log_war "👑 将軍の本陣を構築中..."
+log_war "👑 Fury の本陣を構築中..."
 
 # 既存セッションをクリーンアップ
-tmux kill-session -t "${TMUX_SHOGUN}" 2>/dev/null && log_info "  └─ 既存の ${TMUX_SHOGUN} セッション撤収" || true
-tmux kill-session -t "${TMUX_MULTIAGENT}" 2>/dev/null && log_info "  └─ 既存の ${TMUX_MULTIAGENT} セッション撤収" || true
+tmux kill-session -t "${TMUX_FURY}" 2>/dev/null && log_info "  └─ 既存の ${TMUX_FURY} セッション撤収" || true
+tmux kill-session -t "${TMUX_AVENGERS}" 2>/dev/null && log_info "  └─ 既存の ${TMUX_AVENGERS} セッション撤収" || true
 
-# 将軍用 tmux セッション（Claude Code を起動）
+# Fury 用 tmux セッション（Claude Code を起動）
 # resume モードでは保存済みセッションIDで復元、なければ --continue にフォールバック
 CLAUDE_EXTRA_ARGS=""
 if [ "$RESUME_MODE" = true ]; then
@@ -531,20 +534,20 @@ if [ "$RESUME_MODE" = true ]; then
         log_info "  └─ セッションIDなし、最新セッションで再開（--continue）"
     fi
 fi
-tmux new-session -d -s "${TMUX_SHOGUN}" -n "shogun" \
-    "cd '${WORK_DIR}' && WORK_DIR='${WORK_DIR}' SHOGUN_DATA_DIR='${SHOGUN_DATA_DIR}' '${SHOGUN_ROOT}/scripts/claude-shogun' --dangerously-skip-permissions ${CLAUDE_EXTRA_ARGS}"
-tmux set-option -t "${TMUX_SHOGUN}" pane-base-index 0
+tmux new-session -d -s "${TMUX_FURY}" -n "fury" \
+    "cd '${WORK_DIR}' && WORK_DIR='${WORK_DIR}' AVENGERS_DATA_DIR='${AVENGERS_DATA_DIR}' '${AVENGERS_ROOT}/scripts/claude-avengers' --dangerously-skip-permissions ${CLAUDE_EXTRA_ARGS}"
+tmux set-option -t "${TMUX_FURY}" pane-base-index 0
 
 # チームメイト用 tmux セッション（配下の陣）
-tmux new-session -d -s "${TMUX_MULTIAGENT}" -n "agents"
-tmux set-option -t "${TMUX_MULTIAGENT}" pane-base-index 0
-INITIAL_PANE=$(tmux display-message -t "${TMUX_MULTIAGENT}:agents" -p '#{pane_id}')
+tmux new-session -d -s "${TMUX_AVENGERS}" -n "agents"
+tmux set-option -t "${TMUX_AVENGERS}" pane-base-index 0
+INITIAL_PANE=$(tmux display-message -t "${TMUX_AVENGERS}:agents" -p '#{pane_id}')
 
-# tmux フック: shogun で pane が split されたら multiagent に自動移動
+# tmux フック: fury で pane が split されたら avengers に自動移動
 # Agent Teams が teammateMode: tmux で pane を作るたび発火する
 # move-pane は直接 tmux コマンドとして実行（run-shell 内では動かない）
 # カウンターベース: チームメイト数に達したらフック自動解除
-EXPECTED_TEAMMATES=$((2 + ASHIGARU_COUNT))  # karo(1) + metsuke(1) + ashigaru(N)
+EXPECTED_TEAMMATES=$((2 + ASHIGARU_COUNT))  # jarvis(1) + bruce(1) + workers(N)
 MOVE_COUNTER="${STATUS_DIR}/.pane_move_count"
 echo "0" > "${MOVE_COUNTER}"
 
@@ -554,10 +557,10 @@ cat > "${HOOK_SCRIPT}" << HOOKEOF
 #!/bin/bash
 COUNTER_FILE="${MOVE_COUNTER}"
 EXPECTED="${EXPECTED_TEAMMATES}"
-TMUX_SH="${TMUX_SHOGUN}"
-TMUX_MA="${TMUX_MULTIAGENT}"
+TMUX_SH="${TMUX_FURY}"
+TMUX_MA="${TMUX_AVENGERS}"
 INITIAL="${INITIAL_PANE}"
-LAYOUT_SCRIPT="${SHOGUN_ROOT}/scripts/tmux-grid-layout.sh"
+LAYOUT_SCRIPT="${AVENGERS_ROOT}/scripts/tmux-grid-layout.sh"
 
 COUNT=\$(cat "\$COUNTER_FILE" 2>/dev/null || echo "0")
 COUNT=\$((COUNT + 1))
@@ -573,26 +576,26 @@ HOOKEOF
 chmod +x "${HOOK_SCRIPT}"
 
 # フック設定: move-pane は直接 tmux コマンド、後処理は run-shell -b
-tmux set-hook -t "${TMUX_SHOGUN}" after-split-window \
-    "move-pane -t ${TMUX_MULTIAGENT}:agents ; run-shell -b '${HOOK_SCRIPT}'"
+tmux set-hook -t "${TMUX_FURY}" after-split-window \
+    "move-pane -t ${TMUX_AVENGERS}:agents ; run-shell -b '${HOOK_SCRIPT}'"
 
-log_success "  └─ 将軍の本陣（${TMUX_SHOGUN}）構築完了"
-log_success "  └─ 配下の陣（${TMUX_MULTIAGENT}）構築完了"
+log_success "  └─ Fury の本陣（${TMUX_FURY}）構築完了"
+log_success "  └─ 配下の陣（${TMUX_AVENGERS}）構築完了"
 log_success "  └─ 自動配備フック設定完了"
 echo ""
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STEP 8: 将軍にチーム構成の初期指示を送信
+# STEP 8: Fury にチーム構成の初期指示を送信
 # ═══════════════════════════════════════════════════════════════════════════════
 # Claude Code が起動完了するまで待機し、チーム構成指示を自動送信する。
 # これにより、旧システムと同様に起動時に全エージェントが配備される。
 
-log_war "⏳ 将軍の起動を待機中..."
+log_war "⏳ Fury の起動を待機中..."
 
 # Claude Code の起動完了を待つ（プロンプト表示を検知）
 READY=false
 for i in $(seq 1 30); do
-    if tmux capture-pane -t "${TMUX_SHOGUN}:shogun" -p 2>/dev/null | grep -qE '❯|>.*$'; then
+    if tmux capture-pane -t "${TMUX_FURY}:fury" -p 2>/dev/null | grep -qE '❯|>.*$'; then
         READY=true
         break
     fi
@@ -600,13 +603,19 @@ for i in $(seq 1 30); do
 done
 
 if [ "$READY" = true ]; then
-    log_success "  └─ 将軍、起動完了"
+    log_success "  └─ Fury、起動完了"
 
-    # 足軽 spawn 指示を動的に構成
-    ASHIGARU_SPAWN=""
+    # Worker spawn 指示を動的に構成（tony / peter / cap / marvel を順に割当）
+    WORKER_SPAWN=""
     for i in $(seq 1 "$ASHIGARU_COUNT"); do
-        ASHIGARU_SPAWN="${ASHIGARU_SPAWN}
-- 足軽${i}号（ashigaru${i}）: ${SHOGUN_ROOT}/instructions/ashigaru.md を読ませよ"
+        case $(( (i - 1) % 4 )) in
+            0) W_JA="Tony Stark（tony）"; W_FILE="tony_stark.md" ;;
+            1) W_JA="Peter Parker（peter）"; W_FILE="peter_parker.md" ;;
+            2) W_JA="Captain America（cap）"; W_FILE="captain_america.md" ;;
+            3) W_JA="Captain Marvel（marvel）"; W_FILE="captain_marvel.md" ;;
+        esac
+        WORKER_SPAWN="${WORKER_SPAWN}
+- ${W_JA}: ${AVENGERS_ROOT}/instructions/${W_FILE} を読ませよ"
     done
 
     if [ "$RESUME_MODE" = true ]; then
@@ -620,50 +629,50 @@ if [ "$READY" = true ]; then
 前回の未完了タスクが ${STATUS_DIR}/pending_tasks.yaml に保存されている。読み込んで TaskCreate で再登録せよ。"
         fi
 
-        INIT_PROMPT="前回セッションから再開する。${SHOGUN_ROOT}/instructions/shogun_core.md と ${SHOGUN_ROOT}/CLAUDE.md を再読せよ。${SHOGUN_ROOT}/config/settings.yaml で言語設定を確認せよ。
+        INIT_PROMPT="前回セッションから再開する。${AVENGERS_ROOT}/instructions/nick_fury_core.md と ${AVENGERS_ROOT}/CLAUDE.md を再読せよ。${AVENGERS_ROOT}/config/settings.yaml で言語設定を確認せよ。
 
-環境変数 SHOGUN_ROOT=${SHOGUN_ROOT} が設定済みである。
+環境変数 AVENGERS_ROOT=${AVENGERS_ROOT} が設定済みである。
 ダッシュボードのパスは ${DASHBOARD_PATH} である（前回の内容を引き継ぎ済み）。
-プロジェクトデータディレクトリは ${SHOGUN_DATA_DIR} である。
-将軍の状況認識ファイル ${STATUS_DIR}/shogun_context.md を読んで前回の状況を把握せよ。
+プロジェクトデータディレクトリは ${AVENGERS_DATA_DIR} である。
+Fury の状況認識ファイル ${STATUS_DIR}/fury_context.md を読んで前回の状況を把握せよ。
 
 TeamCreate でチーム ${TEAM_NAME} を作成し、以下のチームメイトを Task で spawn せよ:
-- 家老（karo）: ${SHOGUN_ROOT}/instructions/karo.md を読ませよ。mode は delegate にせよ。
-- 目付（metsuke）: ${SHOGUN_ROOT}/instructions/metsuke.md を読ませよ。${ASHIGARU_SPAWN}
+- JARVIS（jarvis）: ${AVENGERS_ROOT}/instructions/jarvis.md を読ませよ。mode は delegate にせよ。
+- Bruce（bruce）: ${AVENGERS_ROOT}/instructions/bruce_banner.md を読ませよ。${WORKER_SPAWN}
 ${PENDING_TASKS_REF}
-全員が起動したら、殿の指示を待て。"
+全員が起動したら、Hayato の指示を待て。"
 
     else
         # ═══════════════════════════════════════════════════════════════════
         # 通常モード: 新規セッション
         # ═══════════════════════════════════════════════════════════════════
-        INIT_PROMPT="${SHOGUN_ROOT}/instructions/shogun_core.md を読んで将軍として起動せよ。${SHOGUN_ROOT}/instructions/shogun_ref.md も初回なので読め。${SHOGUN_ROOT}/CLAUDE.md も読め。${SHOGUN_ROOT}/config/settings.yaml で言語設定を確認せよ。
+        INIT_PROMPT="${AVENGERS_ROOT}/instructions/nick_fury_core.md を読んで Fury として起動せよ。${AVENGERS_ROOT}/instructions/nick_fury_ref.md も初回なので読め。${AVENGERS_ROOT}/CLAUDE.md も読め。${AVENGERS_ROOT}/config/settings.yaml で言語設定を確認せよ。
 
-環境変数 SHOGUN_ROOT=${SHOGUN_ROOT} が設定済みである。shogun システムのファイルは全て \$SHOGUN_ROOT 配下にある。
+環境変数 AVENGERS_ROOT=${AVENGERS_ROOT} が設定済みである。Avengers Multi-Agent System のファイルは全て \$AVENGERS_ROOT 配下にある。
 ダッシュボードのパスは ${DASHBOARD_PATH} である。
-プロジェクトデータディレクトリは ${SHOGUN_DATA_DIR} である。
+プロジェクトデータディレクトリは ${AVENGERS_DATA_DIR} である。
 
 TeamCreate でチーム ${TEAM_NAME} を作成し、以下のチームメイトを Task で spawn せよ:
-- 家老（karo）: ${SHOGUN_ROOT}/instructions/karo.md を読ませよ。mode は delegate にせよ。
-- 目付（metsuke）: ${SHOGUN_ROOT}/instructions/metsuke.md を読ませよ。${ASHIGARU_SPAWN}
+- JARVIS（jarvis）: ${AVENGERS_ROOT}/instructions/jarvis.md を読ませよ。mode は delegate にせよ。
+- Bruce（bruce）: ${AVENGERS_ROOT}/instructions/bruce_banner.md を読ませよ。${WORKER_SPAWN}
 
 次のファイルを読み込んでプロジェクト概要を把握せよ。
 CLAUDE.md
 
-全員が起動したら、殿の指示を待て。"
+全員が起動したら、Hayato の指示を待て。"
 
     fi
 
-    tmux send-keys -t "${TMUX_SHOGUN}:shogun" "$INIT_PROMPT"
+    tmux send-keys -t "${TMUX_FURY}:fury" "$INIT_PROMPT"
     sleep 2
-    tmux send-keys -t "${TMUX_SHOGUN}:shogun" Enter
+    tmux send-keys -t "${TMUX_FURY}:fury" Enter
     if [ "$RESUME_MODE" = true ]; then
         log_success "  └─ 再開指示を送信（前回セッション引き継ぎ）"
     else
         log_success "  └─ チーム構成指示を送信"
     fi
 else
-    log_info "⚠️  将軍の起動に時間がかかっています"
+    log_info "⚠️  Fury の起動に時間がかかっています"
     log_info "  アタッチ後に手動でチーム構成を指示してください"
 fi
 
@@ -672,11 +681,11 @@ echo ""
 echo ""
 if [ "$RESUME_MODE" = true ]; then
     echo "  ╔══════════════════════════════════════════════════════════╗"
-    echo "  ║  🏯 再出陣完了！前回の陣を引き継ぐ！                     ║"
+    echo "  ║  🛡️ 再開完了！前回の陣を引き継ぐ！                     ║"
     echo "  ╚══════════════════════════════════════════════════════════╝"
 else
     echo "  ╔══════════════════════════════════════════════════════════╗"
-    echo "  ║  🏯 出陣準備完了！天下布武！                              ║"
+    echo "  ║  🛡️ Avengers Assemble準備完了！天下布武！                              ║"
     echo "  ╚══════════════════════════════════════════════════════════╝"
 fi
 echo ""
@@ -684,19 +693,19 @@ echo ""
 echo "  ┌──────────────────────────────────────────────────────────┐"
 echo "  │  Agent Teams 方式（tmux モード）                         │"
 echo "  │                                                          │"
-echo "  │  将軍（${TMUX_SHOGUN}）と配下（${TMUX_MULTIAGENT}）の2陣を構築。"
+echo "  │  Fury（${TMUX_FURY}）と配下（${TMUX_AVENGERS}）の2陣を構築。"
 echo "  │  チーム構成指示を自動送信済み。                          │"
-echo "  │  Agent Teams がチームメイトを multiagent に自動配備。    │"
+echo "  │  Agent Teams がチームメイトを avengers に自動配備。    │"
 echo "  │                                                          │"
 echo "  │  ── 操作方法 ──                                          │"
 echo "  │                                                          │"
-echo "  │  将軍にアタッチ（指示を出す）:                            │"
-echo "  │    .shogun/bin/shogun.sh                                 │"
-echo "  │    tmux attach -t ${TMUX_SHOGUN}                        │"
+echo "  │  Fury にアタッチ（指示を出す）:                            │"
+echo "  │    .avengers/bin/fury.sh                                 │"
+echo "  │    tmux attach -t ${TMUX_FURY}                        │"
 echo "  │                                                          │"
 echo "  │  配下にアタッチ（チームメイトを観察）:                    │"
-echo "  │    .shogun/bin/multiagent.sh                             │"
-echo "  │    tmux attach -t ${TMUX_MULTIAGENT}                    │"
+echo "  │    .avengers/bin/avengers.sh                             │"
+echo "  │    tmux attach -t ${TMUX_AVENGERS}                    │"
 echo "  │                                                          │"
 echo "  │  セッション一覧:                                          │"
 echo "  │    tmux ls                                               │"
@@ -706,7 +715,7 @@ echo "  │  デタッチ（セッションから離脱）:                     
 echo "  │    Ctrl+b → d                                            │"
 echo "  │                                                          │"
 echo "  │  撤退:                                                    │"
-echo "  │    .shogun/bin/tettai.sh                                 │"
+echo "  │    .avengers/bin/disassemble.sh                            │"
 echo "  └──────────────────────────────────────────────────────────┘"
 echo ""
 echo "  ════════════════════════════════════════════════════════════"

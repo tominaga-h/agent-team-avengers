@@ -4,12 +4,12 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # 全スクリプトが source して使う共通ヘルパー。
-# WORK_DIR と SHOGUN_ROOT が設定済みの前提で、以下を導出する:
+# WORK_DIR と AVENGERS_ROOT が設定済みの前提で、以下を導出する:
 #
 #   PROJECT_NAME_SAFE  - basename を sanitize（tmux セッション名用）
-#   SHOGUN_DATA_DIR    - ${WORK_DIR}/.shogun
-#   TMUX_SHOGUN        - shogun-<project> セッション名
-#   TMUX_MULTIAGENT    - multiagent-<project> セッション名
+#   AVENGERS_DATA_DIR  - ${WORK_DIR}/.avengers
+#   TMUX_FURY          - fury-<project> セッション名
+#   TMUX_AVENGERS      - avengers-<project> セッション名
 #   TEAM_NAME          - Agent Teams チーム名
 #   TEAM_DIR           - ~/.claude/teams/${TEAM_NAME}
 #   TASK_DIR           - ~/.claude/tasks/${TEAM_NAME}
@@ -20,8 +20,8 @@
 #
 # 使い方:
 #   WORK_DIR="$(pwd)"
-#   SHOGUN_ROOT="/path/to/multi-agent-shogun"
-#   source "${SHOGUN_ROOT}/scripts/project-env.sh"
+#   AVENGERS_ROOT="/path/to/multi-agent-avengers"
+#   source "${AVENGERS_ROOT}/scripts/project-env.sh"
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -31,8 +31,8 @@ if [ -z "$WORK_DIR" ]; then
     exit 1
 fi
 
-if [ -z "$SHOGUN_ROOT" ]; then
-    echo "ERROR: SHOGUN_ROOT が設定されていません" >&2
+if [ -z "$AVENGERS_ROOT" ]; then
+    echo "ERROR: AVENGERS_ROOT が設定されていません" >&2
     exit 1
 fi
 
@@ -43,19 +43,19 @@ PROJECT_NAME_RAW="$(basename "$WORK_DIR")"
 PROJECT_NAME_SAFE="$(echo "$PROJECT_NAME_RAW" | tr ' ./' '---' | sed 's/^[-.]*//')"
 
 # プロジェクト固有のデータディレクトリ
-SHOGUN_DATA_DIR="${WORK_DIR}/.shogun"
+AVENGERS_DATA_DIR="${WORK_DIR}/.avengers"
 
 # tmux セッション名
-TMUX_SHOGUN="shogun-${PROJECT_NAME_SAFE}"
-TMUX_MULTIAGENT="multiagent-${PROJECT_NAME_SAFE}"
+TMUX_FURY="fury-${PROJECT_NAME_SAFE}"
+TMUX_AVENGERS="avengers-${PROJECT_NAME_SAFE}"
 
 # Agent Teams
-TEAM_NAME="shogun-team-${PROJECT_NAME_SAFE}"
+TEAM_NAME="avengers-team-${PROJECT_NAME_SAFE}"
 TEAM_DIR="$HOME/.claude/teams/${TEAM_NAME}"
 TASK_DIR="$HOME/.claude/tasks/${TEAM_NAME}"
 
 # プロジェクト固有パス
-DASHBOARD_PATH="${SHOGUN_DATA_DIR}/dashboard.md"
-STATUS_DIR="${SHOGUN_DATA_DIR}/status"
-LOGS_DIR="${SHOGUN_DATA_DIR}/logs"
-BIN_DIR="${SHOGUN_DATA_DIR}/bin"
+DASHBOARD_PATH="${AVENGERS_DATA_DIR}/dashboard.md"
+STATUS_DIR="${AVENGERS_DATA_DIR}/status"
+LOGS_DIR="${AVENGERS_DATA_DIR}/logs"
+BIN_DIR="${AVENGERS_DATA_DIR}/bin"

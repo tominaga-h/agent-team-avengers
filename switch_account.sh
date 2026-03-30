@@ -1,17 +1,17 @@
 #!/bin/bash
 # switch_account.sh - Claudeアカウント切り替えスクリプト
 
-SHOGUN_ROOT="$(cd "$(dirname "$0")" && pwd)"
+AVENGERS_ROOT="$(cd "$(dirname "$0")" && pwd)"
 
 # WORK_DIR 発見ロジック
-if [ -d "$(pwd)/.shogun" ]; then
+if [ -d "$(pwd)/.avengers" ]; then
     WORK_DIR="$(pwd)"
 else
-    WORK_DIR="$SHOGUN_ROOT"
+    WORK_DIR="$AVENGERS_ROOT"
 fi
 
 # プロジェクト共通変数を読み込み
-source "${SHOGUN_ROOT}/scripts/project-env.sh"
+source "${AVENGERS_ROOT}/scripts/project-env.sh"
 
 echo "=========================================="
 echo "  Claude アカウント切り替え"
@@ -20,8 +20,8 @@ echo ""
 
 # 1. 現在のセッション状態確認
 echo "📊 現在のセッション状態:"
-tmux has-session -t "${TMUX_SHOGUN}" 2>/dev/null && echo "  - ${TMUX_SHOGUN}: 稼働中" || echo "  - ${TMUX_SHOGUN}: 停止中"
-tmux has-session -t "${TMUX_MULTIAGENT}" 2>/dev/null && echo "  - ${TMUX_MULTIAGENT}: 稼働中" || echo "  - ${TMUX_MULTIAGENT}: 停止中"
+tmux has-session -t "${TMUX_FURY}" 2>/dev/null && echo "  - ${TMUX_FURY}: 稼働中" || echo "  - ${TMUX_FURY}: 停止中"
+tmux has-session -t "${TMUX_AVENGERS}" 2>/dev/null && echo "  - ${TMUX_AVENGERS}: 稼働中" || echo "  - ${TMUX_AVENGERS}: 停止中"
 echo ""
 
 # 2. dashboard.md 最終更新確認
@@ -44,12 +44,12 @@ fi
 # 4. セッション停止
 echo ""
 echo "🛑 セッションを停止中..."
-tmux kill-session -t "${TMUX_SHOGUN}" 2>/dev/null && echo "  - ${TMUX_SHOGUN} 停止完了"
-tmux kill-session -t "${TMUX_MULTIAGENT}" 2>/dev/null && echo "  - ${TMUX_MULTIAGENT} 停止完了"
+tmux kill-session -t "${TMUX_FURY}" 2>/dev/null && echo "  - ${TMUX_FURY} 停止完了"
+tmux kill-session -t "${TMUX_AVENGERS}" 2>/dev/null && echo "  - ${TMUX_AVENGERS} 停止完了"
 
 # watchdog停止
-if [ -f "${SHOGUN_DATA_DIR}/watchdog.pid" ]; then
-    kill "$(cat "${SHOGUN_DATA_DIR}/watchdog.pid")" 2>/dev/null && echo "  - watchdog 停止完了"
+if [ -f "${AVENGERS_DATA_DIR}/watchdog.pid" ]; then
+    kill "$(cat "${AVENGERS_DATA_DIR}/watchdog.pid")" 2>/dev/null && echo "  - watchdog 停止完了"
 else
     pkill -f watchdog.sh 2>/dev/null && echo "  - watchdog 停止完了"
 fi
@@ -92,12 +92,12 @@ if [ "$restart_answer" = "y" ]; then
   echo ""
   echo "起動中..."
   cd "$WORK_DIR" || exit 1
-  "${SHOGUN_ROOT}/shutsujin_departure.sh"
+  "${AVENGERS_ROOT}/assemble.sh"
 else
   echo ""
   echo "手動で起動する場合:"
-  echo "  cd ${WORK_DIR} && ${SHOGUN_ROOT}/shutsujin_departure.sh"
-  echo "  または: .shogun/bin/shutsujin.sh"
+  echo "  cd ${WORK_DIR} && ${AVENGERS_ROOT}/assemble.sh"
+  echo "  または: .avengers/bin/assemble.sh"
 fi
 
 echo ""

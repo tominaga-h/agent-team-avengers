@@ -3,8 +3,8 @@
 # tmux-grid-layout.sh - 動的グリッドレイアウト適用スクリプト
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-# multiagent セッションのペインを動的なグリッドに配置する。
-# ペイン数に応じて列数を自動計算し、端数時は最初のペイン（家老）を優遇する。
+# avengers セッションのペインを動的なグリッドに配置する。
+# ペイン数に応じて列数を自動計算し、端数時は最初のペイン（JARVIS）を優遇する。
 #
 # 列数の決定ルール:
 #   1ペイン: そのまま
@@ -12,9 +12,9 @@
 #   3〜8ペイン: 2列×N行
 #   9ペイン以上: 3列×N行
 #
-# 端数時の家老優遇:
-#   グリッドに端数が出る場合、最初のペイン（家老）が他より大きくなる。
-#   例: 2列で5ペイン → 家老が左列上部を2行分占有、残り4ペインが均等グリッド
+# 端数時の JARVIS 優遇:
+#   グリッドに端数が出る場合、最初のペイン（JARVIS）が他より大きくなる。
+#   例: 2列で5ペイン → JARVIS が左列上部を2行分占有、残り4ペインが均等グリッド
 #
 # tmux の after-split-window フックから呼び出される。
 #
@@ -22,7 +22,7 @@
 #   tmux-grid-layout.sh <target_window>
 #
 # 例:
-#   tmux-grid-layout.sh "multiagent-aidemy:agents"
+#   tmux-grid-layout.sh "avengers-myproject:agents"
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -83,14 +83,14 @@ determine_columns() {
 # 動的グリッドレイアウト文字列を生成
 # ─────────────────────────────────────────────────────────────────────────────
 #
-# 端数処理（家老優遇）:
+# 端数処理（JARVIS優遇）:
 #   cols列 × rows行 のグリッドで、total = cols * rows に対してペイン数が
-#   足りない場合（端数あり）、最初のペイン（家老）に余った行の高さを加算する。
+#   足りない場合（端数あり）、最初のペイン（JARVIS）に余った行の高さを加算する。
 #
 #   具体例（2列、5ペイン）:
 #     rows = ceil(5/2) = 3行。slots = 2*3 = 6。端数 = 6-5 = 1。
-#     家老（ペイン0、左列先頭）は通常1行分だが、端数1行分を加算して2行分の高さになる。
-#     左列: [家老(2行分)] [ペイン2(1行分)]  = 3行分
+#     JARVIS（ペイン0、左列先頭）は通常1行分だが、端数1行分を加算して2行分の高さになる。
+#     左列: [JARVIS(2行分)] [ペイン2(1行分)]  = 3行分
 #     右列: [ペイン1(1行分)] [ペイン3(1行分)] [ペイン4(1行分)] = 3行分
 #
 generate_grid_layout() {
@@ -114,7 +114,7 @@ generate_grid_layout() {
     local num_rows=$(( (pane_count + num_cols - 1) / num_cols ))
     # グリッドの総スロット数
     local total_slots=$(( num_cols * num_rows ))
-    # 端数（空きスロット数） = 家老が余分に使える行数
+    # 端数（空きスロット数） = JARVISが余分に使える行数
     local empty_slots=$(( total_slots - pane_count ))
 
     # 列幅を計算
@@ -138,12 +138,12 @@ generate_grid_layout() {
     done
 
     # 各列にペインを配分
-    # 列0（左端）に家老ペインを配置。端数がある場合、列0の家老は複数行分を占有。
+    # 列0（左端）にJARVISペインを配置。端数がある場合、列0のJARVISは複数行分を占有。
     # ペインの配分: 列順に上から下へ埋めていく
     #
     # 端数なしの場合: 各列 num_rows 個ずつ
     # 端数ありの場合:
-    #   列0: 家老が (1 + empty_slots) 行分の高さ、残り (num_rows - 1 - empty_slots) 個のペイン
+    #   列0: JARVISが (1 + empty_slots) 行分の高さ、残り (num_rows - 1 - empty_slots) 個のペイン
     #   列0の合計ペイン数 = 1 + (num_rows - 1 - empty_slots) = num_rows - empty_slots
     #   他の列: 各 num_rows 個ずつ
 
@@ -174,8 +174,8 @@ generate_grid_layout() {
         fi
 
         if [ $c -eq 0 ] && [ $empty_slots -gt 0 ]; then
-            # 列0: 家老優遇レイアウト
-            # 家老ペインの高さ = (1 + empty_slots) 行分 + セパレータ分
+            # 列0: JARVIS優遇レイアウト
+            # JARVISペインの高さ = (1 + empty_slots) 行分 + セパレータ分
             local karo_rows=$(( 1 + empty_slots ))
             local karo_h=0
             for ((r = 0; r < karo_rows; r++)); do
@@ -188,11 +188,11 @@ generate_grid_layout() {
             local col0_pane_count=$(( num_rows - empty_slots ))
 
             if [ $col0_pane_count -eq 1 ]; then
-                # 家老ペインのみ（列全体を占有）
+                # JARVISペインのみ（列全体を占有）
                 layout_body="${layout_body}${cw}x${win_h},${cx},0,${pids[$pid_idx]}"
                 pid_idx=$(( pid_idx + 1 ))
             else
-                # 家老ペイン + 残りのペイン
+                # JARVISペイン + 残りのペイン
                 local col_rows="${cw}x${karo_h},${cx},0,${pids[$pid_idx]}"
                 pid_idx=$(( pid_idx + 1 ))
 

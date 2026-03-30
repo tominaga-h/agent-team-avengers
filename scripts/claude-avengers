@@ -1,35 +1,35 @@
 #!/bin/bash
 # ═══════════════════════════════════════════════════════════════════════════════
-# claude-shogun - multi-agent-shogun 用 Claude Code ラッパー
+# claude-avengers - Avengers Multi-Agent System 用 Claude Code ラッパー
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-# shogun システムで Claude Code を起動する際はこのスクリプトを使う。
-# 環境変数 SHOGUN_ROOT, WORK_DIR, SHOGUN_DATA_DIR が設定される。
+# Avengers システムで Claude Code を起動する際はこのスクリプトを使う。
+# 環境変数 AVENGERS_ROOT, WORK_DIR, AVENGERS_DATA_DIR が設定される。
 #
 # 使い方:
-#   claude-shogun [claude の引数...]
+#   claude-avengers [claude の引数...]
 #
 # 例:
-#   claude-shogun
-#   claude-shogun --resume
+#   claude-avengers
+#   claude-avengers --resume
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 
-# このスクリプト自身の場所から SHOGUN_ROOT を動的に取得
+# このスクリプト自身の場所から AVENGERS_ROOT を動的に取得
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-export SHOGUN_ROOT="$(dirname "$SCRIPT_DIR")"
+export AVENGERS_ROOT="$(dirname "$SCRIPT_DIR")"
 
-# WORK_DIR と SHOGUN_DATA_DIR は呼び出し元（shutsujin_departure.sh）から
+# WORK_DIR と AVENGERS_DATA_DIR は呼び出し元（assemble.sh）から
 # 環境変数として渡される。未設定の場合はカレントディレクトリを使用。
 export WORK_DIR="${WORK_DIR:-$(pwd)}"
-export SHOGUN_DATA_DIR="${SHOGUN_DATA_DIR:-${WORK_DIR}/.shogun}"
+export AVENGERS_DATA_DIR="${AVENGERS_DATA_DIR:-${WORK_DIR}/.avengers}"
 
 # Agent Teams 有効化（tmux モード）
 export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
 
-# 将軍ロールマーカー（チームメンバー spawn 制限フックで使用）
-# この環境変数は claude-shogun 経由で起動した将軍プロセスのみが持つ。
+# Fury ロールマーカー（チームメンバー spawn 制限フックで使用）
+# この環境変数は claude-avengers 経由で起動した Fury プロセスのみが持つ。
 # tmux split-window で生成されるチームメイトには引き継がれない。
-export SHOGUN_ROLE=shogun
+export AVENGERS_ROLE=fury
 
 exec npx -y @anthropic-ai/claude-code "$@"

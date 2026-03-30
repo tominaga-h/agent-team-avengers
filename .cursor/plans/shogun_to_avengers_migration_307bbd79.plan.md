@@ -4,43 +4,43 @@ overview: 将軍システム（multi-agent-shogun）をMCUアベンジャーズ�
 todos:
   - id: step1-rename
     content: "Step 1: ファイルリネームとディレクトリ骨格 — 指示書6本リネーム、スクリプト3本リネーム、コマンド3本リネーム、スキル2本リネーム（全てgit mv）"
-    status: pending
+    status: completed
   - id: step2-boot-scripts
     content: "Step 2: 起動基盤スクリプト書き換え — claude-avengers, project-env.sh, check-team-spawn.sh, hooks/guard.sh, tmux-grid-layout.sh の環境変数・パス参照更新"
-    status: pending
+    status: completed
   - id: step3a-fury
     content: "Step 3a: nick_fury_core.md + nick_fury_ref.md 作成 — shogun_core/ref.mdベース、Furyペルソナ、YAML/パス/recipient全更新"
-    status: pending
+    status: completed
   - id: step3b-jarvis
     content: "Step 3b: jarvis.md 作成 — karo.md(645行)ベース、Task Routing追加、F012追加、recipient全更新"
-    status: pending
+    status: completed
   - id: step3c-bruce
     content: "Step 3c: bruce_banner.md 作成 — metsuke.md(359行)ベース、role=strategist、戦略分析追加"
-    status: pending
+    status: completed
   - id: step3d-strange
     content: "Step 3d: doctor_strange.md 新規作成 — reviewer、設計レビュー・リスク分析特化"
-    status: pending
+    status: completed
   - id: step3e-dev-workers
     content: "Step 3e: tony_stark.md + peter_parker.md 作成 — ashigaru.md(471行)ベース、開発特化Worker"
-    status: pending
+    status: completed
   - id: step3f-test-workers
     content: "Step 3f: captain_america.md + captain_marvel.md 作成 — ashigaru.mdベース、テスト/レビュー特化Worker"
-    status: pending
+    status: completed
   - id: step3g-shuri
     content: "Step 3g: shuri.md 新規作成 — idea role、Fury直属、JARVIS管理外"
-    status: pending
+    status: completed
   - id: step4-claude-md
     content: "Step 4: CLAUDE.md 書き換え — 全面差し替え（タイトル、階層図、名前表、セッション名、言語設定）+ 新規セクション追加（Git Workflow、Test Rules、Task Routing等）"
-    status: pending
+    status: completed
   - id: step5-scripts
     content: "Step 5a: 大型スクリプト書き換え — assemble.sh(715行), disassemble.sh(331行), watchdog.sh(306行), first_setup.sh(709行)"
-    status: pending
+    status: completed
   - id: step5-commands
     content: "Step 5b: コマンド内容書き換え(3本) + 新規コマンド移植(4本) + settings.json hooks更新 + スキル内容更新"
-    status: pending
+    status: completed
   - id: step6-cleanup
     content: "Step 6: 不要ファイル削除(trash)、README/CHANGELOG更新、.gitignore更新、テスト・検証"
-    status: pending
+    status: completed
 isProject: false
 ---
 

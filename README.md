@@ -1,4 +1,4 @@
-# multi-agent-shogun
+# Avengers Multi-Agent System
 
 <div align="center">
 
@@ -21,7 +21,7 @@
 
 ## What is this?
 
-**multi-agent-shogun** is a system that runs multiple Claude Code instances simultaneously using **Agent Teams**, organized like a feudal Japanese army.
+**agent-team-avengers** is a system that runs multiple Claude Code instances simultaneously using **Agent Teams**, organized like an MCU Avengers team.
 
 **Why use this?**
 - Give one command, get multiple AI workers executing in parallel
@@ -31,23 +31,23 @@
 - Real-time progress tracking via dashboard
 
 ```
-        You (The Lord)
+        You (Hayato)
              │
              ▼ Give orders
       ┌─────────────┐
-      │   SHOGUN    │  ← Receives your command, delegates immediately
+      │    FURY     │  ← Receives your command, delegates immediately
       └──────┬──────┘
              │ Agent Teams API
       ┌──────▼──────┐
-      │    KARO     │  ← Distributes tasks to workers
+      │   JARVIS    │  ← Distributes tasks to workers
       └──────┬──────┘
              │
     ┌────────┼────────┐
     ▼        ▼        ▼
-┌────────┐ ┌──┬──┬──┐
-│METSUKE │ │A1│A2│A3│ ...  ← Workers execute in parallel
-│(Review)│ └──┴──┴──┘
-└────────┘   ASHIGARU
+┌────────┐ ┌──────────────┐
+│ BRUCE  │ │Tony│Peter│...│  ← Workers execute in parallel
+│(Review)│ └──────────────┘
+└────────┘    WORKERS
 ```
 
 ---
@@ -67,9 +67,9 @@
 
 📥 **Download this repository**
 
-[Download ZIP](https://github.com/marucc/multi-agent-shogun/archive/refs/heads/main.zip) and extract to `C:\tools\multi-agent-shogun`
+[Download ZIP](https://github.com/marucc/agent-team-avengers/archive/refs/heads/main.zip) and extract to `C:\tools\agent-team-avengers`
 
-*Or use git:* `git clone https://github.com/marucc/multi-agent-shogun.git C:\tools\multi-agent-shogun`
+*Or use git:* `git clone https://github.com/marucc/agent-team-avengers.git C:\tools\agent-team-avengers`
 
 </td>
 </tr>
@@ -107,12 +107,12 @@ Open **Ubuntu terminal** (WSL) and run from your **project directory**:
 
 ```bash
 cd /mnt/c/your-project
-/mnt/c/tools/multi-agent-shogun/shutsujin_departure.sh
+/mnt/c/tools/agent-team-avengers/assemble.sh
 ```
 
 #### 🔐 First-Time Authentication (One Time Only)
 
-1. After running `./shutsujin_departure.sh`, a login screen appears in each pane
+1. After running `./assemble.sh`, a login screen appears in each pane
 2. **In just ONE pane**, copy the URL and open it in your browser to log in
 3. After authentication, press `Ctrl+C` in other panes and re-run `claude --dangerously-skip-permissions`
 4. Credentials are saved to `~/.claude/` and won't be needed again
@@ -128,8 +128,8 @@ cd /mnt/c/your-project
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/marucc/multi-agent-shogun.git ~/multi-agent-shogun
-cd ~/multi-agent-shogun
+git clone https://github.com/marucc/agent-team-avengers.git ~/agent-team-avengers
+cd ~/agent-team-avengers
 
 # 2. Make scripts executable
 chmod +x *.sh
@@ -142,7 +142,7 @@ chmod +x *.sh
 
 ```bash
 cd ~/your-project
-~/multi-agent-shogun/shutsujin_departure.sh
+~/agent-team-avengers/assemble.sh
 ```
 
 </details>
@@ -181,7 +181,7 @@ Then restart your computer and run `install.bat` again.
 |--------|---------|-------------|
 | `install.bat` | Windows: First-time setup (runs first_setup.sh via WSL) | First time only |
 | `first_setup.sh` | Installs tmux, Node.js, Claude Code CLI + configures Memory MCP | First time only |
-| `shutsujin_departure.sh` | Creates `.shogun/` + tmux sessions + starts Claude Code | Every day (run from project dir) |
+| `assemble.sh` | Creates `.avengers/` + tmux sessions + starts Claude Code | Every day (run from project dir) |
 
 ### What `install.bat` does automatically:
 - ✅ Checks if WSL2 is installed
@@ -190,12 +190,12 @@ Then restart your computer and run `install.bat` again.
 - ✅ Creates necessary directories
 - ✅ Configures Memory MCP server (for cross-session memory)
 
-### What `shutsujin_departure.sh` does:
-- ✅ Creates `.shogun/` directory in your project (dashboard, logs, wrapper scripts)
-- ✅ Creates tmux sessions (`shogun-<project>` + `multiagent-<project>`)
+### What `assemble.sh` does:
+- ✅ Creates `.avengers/` directory in your project (dashboard, logs, wrapper scripts)
+- ✅ Creates tmux sessions (`fury-<project>` + `avengers-<project>`)
 - ✅ Launches Claude Code with Agent Teams enabled
 - ✅ Automatically loads instruction files for each agent
-- ✅ Sets up the team hierarchy (Shogun → Karo → Ashigaru)
+- ✅ Sets up the team hierarchy (Fury → JARVIS → Workers)
 
 **After running, all agents are ready to receive commands immediately!**
 
@@ -226,57 +226,57 @@ After running either option, AI agents will start automatically:
 
 | Agent | Role | Quantity |
 |-------|------|----------|
-| 🏯 Shogun | Commander — receives your orders | 1 |
-| 📋 Karo | Manager — distributes tasks | 1 |
-| 🔍 Metsuke | Reviewer — quality assurance | 1 |
-| ⚔️ Ashigaru | Workers — execute tasks in parallel | Configurable (default: 3) |
+| 🛡️ Nick Fury | Director — receives your orders | 1 |
+| 🤖 JARVIS | AI Assistant — distributes tasks | 1 |
+| 🧪 Bruce Banner | Strategist — quality assurance & analysis | 1 |
+| ⚡ Workers | Specialists — execute tasks in parallel | Configurable (default: 6) |
 
 You'll see tmux sessions created (names include your project name):
-- `shogun-<project>` — Connect here to give commands
-- `multiagent-<project>` — Workers running in background
+- `fury-<project>` — Connect here to give commands
+- `avengers-<project>` — Workers running in background
 
-Wrapper scripts are generated in `.shogun/bin/` for easy access.
+Wrapper scripts are generated in `.avengers/bin/` for easy access.
 
 ---
 
 ## 📖 Basic Usage
 
-### Step 1: Connect to Shogun
+### Step 1: Connect to Fury
 
-After running `shutsujin_departure.sh`, all agents automatically load their instructions and are ready to work.
+After running `assemble.sh`, all agents automatically load their instructions and are ready to work.
 
-Open a new terminal and connect to the Shogun:
+Open a new terminal and connect to Fury:
 
 ```bash
-.shogun/bin/shogun.sh
+.avengers/bin/fury.sh
 ```
 
 ### Step 2: Give Your First Order
 
-The Shogun is already initialized! Just give your command:
+Fury is already initialized! Just give your command:
 
 ```
 Investigate the top 5 JavaScript frameworks and create a comparison table.
 ```
 
-The Shogun will:
+Fury will:
 1. Create tasks via Agent Teams API
-2. Send instructions to the Karo (manager) via SendMessage
+2. Send instructions to JARVIS via SendMessage
 3. Return control to you immediately (you don't have to wait!)
 
-Meanwhile, the Karo distributes the work to Ashigaru workers who execute in parallel.
+Meanwhile, JARVIS distributes the work to Workers who execute in parallel.
 
 ### Step 3: Check Progress
 
-Open `.shogun/dashboard.md` in your editor to see real-time status:
+Open `.avengers/dashboard.md` in your editor to see real-time status:
 
 ```markdown
 ## In Progress
 | Worker | Task | Status |
 |--------|------|--------|
-| Ashigaru 1 | React research | Running |
-| Ashigaru 2 | Vue research | Running |
-| Ashigaru 3 | Angular research | Done |
+| Worker 1 | React research | Running |
+| Worker 2 | Vue research | Running |
+| Worker 3 | Angular research | Done |
 ```
 
 ---
@@ -289,16 +289,16 @@ One command can spawn multiple parallel tasks:
 
 ```
 You: "Research 5 MCP servers"
-→ Ashigaru start researching simultaneously
+→ Workers start researching simultaneously
 → Results ready in minutes, not hours
 ```
 
 ### 🔄 2. Non-Blocking Workflow
 
-The Shogun delegates immediately and returns control to you:
+Fury delegates immediately and returns control to you:
 
 ```
-You: Give order → Shogun: Delegates → You: Can give next order immediately
+You: Give order → Fury: Delegates → You: Can give next order immediately
                                            ↓
                          Workers: Execute in background
                                            ↓
@@ -335,7 +335,7 @@ VSCode's Claude Code extension lets you paste screenshots to explain issues. Thi
 screenshot:
   path: "/mnt/c/Users/YourName/Pictures/Screenshots"
 
-# Then just tell the Shogun:
+# Then just tell Fury:
 You: "Check the latest screenshot"
 You: "Look at the last 2 screenshots"
 → AI reads and analyzes your screenshots instantly
@@ -349,7 +349,7 @@ The system uses a three-layer context structure for efficient knowledge sharing:
 
 | Layer | Location | Purpose |
 |-------|----------|---------|
-| Memory MCP | `memory/shogun_memory.jsonl` | Persistent memory across sessions (preferences, decisions) |
+| Memory MCP | `memory/avengers_memory.jsonl` | Persistent memory across sessions (preferences, decisions) |
 | Global | `memory/global_context.md` | System-wide settings, user preferences |
 | Project | `context/{project}.md` | Project-specific knowledge and state |
 
@@ -379,12 +379,12 @@ Review and approve them to grow your personal skill library.
 
 ### Why Hierarchical Structure?
 
-The Shogun → Karo → Ashigaru hierarchy exists for:
+The Fury → JARVIS → Workers hierarchy exists for:
 
-1. **Immediate Response**: Shogun delegates instantly and returns control to you
-2. **Parallel Execution**: Karo distributes to multiple Ashigaru simultaneously
-3. **Separation of Concerns**: Shogun decides "what", Karo decides "who"
-4. **Quality Gate**: Metsuke reviews outputs independently
+1. **Immediate Response**: Fury delegates instantly and returns control to you
+2. **Parallel Execution**: JARVIS distributes to multiple Workers simultaneously
+3. **Separation of Concerns**: Fury decides "what", JARVIS decides "who"
+4. **Quality Gate**: Bruce reviews outputs independently
 
 ### Why Agent Teams?
 
@@ -393,10 +393,10 @@ The Shogun → Karo → Ashigaru hierarchy exists for:
 - **Task management**: Built-in TaskCreate/TaskUpdate/TaskList
 - **Reliable communication**: SendMessage with guaranteed delivery
 
-### Why Only Karo Updates Dashboard?
+### Why Only JARVIS Updates Dashboard?
 
 - **Single responsibility**: One writer = no conflicts
-- **Information hub**: Karo receives all reports, knows the full picture
+- **Information hub**: JARVIS receives all reports, knows the full picture
 - **Consistency**: All updates go through one quality gate
 
 ### How Skills Work
@@ -409,10 +409,10 @@ Skills (`.claude/commands/`) are **not committed to this repository** by design.
 - No one-size-fits-all solution
 
 **How to create new skills:**
-1. Ashigaru report "skill candidates" when they notice repeatable patterns
+1. Workers report "skill candidates" when they notice repeatable patterns
 2. Candidates appear in `dashboard.md` under "Skill Candidates"
 3. You review and approve (or reject)
-4. Approved skills are created by Karo
+4. Approved skills are created by JARVIS
 
 ---
 
@@ -448,7 +448,7 @@ claude mcp add sequential-thinking -- npx -y @modelcontextprotocol/server-sequen
 # 5. Memory - Long-term memory across sessions (Recommended!)
 # ✅ Automatically configured by first_setup.sh
 # To reconfigure manually:
-claude mcp add memory -e MEMORY_FILE_PATH="$PWD/memory/shogun_memory.jsonl" -- npx -y @modelcontextprotocol/server-memory
+claude mcp add memory -e MEMORY_FILE_PATH="$PWD/memory/avengers_memory.jsonl" -- npx -y @modelcontextprotocol/server-memory
 ```
 
 ### Verify Installation
@@ -468,7 +468,7 @@ You should see all servers with "Connected" status.
 Edit `config/settings.yaml`:
 
 ```yaml
-ashigaru_count: 3   # Number of workers (1-8)
+worker_count: 6   # Number of workers (1-8)
 ```
 
 ### Language Setting
@@ -503,13 +503,13 @@ language: en   # Japanese + English translation
 │                      DAILY STARTUP (Run Every Day)                  │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
-│  shutsujin_departure.sh                                             │
+│  assemble.sh                                                        │
 │      │                                                              │
-│      ├──▶ Create .shogun/ directory in project                        │
+│      ├──▶ Create .avengers/ directory in project                    │
 │      │                                                              │
 │      ├──▶ Create tmux sessions                                      │
-│      │         • "shogun-<project>" session (Shogun agent)          │
-│      │         • "multiagent-<project>" session (Karo+Metsuke+Ashi) │
+│      │         • "fury-<project>" session (Fury agent)              │
+│      │         • "avengers-<project>" session (JARVIS+Bruce+Workers)│
 │      │                                                              │
 │      └──▶ Launch Claude Code with Agent Teams                       │
 │                                                                     │
@@ -519,17 +519,17 @@ language: en   # Japanese + English translation
 </details>
 
 <details>
-<summary><b>shutsujin_departure.sh Options</b> (Click to expand)</summary>
+<summary><b>assemble.sh Options</b> (Click to expand)</summary>
 
 ```bash
 # Run from your project directory
 cd /path/to/your/project
 
-# Default: Full startup (.shogun/ creation + tmux sessions + Claude Code launch)
-/path/to/multi-agent-shogun/shutsujin_departure.sh
+# Default: Full startup (.avengers/ creation + tmux sessions + Claude Code launch)
+/path/to/agent-team-avengers/assemble.sh
 
 # Show help
-/path/to/multi-agent-shogun/shutsujin_departure.sh -h
+/path/to/agent-team-avengers/assemble.sh -h
 ```
 
 </details>
@@ -540,18 +540,18 @@ cd /path/to/your/project
 **Normal Daily Usage:**
 ```bash
 cd /path/to/your/project
-/path/to/multi-agent-shogun/shutsujin_departure.sh   # Start everything
-.shogun/bin/shogun.sh                                 # Connect to give commands
+/path/to/agent-team-avengers/assemble.sh   # Start everything
+.avengers/bin/fury.sh                       # Connect to give commands
 ```
 
 **Re-launch (after retreat):**
 ```bash
-.shogun/bin/shutsujin.sh          # Re-deploy from project directory
+.avengers/bin/assemble.sh          # Re-deploy from project directory
 ```
 
 **Retreat (shutdown):**
 ```bash
-.shogun/bin/tettai.sh             # Graceful shutdown with backup
+.avengers/bin/disassemble.sh       # Graceful shutdown with backup
 ```
 
 </details>
@@ -564,25 +564,25 @@ cd /path/to/your/project
 <summary><b>Click to expand file structure</b></summary>
 
 ```
-multi-agent-shogun/                      # SHOGUN_ROOT (system files)
+agent-team-avengers/                     # AVENGERS_ROOT (system files)
 │
 │  ┌─────────────────── SCRIPTS ─────────────────────────┐
 ├── install.bat               # Windows: First-time setup
 ├── first_setup.sh            # Ubuntu/Mac: First-time setup
-├── shutsujin_departure.sh    # Deploy (run from project dir)
-├── tettai_retreat.sh         # Shutdown / retreat
+├── assemble.sh               # Deploy (run from project dir)
+├── disassemble.sh            # Shutdown / retreat
 ├── watchdog.sh               # Monitoring daemon
 ├── switch_account.sh         # Account switching
 │  └────────────────────────────────────────────────────┘
 │
 ├── instructions/             # Agent instruction files
-│   ├── shogun.md             # Commander instructions
-│   ├── karo.md               # Manager instructions
-│   ├── metsuke.md            # Reviewer instructions
-│   └── ashigaru.md           # Worker instructions
+│   ├── nick_fury_core.md    # Director instructions
+│   ├── jarvis.md            # AI Assistant instructions
+│   ├── bruce_banner.md      # Strategist instructions
+│   └── tony_stark.md (etc.) # Worker instructions
 │
 ├── scripts/
-│   ├── claude-shogun         # Claude Code launcher wrapper
+│   ├── claude-avengers       # Claude Code launcher wrapper
 │   ├── notify.sh             # tmux send-keys wrapper
 │   └── project-env.sh        # Shared variable definitions
 │
@@ -593,14 +593,14 @@ multi-agent-shogun/                      # SHOGUN_ROOT (system files)
 ├── memory/                   # Memory MCP storage
 └── CLAUDE.md                 # Project context for Claude
 
-your-project/.shogun/                    # Generated per project
+your-project/.avengers/                  # Generated per project
 ├── project.env               # Project metadata
 ├── dashboard.md              # Real-time status overview
 ├── bin/
-│   ├── shutsujin.sh          # Re-deploy wrapper
-│   ├── tettai.sh             # Retreat wrapper
-│   ├── shogun.sh             # Attach to shogun session
-│   └── multiagent.sh         # Attach to multiagent session
+│   ├── assemble.sh           # Re-deploy wrapper
+│   ├── disassemble.sh        # Retreat wrapper
+│   ├── fury.sh               # Attach to fury session
+│   └── avengers.sh           # Attach to avengers session
 ├── status/
 │   └── pending_tasks.yaml    # Saved on retreat
 └── logs/
@@ -645,7 +645,7 @@ claude --dangerously-skip-permissions --system-prompt "..."
 
 Check the worker's pane:
 ```bash
-.shogun/bin/multiagent.sh
+.avengers/bin/avengers.sh
 # Use Ctrl+B then arrow keys to switch panes
 ```
 
@@ -657,9 +657,9 @@ Check the worker's pane:
 
 | Command | Description |
 |---------|-------------|
-| `.shogun/bin/shogun.sh` | Connect to Shogun |
-| `.shogun/bin/multiagent.sh` | Connect to workers |
-| `.shogun/bin/tettai.sh` | Graceful shutdown |
+| `.avengers/bin/fury.sh` | Connect to Fury |
+| `.avengers/bin/avengers.sh` | Connect to workers |
+| `.avengers/bin/disassemble.sh` | Graceful shutdown |
 | `Ctrl+B` then `0-8` | Switch between panes |
 | `Ctrl+B` then `d` | Detach (leave running) |
 | `tmux ls` | List all sessions |
@@ -682,6 +682,6 @@ MIT License - See [LICENSE](LICENSE) for details.
 
 <div align="center">
 
-**Command your AI army. Build faster.**
+**Assemble your AI team. Build faster.**
 
 </div>

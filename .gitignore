@@ -1,5 +1,5 @@
 # Order file (internal use only)
-claude-shogun-orders.md
+claude-avengers-orders.md
 
 # Test outputs (generated during testing)
 test_output/
@@ -30,8 +30,8 @@ config/settings.yaml
 logs/
 
 # Project-local runtime data (generated per work directory)
-.shogun/
+.avengers/
 
-# Legacy watchdog runtime files (now in .shogun/)
+# Legacy watchdog runtime files (now in .avengers/)
 .last_dashboard_check
 .limit_reset_times

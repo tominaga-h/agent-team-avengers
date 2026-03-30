@@ -6,11 +6,11 @@
 
 ### 1. Autonomous Formation Design
 
-Design task formations based on complexity, not templates. A simple file rename doesn't need 8 Ashigaru. A complex refactor across 20 files does. The Karo analyzes each command and decides the optimal formation — sometimes 1 Ashigaru, sometimes all 8 in parallel with dependency chains.
+Design task formations based on complexity, not templates. A simple file rename doesn't need all Workers. A complex refactor across 20 files does. JARVIS analyzes each command and decides the optimal formation — sometimes 1 Worker, sometimes all in parallel with dependency chains.
 
 ### 2. Parallelization
 
-Use subagents to prevent single-point bottlenecks. The Karo decomposes tasks into independent subtasks and assigns them to multiple Ashigaru simultaneously. Dependent tasks use `addBlocks`/`addBlockedBy` in TaskUpdate to ensure correct execution order while maximizing parallel throughput.
+Use subagents to prevent single-point bottlenecks. JARVIS decomposes tasks into independent subtasks and assigns them to multiple Workers simultaneously. Dependent tasks use `addBlocks`/`addBlockedBy` in TaskUpdate to ensure correct execution order while maximizing parallel throughput.
 
 ### 3. Research First
 
@@ -26,14 +26,14 @@ Multi-perspective research with integrated authorization. Important decisions ar
 
 ## Design Decisions
 
-### Why a hierarchy (Shogun → Karo → Ashigaru)?
+### Why a hierarchy (Fury → JARVIS → Workers)?
 
-1. **Instant response**: The Shogun delegates immediately, returning control to you
-2. **Parallel execution**: The Karo distributes to multiple Ashigaru simultaneously
+1. **Instant response**: Fury delegates immediately, returning control to you
+2. **Parallel execution**: JARVIS distributes to multiple Workers simultaneously
 3. **Single responsibility**: Each role is clearly separated — no confusion
-4. **Scalability**: Adding more Ashigaru doesn't break the structure
-5. **Fault isolation**: One Ashigaru failing doesn't affect the others
-6. **Unified reporting**: Only the Shogun communicates with you, keeping information organized
+4. **Specialization**: Workers have specific domains (dev, test, review, strategy)
+5. **Fault isolation**: One Worker failing doesn't affect the others
+6. **Unified reporting**: Only Fury communicates with you, keeping information organized
 
 ### Why Agent Teams?
 
@@ -45,12 +45,12 @@ Multi-perspective research with integrated authorization. Important decisions ar
 6. **Guaranteed delivery**: `SendMessage` succeeds = message will be delivered. No delivery verification needed, no false negatives
 7. **Zero infrastructure**: No file-based mailboxes, no lock files, no watcher processes — Agent Teams manages everything as a native Claude Code feature
 
-### Why only the Karo updates dashboard.md
+### Why only JARVIS updates dashboard.md
 
 1. **Single writer**: Prevents conflicts by limiting updates to one agent
-2. **Information aggregation**: The Karo receives all Ashigaru reports, so it has the full picture
+2. **Information aggregation**: JARVIS receives all Worker reports, so it has the full picture
 3. **Consistency**: All updates pass through a single quality gate
-4. **No interruptions**: If the Shogun updated it, it could interrupt the Lord's input
+4. **No interruptions**: If Fury updated it, it could interrupt the user's input
 
 ### Why Skills are not committed to the repo
 

@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
-# 🏯 multi-agent-shogun 撤退スクリプト（全終了用）
-# Retreat Script - Graceful shutdown of all agents
+# 🏯 Avengers Multi-Agent System Disassembleスクリプト（全終了用）
+# Disassemble Script - Graceful shutdown of all agents
 # Agent Teams 版
 #
 # 使用方法:
-#   ./tettai_retreat.sh                        # 通常撤退（カレントディレクトリの .shogun/ を使用）
-#   ./tettai_retreat.sh --project-dir=/path     # 指定ディレクトリのプロジェクトを撤退
-#   ./tettai_retreat.sh -f                      # 強制撤退（バックアップなし）
-#   ./tettai_retreat.sh -h                      # ヘルプ表示
+#   ./disassemble.sh                        # 通常Disassemble（カレントディレクトリの .avengers/ を使用）
+#   ./disassemble.sh --project-dir=/path     # 指定ディレクトリのプロジェクトをDisassemble
+#   ./disassemble.sh -f                      # 強制Disassemble（バックアップなし）
+#   ./disassemble.sh -h                      # ヘルプ表示
 
 set -e
 
-# shogun システムのルートディレクトリ
-SHOGUN_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Avengers Multi-Agent System のルートディレクトリ
+AVENGERS_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # 色付きログ関数（戦国風）
 log_info() {
@@ -23,7 +23,7 @@ log_success() {
     echo -e "\033[1;32m【成】\033[0m $1"
 }
 
-log_retreat() {
+log_disassemble() {
     echo -e "\033[1;36m【退】\033[0m $1"
 }
 
@@ -45,30 +45,30 @@ while [[ $# -gt 0 ]]; do
             ;;
         -h|--help)
             echo ""
-            echo "🏯 multi-agent-shogun 撤退スクリプト（Agent Teams 版）"
+            echo "🏯 Avengers Multi-Agent System Disassembleスクリプト（Agent Teams 版）"
             echo ""
-            echo "使用方法: ./tettai_retreat.sh [オプション]"
+            echo "使用方法: ./disassemble.sh [オプション]"
             echo ""
             echo "オプション:"
-            echo "  -f, --force              強制撤退（バックアップなし）"
-            echo "  --project-dir=<path>     撤退対象のプロジェクトディレクトリを指定"
+            echo "  -f, --force              強制Disassemble（バックアップなし）"
+            echo "  --project-dir=<path>     Disassemble対象のプロジェクトディレクトリを指定"
             echo "  -h, --help               このヘルプを表示"
             echo ""
             echo "例:"
-            echo "  ./tettai_retreat.sh                          # カレントディレクトリのプロジェクトを撤退"
-            echo "  ./tettai_retreat.sh --project-dir=/path/to/project"
-            echo "  ./tettai_retreat.sh -f                       # 強制撤退（即座に終了）"
+            echo "  ./disassemble.sh                          # カレントディレクトリのプロジェクトをDisassemble"
+            echo "  ./disassemble.sh --project-dir=/path/to/project"
+            echo "  ./disassemble.sh -f                       # 強制Disassemble（即座に終了）"
             echo ""
             echo "WORK_DIR 発見ロジック:"
-            echo "  1. \$(pwd)/.shogun が存在すればカレントディレクトリ"
+            echo "  1. \$(pwd)/.avengers が存在すればカレントディレクトリ"
             echo "  2. --project-dir= で指定されたディレクトリ"
-            echo "  3. フォールバック: SHOGUN_ROOT"
+            echo "  3. フォールバック: AVENGERS_ROOT"
             echo ""
             exit 0
             ;;
         *)
             echo "不明なオプション: $1"
-            echo "./tettai_retreat.sh -h でヘルプを表示"
+            echo "./disassemble.sh -h でヘルプを表示"
             exit 1
             ;;
     esac
@@ -77,21 +77,21 @@ done
 # ═══════════════════════════════════════════════════════════════════════════════
 # WORK_DIR 発見ロジック
 # ═══════════════════════════════════════════════════════════════════════════════
-if [ -n "$PROJECT_DIR" ] && [ -d "${PROJECT_DIR}/.shogun" ]; then
+if [ -n "$PROJECT_DIR" ] && [ -d "${PROJECT_DIR}/.avengers" ]; then
     WORK_DIR="$PROJECT_DIR"
-elif [ -d "$(pwd)/.shogun" ]; then
+elif [ -d "$(pwd)/.avengers" ]; then
     WORK_DIR="$(pwd)"
 else
-    WORK_DIR="$SHOGUN_ROOT"
+    WORK_DIR="$AVENGERS_ROOT"
 fi
 
 # プロジェクト共通変数を読み込み
-source "${SHOGUN_ROOT}/scripts/project-env.sh"
+source "${AVENGERS_ROOT}/scripts/project-env.sh"
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# 撤退バナー表示
+# Disassembleバナー表示
 # ═══════════════════════════════════════════════════════════════════════════════
-show_retreat_banner() {
+show_disassemble_banner() {
     clear
     echo ""
     echo -e "\033[1;36m╔══════════════════════════════════════════════════════════════════════════════════╗\033[0m"
@@ -102,13 +102,13 @@ show_retreat_banner() {
     echo -e "\033[1;36m║\033[0m \033[1;37m   ██║   ███████╗   ██║      ██║   ██║  ██║██║\033[0m                                 \033[1;36m║\033[0m"
     echo -e "\033[1;36m║\033[0m \033[1;37m   ╚═╝   ╚══════╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝╚═╝\033[0m                                 \033[1;36m║\033[0m"
     echo -e "\033[1;36m╠══════════════════════════════════════════════════════════════════════════════════╣\033[0m"
-    echo -e "\033[1;36m║\033[0m       \033[1;37m撤退じゃーーー！！！\033[0m    \033[1;35m⚔\033[0m    \033[1;33m本日の戦、ここまで！\033[0m                    \033[1;36m║\033[0m"
+    echo -e "\033[1;36m║\033[0m       \033[1;37mDisassembleじゃーーー！！！\033[0m    \033[1;35m⚔\033[0m    \033[1;33m本日の戦、ここまで！\033[0m                    \033[1;36m║\033[0m"
     echo -e "\033[1;36m╚══════════════════════════════════════════════════════════════════════════════════╝\033[0m"
     echo ""
 }
 
 # バナー表示
-show_retreat_banner
+show_disassemble_banner
 
 log_info "プロジェクト: ${PROJECT_NAME_SAFE} (${WORK_DIR})"
 echo ""
@@ -116,23 +116,23 @@ echo ""
 # ═══════════════════════════════════════════════════════════════════════════════
 # 存在確認（tmux セッション + Agent Teams データ）
 # ═══════════════════════════════════════════════════════════════════════════════
-SHOGUN_EXISTS=false
-MULTIAGENT_EXISTS=false
+FURY_EXISTS=false
+AVENGERS_EXISTS=false
 TEAM_DATA_EXISTS=false
 
-if tmux has-session -t "${TMUX_SHOGUN}" 2>/dev/null; then
-    SHOGUN_EXISTS=true
+if tmux has-session -t "${TMUX_FURY}" 2>/dev/null; then
+    FURY_EXISTS=true
 fi
 
-if tmux has-session -t "${TMUX_MULTIAGENT}" 2>/dev/null; then
-    MULTIAGENT_EXISTS=true
+if tmux has-session -t "${TMUX_AVENGERS}" 2>/dev/null; then
+    AVENGERS_EXISTS=true
 fi
 
 if [ -d "$TEAM_DIR" ] || [ -d "$TASK_DIR" ]; then
     TEAM_DATA_EXISTS=true
 fi
 
-if [ "$SHOGUN_EXISTS" = false ] && [ "$MULTIAGENT_EXISTS" = false ] && [ "$TEAM_DATA_EXISTS" = false ]; then
+if [ "$FURY_EXISTS" = false ] && [ "$AVENGERS_EXISTS" = false ] && [ "$TEAM_DATA_EXISTS" = false ]; then
     log_info "陣は既に撤収済みでござる（セッション・チームデータなし）"
     echo ""
     exit 0
@@ -140,8 +140,8 @@ fi
 
 # 現在の状態を表示
 log_info "現在の陣容:"
-[ "$SHOGUN_EXISTS" = true ] && log_info "  ├─ tmux: ${TMUX_SHOGUN} セッション ... 稼働中"
-[ "$MULTIAGENT_EXISTS" = true ] && log_info "  ├─ tmux: ${TMUX_MULTIAGENT} セッション ... 稼働中"
+[ "$FURY_EXISTS" = true ] && log_info "  ├─ tmux: ${TMUX_FURY} セッション ... 稼働中"
+[ "$AVENGERS_EXISTS" = true ] && log_info "  ├─ tmux: ${TMUX_AVENGERS} セッション ... 稼働中"
 [ "$TEAM_DATA_EXISTS" = true ] && log_info "  ├─ Agent Teams: チームデータ (${TEAM_NAME}) ... 存在"
 echo ""
 
@@ -227,8 +227,8 @@ $(echo "$task_description" | sed 's/^/      /')
         mkdir -p "${STATUS_DIR}"
         SAVED_AT=$(date "+%Y-%m-%d %H:%M")
         {
-            echo "# 未完了タスク一覧（撤退時自動保存）"
-            echo "# 再出陣時に将軍が読み込み、家老にタスクを再割り当てする"
+            echo "# 未完了タスク一覧（Disassemble時自動保存）"
+            echo "# 再出陣時にFuryが読み込み、JARVISにタスクを再割り当てする"
             echo "saved_at: \"${SAVED_AT}\""
             echo "tasks:"
             printf '%s' "$PENDING_ENTRIES"
@@ -243,56 +243,56 @@ $(echo "$task_description" | sed 's/^/      /')
 fi
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# 将軍セッションID保存（-f モードでない場合）
+# FuryセッションID保存（-f モードでない場合）
 # ═══════════════════════════════════════════════════════════════════════════════
 # Claude Code のセッションファイルは ~/.claude/projects/<sanitized-path>/<uuid>.jsonl
-# に保存される。将軍のセッションIDを保存しておくと再出陣時に --continue で復元できる。
-SESSION_ID_FILE="${STATUS_DIR}/shogun_session_id"
+# に保存される。FuryのセッションIDを保存しておくと再出陣時に --continue で復元できる。
+SESSION_ID_FILE="${STATUS_DIR}/fury_session_id"
 
-if [ "$FORCE_MODE" = false ] && [ "$SHOGUN_EXISTS" = true ]; then
+if [ "$FORCE_MODE" = false ] && [ "$FURY_EXISTS" = true ]; then
     # WORK_DIR からセッションディレクトリを導出（/ を - に置換）
     CLAUDE_PROJECT_DIR="$HOME/.claude/projects/$(echo "$WORK_DIR" | tr '/' '-')"
 
     if [ -d "$CLAUDE_PROJECT_DIR" ]; then
-        # 最新の .jsonl ファイル（将軍のセッション）を取得
+        # 最新の .jsonl ファイル（Furyのセッション）を取得
         LATEST_SESSION=$(ls -t "$CLAUDE_PROJECT_DIR"/*.jsonl 2>/dev/null | head -1)
         if [ -n "$LATEST_SESSION" ]; then
             SESSION_ID=$(basename "$LATEST_SESSION" .jsonl)
             mkdir -p "${STATUS_DIR}"
             echo "$SESSION_ID" > "$SESSION_ID_FILE"
-            log_info "📎 将軍のセッションID を保存: ${SESSION_ID:0:8}..."
+            log_info "📎 FuryのセッションID を保存: ${SESSION_ID:0:8}..."
         fi
     fi
 elif [ "$FORCE_MODE" = true ]; then
-    # 強制撤退: セッションIDファイルを削除（再開不可にする）
+    # 強制Disassemble: セッションIDファイルを削除（再開不可にする）
     if [ -f "$SESSION_ID_FILE" ]; then
         trash "$SESSION_ID_FILE" 2>/dev/null || true
-        log_info "📎 強制撤退のため、セッションID を破棄"
+        log_info "📎 強制Disassembleのため、セッションID を破棄"
     fi
 fi
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# 撤退処理
+# Disassemble処理
 # ═══════════════════════════════════════════════════════════════════════════════
-log_retreat "🏯 全軍撤退開始..."
+log_disassemble "🏯 全軍Disassemble開始..."
 echo ""
 
 # STEP 1: tmux セッション終了（Claude Code プロセスも終了する）
-if [ "$MULTIAGENT_EXISTS" = true ]; then
-    log_retreat "  └─ 家老・目付・足軽の陣を撤収中..."
-    tmux kill-session -t "${TMUX_MULTIAGENT}" 2>/dev/null
-    log_success "     └─ ${TMUX_MULTIAGENT} 陣、撤収完了"
+if [ "$AVENGERS_EXISTS" = true ]; then
+    log_disassemble "  └─ JARVIS・Bruce・Workerの陣を撤収中..."
+    tmux kill-session -t "${TMUX_AVENGERS}" 2>/dev/null
+    log_success "     └─ ${TMUX_AVENGERS} 陣、撤収完了"
 fi
 
-if [ "$SHOGUN_EXISTS" = true ]; then
-    log_retreat "  └─ 将軍の本陣を撤収中..."
-    tmux kill-session -t "${TMUX_SHOGUN}" 2>/dev/null
-    log_success "     └─ ${TMUX_SHOGUN} 本陣、撤収完了"
+if [ "$FURY_EXISTS" = true ]; then
+    log_disassemble "  └─ Furyの本陣を撤収中..."
+    tmux kill-session -t "${TMUX_FURY}" 2>/dev/null
+    log_success "     └─ ${TMUX_FURY} 本陣、撤収完了"
 fi
 
 # STEP 2: Agent Teams チームデータのクリーンアップ
 if [ "$TEAM_DATA_EXISTS" = true ]; then
-    log_retreat "  └─ Agent Teams チームデータを撤収中..."
+    log_disassemble "  └─ Agent Teams チームデータを撤収中..."
 
     if [ -d "$TEAM_DIR" ]; then
         trash "$TEAM_DIR" 2>/dev/null || true
@@ -311,17 +311,17 @@ echo ""
 # 完了メッセージ
 # ═══════════════════════════════════════════════════════════════════════════════
 echo -e "\033[1;36m  ╔══════════════════════════════════════════════════════════╗\033[0m"
-echo -e "\033[1;36m  ║\033[0m  \033[1;37m🏯 撤退完了！本日の戦、お疲れ様でござった！\033[0m              \033[1;36m║\033[0m"
+echo -e "\033[1;36m  ║\033[0m  \033[1;37m🏯 Disassemble完了！本日の戦、お疲れ様でござった！\033[0m              \033[1;36m║\033[0m"
 echo -e "\033[1;36m  ╚══════════════════════════════════════════════════════════╝\033[0m"
 echo ""
 echo "  次回出陣するには:"
 echo "  ┌──────────────────────────────────────────────────────────┐"
 echo "  │  新規出陣:                                                │"
-echo "  │    .shogun/bin/shutsujin.sh                               │"
+echo "  │    .avengers/bin/assemble.sh                               │"
 if [ -f "$SESSION_ID_FILE" ]; then
 echo "  │                                                          │"
 echo "  │  前回セッション引き継ぎ:                                  │"
-echo "  │    .shogun/bin/shutsujin.sh --resume                     │"
+echo "  │    .avengers/bin/assemble.sh --resume                     │"
 fi
 echo "  └──────────────────────────────────────────────────────────┘"
 echo ""

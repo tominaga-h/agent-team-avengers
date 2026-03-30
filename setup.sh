@@ -2,11 +2,11 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # setup.sh - 互換性のためのラッパースクリプト
 # ═══════════════════════════════════════════════════════════════════════════════
-# このスクリプトは shutsujin_departure.sh に統合されました。
-# 互換性のため、全ての引数を shutsujin_departure.sh に転送します。
+# このスクリプトは assemble.sh に統合されました。
+# 互換性のため、全ての引数を assemble.sh に転送します。
 #
-# 推奨: 直接 ./shutsujin_departure.sh を使用してください。
+# 推奨: 直接 ./assemble.sh を使用してください。
 # ═══════════════════════════════════════════════════════════════════════════════
 
-SHOGUN_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-exec "$SHOGUN_ROOT/shutsujin_departure.sh" "$@"
+AVENGERS_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+exec "$AVENGERS_ROOT/assemble.sh" "$@"

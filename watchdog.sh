@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# watchdog.sh - multi-agent-shogun 監視スクリプト
+# watchdog.sh - Avengers Multi-Agent System 監視スクリプト
 # 使い方: ./watchdog.sh [--project-dir=/path/to/project]
 #         ./watchdog.sh &
 #
 # 機能:
-#   - 全JOBのLimit検知（ログは1件のみ）、リセット後は将軍・家老に自動通知
-#   - dashboard.md更新検知 → 将軍に通知
-#   - 家老のアイドル検知（未処理報告がある場合）
+#   - 全JOBのLimit検知（ログは1件のみ）、リセット後はFury・JARVISに自動通知
+#   - dashboard.md更新検知 → Furyに通知
+#   - JARVISのアイドル検知（未処理報告がある場合）
 
-SHOGUN_ROOT="$(cd "$(dirname "$0")" && pwd)"
+AVENGERS_ROOT="$(cd "$(dirname "$0")" && pwd)"
 
 # WORK_DIR 発見ロジック
 PROJECT_DIR=""
@@ -18,22 +18,22 @@ for arg in "$@"; do
     esac
 done
 
-if [ -n "$PROJECT_DIR" ] && [ -d "${PROJECT_DIR}/.shogun" ]; then
+if [ -n "$PROJECT_DIR" ] && [ -d "${PROJECT_DIR}/.avengers" ]; then
     WORK_DIR="$PROJECT_DIR"
-elif [ -d "$(pwd)/.shogun" ]; then
+elif [ -d "$(pwd)/.avengers" ]; then
     WORK_DIR="$(pwd)"
 else
-    WORK_DIR="$SHOGUN_ROOT"
+    WORK_DIR="$AVENGERS_ROOT"
 fi
 
 # プロジェクト共通変数を読み込み
-source "${SHOGUN_ROOT}/scripts/project-env.sh"
+source "${AVENGERS_ROOT}/scripts/project-env.sh"
 
 LOG_FILE="${LOGS_DIR}/watchdog.log"
 CHECK_INTERVAL=300  # 5分ごとにチェック
-LIMIT_RESET_FILE="${SHOGUN_DATA_DIR}/.limit_reset_times"
-PID_FILE="${SHOGUN_DATA_DIR}/watchdog.pid"
-LAST_DASHBOARD_CHECK_FILE="${SHOGUN_DATA_DIR}/.last_dashboard_check"
+LIMIT_RESET_FILE="${AVENGERS_DATA_DIR}/.limit_reset_times"
+PID_FILE="${AVENGERS_DATA_DIR}/watchdog.pid"
+LAST_DASHBOARD_CHECK_FILE="${AVENGERS_DATA_DIR}/.last_dashboard_check"
 
 # ログディレクトリ作成
 mkdir -p "${LOGS_DIR}"
@@ -48,7 +48,7 @@ log() {
 notify() {
   local pane=$1
   local message=$2
-  "$SHOGUN_ROOT/scripts/notify.sh" "$pane" "$message"
+  "$AVENGERS_ROOT/scripts/notify.sh" "$pane" "$message"
 }
 
 # 12時間形式の時刻をUNIXタイムスタンプに変換（今日の日付で）
@@ -112,7 +112,7 @@ check_limit() {
   return 1
 }
 
-# 2. Limitリセット後の自動再開（全JOBの記録を見て、将軍・家老に通知）
+# 2. Limitリセット後の自動再開（全JOBの記録を見て、Fury・JARVISに通知）
 check_limit_reset() {
   [ ! -f "$LIMIT_RESET_FILE" ] && return 1
   [ ! -s "$LIMIT_RESET_FILE" ] && return 1  # 空ファイルもスキップ
@@ -141,23 +141,23 @@ check_limit_reset() {
     fi
   done < "$LIMIT_RESET_FILE"
 
-  # リセット時刻を過ぎていたら将軍・家老に通知
+  # リセット時刻を過ぎていたらFury・JARVISに通知
   if [ "$should_notify" = true ]; then
-    log "✅ Limitリセット時刻($reset_info)を過ぎた - 将軍・家老に再開指示"
+    log "✅ Limitリセット時刻($reset_info)を過ぎた - Fury・JARVISに再開指示"
 
-    # 家老に通知（先に通知）
-    if tmux has-session -t "${TMUX_MULTIAGENT}" 2>/dev/null; then
-      tmux send-keys -t "${TMUX_MULTIAGENT}:0.0" "" Enter
+    # JARVISに通知（先に通知）
+    if tmux has-session -t "${TMUX_AVENGERS}" 2>/dev/null; then
+      tmux send-keys -t "${TMUX_AVENGERS}:0.0" "" Enter
       sleep 1
-      notify "${TMUX_MULTIAGENT}:0.0" "Limitがリセットされた。作業再開せよ。目付や各足軽にも再開指示をせよ。"
+      notify "${TMUX_AVENGERS}:0.0" "Limitがリセットされた。作業再開せよ。Bruceや各Workerにも再開指示をせよ。"
     fi
 
-    # 将軍に通知
-    if tmux has-session -t "${TMUX_SHOGUN}" 2>/dev/null; then
+    # Furyに通知
+    if tmux has-session -t "${TMUX_FURY}" 2>/dev/null; then
       sleep 1
-      tmux send-keys -t "${TMUX_SHOGUN}:0.0" "" Enter
+      tmux send-keys -t "${TMUX_FURY}:0.0" "" Enter
       sleep 1
-      notify "${TMUX_SHOGUN}:0.0" "Limitがリセットされた。家老にも指示したので家老が動いていなかったら追加指示をすること。"
+      notify "${TMUX_FURY}:0.0" "Limitがリセットされた。JARVISにも指示したのでJARVISが動いていなかったら追加指示をすること。"
     fi
 
     # 記録ファイルをクリア
@@ -176,12 +176,12 @@ check_idle() {
 
   # プロンプト（❯）が表示されている = アイドル
   if echo "$output" | grep -qE "^❯ *$"; then
-    # 家老の場合、未処理報告があるか確認
-    if [ "$name" = "karo" ]; then
-      local report_count=$(find "$SHOGUN_ROOT/queue/reports" -name "*.yaml" -mmin -10 -type f 2>/dev/null | wc -l | tr -d ' ')
+    # JARVISの場合、未処理報告があるか確認
+    if [ "$name" = "jarvis" ]; then
+      local report_count=$(find "$AVENGERS_ROOT/queue/reports" -name "*.yaml" -mmin -10 -type f 2>/dev/null | wc -l | tr -d ' ')
 
       if [ "$report_count" -gt 0 ]; then
-        log "⚠️  [karo] アイドル状態 + 未処理報告あり ($report_count件) - 起床"
+        log "⚠️  [jarvis] アイドル状態 + 未処理報告あり ($report_count件) - 起床"
         notify "$pane" "queue/reports/ に未処理報告がある。確認せよ。"
         return 0
       fi
@@ -191,7 +191,7 @@ check_idle() {
   return 1
 }
 
-# 4. dashboard.md更新検知 → 将軍に報告
+# 4. dashboard.md更新検知 → Furyに報告
 check_dashboard_update() {
   local dashboard="${DASHBOARD_PATH}"
 
@@ -214,21 +214,21 @@ check_dashboard_update() {
 
     # macOS通知
     if command -v osascript &> /dev/null; then
-      osascript -e 'display notification "dashboard.mdが更新されました" with title "multi-agent-shogun" sound name "Glass"' 2>/dev/null
+      osascript -e 'display notification "dashboard.mdが更新されました" with title "Avengers Multi-Agent System" sound name "Glass"' 2>/dev/null
     fi
 
-    # 将軍が稼働中でアイドルなら起こす
-    if tmux has-session -t "${TMUX_SHOGUN}" 2>/dev/null; then
-      local shogun_output=$(tmux capture-pane -t "${TMUX_SHOGUN}:0.0" -p 2>/dev/null | tail -5)
+    # Furyが稼働中でアイドルなら起こす
+    if tmux has-session -t "${TMUX_FURY}" 2>/dev/null; then
+      local fury_output=$(tmux capture-pane -t "${TMUX_FURY}:0.0" -p 2>/dev/null | tail -5)
 
-      if echo "$shogun_output" | grep -qE "^❯ *$"; then
-        log "  → 将軍を起床させる"
-        notify "${TMUX_SHOGUN}:0.0" "dashboard.md が更新された。確認せよ。"
+      if echo "$fury_output" | grep -qE "^❯ *$"; then
+        log "  → Furyを起床させる"
+        notify "${TMUX_FURY}:0.0" "dashboard.md が更新された。確認せよ。"
       else
-        log "  → 将軍は殿と会話中（起こさない）"
+        log "  → FuryはHayatoと会話中（起こさない）"
       fi
     else
-      log "  → 将軍は停止中"
+      log "  → Furyは停止中"
     fi
 
     # タイムスタンプ更新
@@ -266,29 +266,29 @@ while true; do
   # Limit検知フラグ（新規記録があれば1件だけログ出力）
   limit_detected=false
 
-  # shogunセッション
-  if tmux has-session -t "${TMUX_SHOGUN}" 2>/dev/null; then
-    check_limit "${TMUX_SHOGUN}:0.0" "shogun"
+  # Furyセッション
+  if tmux has-session -t "${TMUX_FURY}" 2>/dev/null; then
+    check_limit "${TMUX_FURY}:0.0" "fury"
     [ $? -eq 0 ] && limit_detected=true
-    check_long_thinking "${TMUX_SHOGUN}:0.0" "shogun"
+    check_long_thinking "${TMUX_FURY}:0.0" "fury"
   fi
 
-  # multiagentセッション
-  if tmux has-session -t "${TMUX_MULTIAGENT}" 2>/dev/null; then
-    # Pane 0: karo
-    check_limit "${TMUX_MULTIAGENT}:0.0" "karo"
+  # Avengersセッション
+  if tmux has-session -t "${TMUX_AVENGERS}" 2>/dev/null; then
+    # Pane 0: jarvis
+    check_limit "${TMUX_AVENGERS}:0.0" "jarvis"
     [ $? -eq 0 ] && limit_detected=true
-    check_idle "${TMUX_MULTIAGENT}:0.0" "karo"
-    check_long_thinking "${TMUX_MULTIAGENT}:0.0" "karo"
+    check_idle "${TMUX_AVENGERS}:0.0" "jarvis"
+    check_long_thinking "${TMUX_AVENGERS}:0.0" "jarvis"
 
-    # Pane 1: metsuke
-    check_limit "${TMUX_MULTIAGENT}:0.1" "metsuke"
+    # Pane 1: bruce
+    check_limit "${TMUX_AVENGERS}:0.1" "bruce"
     [ $? -eq 0 ] && limit_detected=true
 
-    # Pane 2-N: ashigaru
+    # Pane 2-N: worker
     for i in {2..9}; do
-      if tmux list-panes -t "${TMUX_MULTIAGENT}" -F '#{pane_index}' 2>/dev/null | grep -q "^$i$"; then
-        check_limit "${TMUX_MULTIAGENT}:0.$i" "ashigaru$((i-1))"
+      if tmux list-panes -t "${TMUX_AVENGERS}" -F '#{pane_index}' 2>/dev/null | grep -q "^$i$"; then
+        check_limit "${TMUX_AVENGERS}:0.$i" "worker$((i-1))"
         [ $? -eq 0 ] && limit_detected=true
       fi
     done
