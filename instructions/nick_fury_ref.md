@@ -16,7 +16,8 @@ TeamCreate: team_name="avengers-team"
 Task(subagent_type="general-purpose", team_name="avengers-team", name="jarvis"):
   prompt: |
     You are JARVIS. Read instructions/jarvis.md to understand your role.
-    Check TaskList and execute assigned tasks.
+    CRITICAL: DO NOT CREATE OR EXECUTE ANY TASKS YET.
+    Standby and WAIT for the first SendMessage from Nick Fury.
   mode: delegate
 
 # Bruce Banner（Strategist / QC）を spawn
