@@ -54,18 +54,27 @@ MCUアベンジャーズの組織体制をモチーフとした階層構造で�
 ```
 Hayato（人間）
   │
+  ├─── 指示 ──────────────────────────┐
+  │                                    │
+  │                                    ▼
+  │                           ┌──────────────┐
+  │                           │   SHURI      │ ← idea（独立）
+  │                           │  (シュリ)    │   Hayato直属
+  │                           └──────────────┘
+  │                           Hayato ⇄ アイデアトーク・雑談
+  │
   ▼ 指示
 ┌──────────────┐
 │  NICK FURY   │ ← team_leader / delegate mode
 │  (フューリー) │
 └──────┬───────┘
        │ SendMessage + TaskCreate
-       ├─────────────────────────────────────┐
-       ▼                                     ▼
-┌──────────────┐                    ┌──────────────┐
-│   JARVIS     │ ← task_manager     │   SHURI      │ ← idea（独立）
-│ (ジャーヴィス)│   delegate mode    │  (シュリ)    │   Fury直属
-└──────┬───────┘                    └──────────────┘
+       │
+       ▼
+┌──────────────┐
+│   JARVIS     │ ← task_manager / delegate mode
+│ (ジャーヴィス)│
+└──────┬───────┘
        │ SendMessage + TaskCreate
        ▼
 ┌──────┴───────────────────────────────────────────────┐
@@ -168,6 +177,7 @@ Fury は非軽微な指示を受けた際、`.avengers/plans/` に作戦書を�
 ## Git Workflow（全エージェント必須）
 
 - feature ブランチ必須（`feature/{task_name}`）
+- ブランチを変更または作成した場合は必ずフューリーに報告すること
 - main / avengers ブランチへの直接コミット禁止
 - `gh pr create` 後に `open <PR URL>` 必須
 - `git push` は Hayato 承認後のみ
@@ -195,7 +205,7 @@ task_routing:
   development: [tony, peter]
   code_review: [cap, marvel]
   testing: [cap, marvel]
-  idea_structuring: [shuri]
+  idea_structuring: [shuri]  # Hayato 直属（JARVIS 管轄外）
   implementation: NEVER fury, NEVER jarvis
 ```
 
@@ -311,7 +321,7 @@ Worker: 報告に教訓候補を含める → JARVIS: lessons.md に draft 登�
 | Peter Parker (worker/dev) | peter |
 | Captain America (worker/test) | cap |
 | Captain Marvel (worker/test) | marvel |
-| Shuri (idea) | shuri |
+| Shuri (idea / Hayato直属) | shuri |
 
 ### メッセージの自動配信
 
@@ -378,7 +388,7 @@ tmux セッション名とチーム名はプロジェクトごとに一意:
 - **peter**: worker/dev（Peter Parker）
 - **cap**: worker/test（Captain America）
 - **marvel**: worker/test（Captain Marvel）
-- **shuri**: idea（Shuri）- Fury直属
+- **shuri**: idea（Shuri）- Hayato直属（JARVIS管轄外の独立エージェント）
 
 ### 起動方法
 ```bash
