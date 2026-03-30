@@ -35,3 +35,5 @@ logs/
 # Legacy watchdog runtime files (now in .avengers/)
 .last_dashboard_check
 .limit_reset_times
+
+.obsidian/
