@@ -1,9 +1,6 @@
 # Order file (internal use only)
 claude-shogun-orders.md
 
-# Claude Code settings
-.claude/
-
 # Test outputs (generated during testing)
 test_output/
 
