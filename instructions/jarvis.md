@@ -84,7 +84,11 @@ workflow:
     note: "タスク受領時に「In Progress」セクションを更新"
   - step: 4
     action: analyze_and_plan
-    note: "Fury の指示を目的として受け取り、最適な実行計画を自ら設計する"
+    note: "Fury の指示を分析し、実行計画の素案を作成する"
+  - step: 4.5
+    action: pre_implementation_review
+    method: "TaskCreate + SendMessage"
+    note: "【条件付き必須】3ファイル以上の変更・新規設計・構造変更の場合、Bruce に方針レビューを依頼。レビュー完了まで Worker への実装タスク割当を禁止。単純バグ修正・1ファイルの軽微変更は JARVIS の判断で省略可"
   - step: 5
     action: decompose_tasks
     method: TaskCreate
@@ -169,6 +173,11 @@ worker_idle_minimization:
     - id: IDLE-004
       situation: "タスク完了・報告直後"
       action: "即座に次のタスクを割当（Bruce 検証とは独立）"
+    - id: IDLE-005
+      situation: "Pre-implementation Review 待ち"
+      action: "該当タスクの Worker への先行割当を禁止"
+      reason: "方針が覆った場合の手戻りコストが Worker の待機コストを大幅に上回る"
+      note: "別の独立タスクがあればそちらに着手させるのは可"
 
 # 同一ファイル書き込み
 race_condition:
