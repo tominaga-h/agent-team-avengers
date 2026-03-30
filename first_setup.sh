@@ -558,7 +558,7 @@ RESULTS+=("実行権限: OK")
 # ============================================================
 # STEP 9: bashrc alias設定
 # ============================================================
-log_step "STEP 9: alias設定"
+log_step "STEP 9: alias設定を行います"
 
 # alias追加対象ファイル
 BASHRC_FILE="$HOME/.bashrc"
@@ -574,18 +574,18 @@ if [ -f "$BASHRC_FILE" ]; then
         echo "" >> "$BASHRC_FILE"
         echo "# multi-agent-avengers aliases (added by first_setup.sh)" >> "$BASHRC_FILE"
         echo "$EXPECTED_CSS" >> "$BASHRC_FILE"
-        log_info "alias css を追加しました（Assembleコマンド）"
+        log_info "alias css を追加いたしました（Assembleコマンド）"
         ALIAS_ADDED=true
     elif ! grep -qF "$EXPECTED_CSS" "$BASHRC_FILE" 2>/dev/null; then
         # alias は存在するがパスが異なる → 更新
         if sed -i "s|alias css=.*|$EXPECTED_CSS|" "$BASHRC_FILE" 2>/dev/null; then
-            log_info "alias css を更新しました（パス変更検出）"
+            log_info "alias css を更新いたしました（パス変更を検出）"
         else
-            log_warn "alias css の更新に失敗しました"
+            log_warn "alias css の更新に失敗いたしました"
         fi
         ALIAS_ADDED=true
     else
-        log_info "alias css は既に正しく設定されています"
+        log_info "alias css は既に正しく設定されております"
     fi
 
     # csm alias (ディレクトリ移動)
@@ -596,25 +596,25 @@ if [ -f "$BASHRC_FILE" ]; then
             echo "# multi-agent-avengers aliases (added by first_setup.sh)" >> "$BASHRC_FILE"
         fi
         echo "$EXPECTED_CSM" >> "$BASHRC_FILE"
-        log_info "alias csm を追加しました（ディレクトリ移動）"
+        log_info "alias csm を追加いたしました（ディレクトリ移動）"
         ALIAS_ADDED=true
     elif ! grep -qF "$EXPECTED_CSM" "$BASHRC_FILE" 2>/dev/null; then
         if sed -i "s|alias csm=.*|$EXPECTED_CSM|" "$BASHRC_FILE" 2>/dev/null; then
-            log_info "alias csm を更新しました（パス変更検出）"
+            log_info "alias csm を更新いたしました（パス変更を検出）"
         else
-            log_warn "alias csm の更新に失敗しました"
+            log_warn "alias csm の更新に失敗いたしました"
         fi
         ALIAS_ADDED=true
     else
-        log_info "alias csm は既に正しく設定されています"
+        log_info "alias csm は既に正しく設定されております"
     fi
 else
-    log_warn "$BASHRC_FILE が見つかりません"
+    log_warn "$BASHRC_FILE が見つかりませんでした"
 fi
 
 if [ "$ALIAS_ADDED" = true ]; then
-    log_success "alias設定を追加しました"
-    log_info "反映するには 'source ~/.bashrc' を実行するか、ターミナルを再起動してください"
+    log_success "alias設定の追加、完了いたしました"
+    log_info "反映には 'source ~/.bashrc' の実行、またはターミナルの再起動をお願いいたします"
 fi
 
 RESULTS+=("alias設定: OK")
@@ -622,27 +622,27 @@ RESULTS+=("alias設定: OK")
 # ============================================================
 # STEP 10: Memory MCP セットアップ
 # ============================================================
-log_step "STEP 10: Memory MCP セットアップ"
+log_step "STEP 10: Memory MCP のセットアップを行います"
 
 if command -v claude &> /dev/null; then
     # Memory MCP が既に設定済みか確認
     if claude mcp list 2>/dev/null | grep -q "memory"; then
-        log_info "Memory MCP は既に設定済みです"
+        log_info "Memory MCP は既に設定済みでございます"
         RESULTS+=("Memory MCP: OK (設定済み)")
     else
-        log_info "Memory MCP を設定中..."
+        log_info "Memory MCP の設定を行っております..."
         if claude mcp add memory \
             -e MEMORY_FILE_PATH="$AVENGERS_ROOT/memory/avengers_memory.jsonl" \
             -- npx -y @modelcontextprotocol/server-memory 2>/dev/null; then
-            log_success "Memory MCP 設定完了"
+            log_success "Memory MCP の設定、完了いたしました、Sir"
             RESULTS+=("Memory MCP: 設定完了")
         else
-            log_warn "Memory MCP の設定に失敗しました（手動で設定可能）"
+            log_warn "Memory MCP の設定に失敗いたしました（手動での設定も可能でございます）"
             RESULTS+=("Memory MCP: 設定失敗 (手動設定可能)")
         fi
     fi
 else
-    log_warn "claude コマンドが見つからないため Memory MCP 設定をスキップ"
+    log_warn "claude コマンドが確認できないため、Memory MCP 設定をスキップいたしました"
     RESULTS+=("Memory MCP: スキップ (claude未インストール)")
 fi
 

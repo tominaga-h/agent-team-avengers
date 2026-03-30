@@ -25,6 +25,8 @@ config/projects.yaml
 status/
 config/settings.yaml
 logs/
+context/
+!context/README.md
 
 # Project-local runtime data (generated per work directory)
 .avengers/
