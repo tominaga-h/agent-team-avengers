@@ -456,13 +456,20 @@ claude mcp list
 
 ## ⚙️ 設定
 
-### エージェント数
+### チーム構成
 
-`config/settings.yaml` を編集：
+固定8名構成（Fury + 配下8名）:
 
-```yaml
-worker_count: 6   # Workerの数（1〜8）
-```
+| メンバー | 役割 |
+|----------|------|
+| JARVIS | タスク管理（delegate） |
+| Bruce Banner | 品質保証・戦略 |
+| Doctor Strange | レビュー |
+| Tony Stark | 開発 |
+| Peter Parker | 開発 |
+| Captain America | テスト |
+| Captain Marvel | テスト |
+| Shuri | アイデア（Fury直属） |
 
 ### 言語設定
 

@@ -463,13 +463,20 @@ You should see all servers with "Connected" status.
 
 ## ⚙️ Configuration
 
-### Agent Count
+### Team Composition
 
-Edit `config/settings.yaml`:
+Fixed 8-member team (Fury + 8 subordinates):
 
-```yaml
-worker_count: 6   # Number of workers (1-8)
-```
+| Member | Role |
+|--------|------|
+| JARVIS | Task management (delegate) |
+| Bruce Banner | Quality assurance / Strategy |
+| Doctor Strange | Review |
+| Tony Stark | Development |
+| Peter Parker | Development |
+| Captain America | Testing |
+| Captain Marvel | Testing |
+| Shuri | Ideation (reports to Fury directly) |
 
 ### Language Setting
 

@@ -132,7 +132,7 @@ Step 1のリネーム後、起動に必須なスクリプトの内容を書き�
 - ペルソナの変更
 
 ### 3a. `nick_fury_core.md` + `nick_fury_ref.md`
-- [shogun_core.md](instructions/shogun_core.md) (165行) ベース
+- [nick_fury_core.md](instructions/nick_fury_core.md) (旧 shogun_core.md, 165行) ベース
 - YAML Front Matter: role=team_leader, agent_id=fury, codename="Nick Fury"
 - forbidden_actions: F001 karo->jarvis, F002 ashigaru->Worker
 - workflow: .shogun->`.avengers`, shogun_context->fury_context
@@ -141,14 +141,14 @@ Step 1のリネーム後、起動に必須なスクリプトの内容を書き�
 - Fury固有: Action Required Rule, Shuri直接指示例外, /project コマンド
 
 ### 3b. `jarvis.md`
-- [karo.md](instructions/karo.md) (645行) ベース
+- [jarvis.md](instructions/jarvis.md) (旧 karo.md, 645行) ベース
 - YAML: role=task_manager, agent_id=jarvis, codename="JARVIS"
 - Task Routingテーブル追加（strategy->bruce/strange, dev->tony/peter, test->cap/marvel）
 - F012 JARVIS先回り禁止ルール追加
 - dashboard.md唯一責任者、IDLE削減、RACE-001 はそのまま維持
 
 ### 3c. `bruce_banner.md`
-- [metsuke.md](instructions/metsuke.md) (359行) ベース
+- [bruce_banner.md](instructions/bruce_banner.md) (旧 metsuke.md, 359行) ベース
 - role: reviewer -> strategist（QC + 戦略分析）
 - 5項目チェック維持 + 戦略分析能力追加
 - 報告先: jarvis
@@ -159,13 +159,13 @@ Step 1のリネーム後、起動に必須なスクリプトの内容を書き�
 - 代替案提示（14,000,605通りの可能性）
 
 ### 3e. `tony_stark.md` + `peter_parker.md`
-- [ashigaru.md](instructions/ashigaru.md) (471行) ベース
+- ashigaru.md (471行, 削除済み) ベース
 - role=worker, specialty=development
 - recipient "karo" -> "jarvis"
 - 開発特化ペルソナ
 
 ### 3f. `captain_america.md` + `captain_marvel.md`
-- ashigaru.md ベース
+- ashigaru.md (削除済み) ベース
 - role=worker, specialty=testing_and_review
 - テスト/レビュー特化ペルソナ
 
@@ -248,7 +248,11 @@ Step 1のリネーム後、起動に必須なスクリプトの内容を書き�
 - `first_setup.sh` 実行 -> config/ 正常生成確認
 - `./assemble.sh` 実行 -> `.avengers/` 構築確認
 - tmuxセッション名確認
-- エージェント通信テスト
+- エージェント通信テスト:
+  - Fury の指示を JARVIS が Task Routing Table に基づき適切に配分すること
+  - 実行担当エージェントが JARVIS へ完了報告すること
+  - Bruce が QC を実行すること
+  - JARVIS が `.avengers/dashboard.md` を更新すること
 - コマンドテスト (`/inspect`, `/reassemble`, `/retreat`)
 - spawn制限テスト
 - Shuri独立性テスト

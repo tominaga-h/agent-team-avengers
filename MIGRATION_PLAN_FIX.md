@@ -1,46 +1,52 @@
 # MIGRATION_PLAN_FIX
 
-対象: `.cursor/plans/shogun_to_avengers_migration_307bbd79.plan.md`  
-基準: `MIGRATION_TO_AVENGERS.md`
+対象: Opus 4.6 実装済みコードレビュー  
+基準: `MIGRATION_TO_AVENGERS.md` / `.cursor/plans/shogun_to_avengers_migration_307bbd79.plan.md`
 
-## 指摘事項
+## 再レビュー結果（未解消のみ）
 
-1. **Step 3 の参照リンクが実行順と矛盾**
+1. **[高] `assemble.sh` が「固定8名構成」要件を満たしていない**
 
-- 現行プランでは Step 1 で `instructions/shogun_core.md` / `instructions/shogun_ref.md` をリネームした後に、Step 3 で旧パスへのリンク参照が残っている。
-- この状態だと Step 1 実行後にリンク切れとなり、作業者が参照元を辿れない。
+- `first_setup.sh` では「固定メンバー構成（Fury/JARVIS/Bruce/Strange/Tony/Peter/Cap/Marvel/Shuri）」を明記している一方、`assemble.sh` は `worker_count` / `ashigaru_count` を読み取る可変構成のまま。
+- 初期値が 3 のため、起動時に Worker が不足し、構成が要件とズレる可能性が高い。
+- `INIT_PROMPT` でも明示的に spawn 指示しているのは `jarvis` と `bruce` + 可変 Worker 群のみで、`strange` / `shuri` が固定で含まれる保証がない。
 - 修正案:
-  - Step 3 のリンク表記を「旧ファイル名（参照元）」という注記に変更し、リンク先は現ファイル（例: `instructions/nick_fury_core.md`）に揃える。
-  - もしくは Step 3 冒頭に「旧ファイルは Step 1 前提で参照不可のため、差分は git history で確認」と明記する。
+  - `assemble.sh` から `worker_count` / `ashigaru_count` 依存を削除し、固定メンバー8名（配下7名）を明示 spawn に統一する。
+  - バナーや表示文言の「Worker×N」も固定チーム名ベースに変更する。
 
-1. **Phase 8 相当のチェックが一部欠落**
+1. **[高] `/reassemble` が存在しないスクリプト `compact_team.sh` を参照している**
 
-- 基準文書には `.claude/settings.json` で「hooks パス更新」に加えて「`permissions.deny` は維持（D001-D008相当）」が明記されている。
-- 現行プランは hooks 更新のみ記載で、`permissions.deny` の非改変確認が抜けている。
+- `commands/reassemble.md` は `.avengers/bin/compact_team.sh` の実行を前提にしているが、`assemble.sh` 側に当該スクリプトの生成処理がない。
+- 実運用で `/reassemble` 実行時に失敗する。
 - 修正案:
-  - Step 5 の設定セクションに「`permissions.deny` が意図せず変更されていないことを確認」を追加。
-  - 検証チェックリストにも同項目を追加。
+  - `assemble.sh` で `.avengers/bin/compact_team.sh` を生成する。
+  - もしくは `commands/reassemble.md` から当該依存を外し、現行実装に合わせた手順（tmux direct send 等）へ更新する。
 
-1. **不要ファイル整理の候補が1件不足**
+1. **[中] プラン完了ステータスと実装成果物が不一致**
 
-- 基準文書の Phase 9 には `install.bat`（macOS環境では不要、残置可）が候補として記載されている。
-- 現行プランの削除候補に `install.bat` の判断項目がないため、整理方針が不完全。
+- プランでは `step5-commands` が completed だが、`commands/` 配下は `reassemble.md` / `inspect.md` / `retreat.md` の3本のみ。
+- プラン本文で移植対象としている `commands/add-todo.md` / `commands/todos.md` / `commands/project.md` / `commands/implement-todo.md` が未実装。
 - 修正案:
-  - Step 6 の削除候補に `install.bat` を追加し、「残置/削除の判断を明示する」運用にする。
+  - 4ファイルを実装するか、不要であればプラン側のスコープから除外して completed 判定条件を更新する。
 
-1. **通信テストの受け入れ条件が基準より粗い**
+1. **[低] 移行プラン文書の参照整合が未修正**
 
-- 基準文書の通信テストは「JARVISのルーティング」「BruceのQC実行」「JARVISのdashboard更新」まで明示されている。
-- 現行プランは「エージェント通信テスト」と抽象化され、完了判定が曖昧。
+- `.cursor/plans/shogun_to_avengers_migration_307bbd79.plan.md` の Step 3 には、Step 1 でリネーム済みの旧パス（例: `instructions/shogun_core.md`）へのリンクが残っている。
+- 実装完了後に計画を参照する際、追跡性が落ちる。
 - 修正案:
-  - Step 6 テスト項目に以下の期待結果を明文化:
-    - Fury指示 → JARVISがTask Routingに従って担当へ割当
-    - 実行担当（Tony/Peter等）がJARVISへ完了報告
-    - BruceがQCを実行
-    - JARVISが `.avengers/dashboard.md` を更新
+  - Step 3 の参照を現行ファイルに合わせるか、「旧名（履歴参照用）」注記に置き換える。
 
-## 反映優先度
+1. **[低] 通信テストの受け入れ条件が依然として曖昧**
 
-- **高**: 指摘 1, 2（作業中断・安全設定逸脱リスク）
-- **中**: 指摘 4（テスト完了判定の曖昧化）
-- **低**: 指摘 3（運用整理の抜け）
+- プランの Step 6 は「エージェント通信テスト」とのみ記載され、判定基準（Routing/QC/dashboard更新）が不足している。
+- 修正案:
+  - 以下を期待結果として明文化する:
+    - Fury 指示を JARVIS が Task Routing で適切に配分
+    - 実行担当が JARVIS へ完了報告
+    - Bruce の QC 実行
+    - JARVIS による `.avengers/dashboard.md` 更新
+
+## 解消済みとして削除した項目
+
+- `.claude/settings.json` の `permissions.deny` 維持漏れ（実装済み）
+- `install.bat` 判断項目不足（ファイル存在を確認、現状は残置運用で整合）

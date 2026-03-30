@@ -24,15 +24,9 @@ if [ -f "${AVENGERS_ROOT}/config/settings.yaml" ]; then
     LANG_SETTING=$(grep "^language:" "${AVENGERS_ROOT}/config/settings.yaml" 2>/dev/null | awk '{print $2}' || echo "ja")
 fi
 
-# Worker 数を読み取り（デフォルト: 3）
-ASHIGARU_COUNT=3
-if [ -f "${AVENGERS_ROOT}/config/settings.yaml" ]; then
-    ASHIGARU_COUNT=$(grep "^worker_count:" "${AVENGERS_ROOT}/config/settings.yaml" 2>/dev/null | awk '{print $2}' || echo "")
-    if [ -z "$ASHIGARU_COUNT" ]; then
-        ASHIGARU_COUNT=$(grep "^ashigaru_count:" "${AVENGERS_ROOT}/config/settings.yaml" 2>/dev/null | awk '{print $2}' || echo "3")
-    fi
-    ASHIGARU_COUNT=${ASHIGARU_COUNT:-3}
-fi
+# 固定8名構成（Fury配下7名 + Shuri）
+# JARVIS / Bruce / Strange / Tony / Peter / Cap / Marvel / Shuri
+TEAM_MEMBER_COUNT=8
 
 # 色付きログ関数（戦国風）
 log_info() {
@@ -76,7 +70,7 @@ while [[ $# -gt 0 ]]; do
             echo ""
             echo "2つの tmux セッションを構築します:"
             echo "  ${TMUX_FURY}     - Fury（Claude Code）"
-            echo "  ${TMUX_AVENGERS} - JARVIS・Bruce・Worker（Agent Teams が自動配備）"
+            echo "  ${TMUX_AVENGERS} - JARVIS・Bruce・Strange・Tony・Peter・Cap・Marvel・Shuri（Agent Teams が自動配備）"
             echo ""
             exit 0
             ;;
@@ -114,50 +108,20 @@ show_battle_cry() {
     echo ""
 
     # ═══════════════════════════════════════════════════════════════════════════
-    # Worker 隊列（動的生成）
+    # Avengers チーム編成（固定8名）
     # ═══════════════════════════════════════════════════════════════════════════
-    # Worker 数に応じた漢数字（bash 3.x 互換）
-    case $ASHIGARU_COUNT in
-        1) KANJI_COUNT="一" ;;
-        2) KANJI_COUNT="二" ;;
-        3) KANJI_COUNT="三" ;;
-        4) KANJI_COUNT="四" ;;
-        5) KANJI_COUNT="五" ;;
-        6) KANJI_COUNT="六" ;;
-        7) KANJI_COUNT="七" ;;
-        8) KANJI_COUNT="八" ;;
-        *) KANJI_COUNT="$ASHIGARU_COUNT" ;;
-    esac
-
     echo -e "\033[1;34m  ╔═════════════════════════════════════════════════════════════════════════════╗\033[0m"
-    echo -e "\033[1;34m  ║\033[0m                    \033[1;37m【 Worker 隊 列 ・ ${KANJI_COUNT} 名 配 備 】\033[0m                      \033[1;34m║\033[0m"
+    echo -e "\033[1;34m  ║\033[0m                    \033[1;37m【 Avengers 隊 列 ・ 八 名 配 備 】\033[0m                    \033[1;34m║\033[0m"
     echo -e "\033[1;34m  ╚═════════════════════════════════════════════════════════════════════════════╝\033[0m"
 
-    # Worker ASCIIアートを動的に生成
     echo ""
-    LINE1="      "
-    LINE2="      "
-    LINE3="     "
-    LINE4="       "
-    LINE5="      "
-    LINE6="      "
-    LINE7="     "
-    for i in $(seq 1 $ASHIGARU_COUNT); do
-        LINE1+="/\\      "
-        LINE2+="/||\\    "
-        LINE3+="/_||\\   "
-        LINE4+="||      "
-        LINE5+="/||\\    "
-        LINE6+="/  \\    "
-        LINE7+="[W$i]   "
-    done
-    echo "$LINE1"
-    echo "$LINE2"
-    echo "$LINE3"
-    echo "$LINE4"
-    echo "$LINE5"
-    echo "$LINE6"
-    echo "$LINE7"
+    echo "      /\\      /\\      /\\      /\\      /\\      /\\      /\\      /\\      "
+    echo "      /||\\    /||\\    /||\\    /||\\    /||\\    /||\\    /||\\    /||\\    "
+    echo "     /_||\\   /_||\\   /_||\\   /_||\\   /_||\\   /_||\\   /_||\\   /_||\\   "
+    echo "       ||      ||      ||      ||      ||      ||      ||      ||      "
+    echo "      /||\\    /||\\    /||\\    /||\\    /||\\    /||\\    /||\\    /||\\    "
+    echo "      /  \\    /  \\    /  \\    /  \\    /  \\    /  \\    /  \\    /  \\    "
+    echo "     JARVIS  Bruce  Strange  Tony   Peter    Cap   Marvel  Shuri  "
     echo ""
 
     echo -e "                    \033[1;36m「「「 はっ！！ Avengers Assembleいたす！！ 」」」\033[0m"
@@ -169,7 +133,8 @@ show_battle_cry() {
     echo -e "\033[1;33m  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\033[0m"
     echo -e "\033[1;33m  ┃\033[0m  \033[1;37m🛡️ Avengers Multi-Agent System\033[0m  〜 \033[1;36mAgent Teams マルチエージェント\033[0m 〜           \033[1;33m┃\033[0m"
     echo -e "\033[1;33m  ┃\033[0m                                                                           \033[1;33m┃\033[0m"
-    echo -e "\033[1;33m  ┃\033[0m    \033[1;35mFury\033[0m: 統括  \033[1;31mJARVIS\033[0m: 管理  \033[1;32mBruce\033[0m: 品質保証  \033[1;34mWorker\033[0m×$ASHIGARU_COUNT: 実働      \033[1;33m┃\033[0m"
+    echo -e "\033[1;33m  ┃\033[0m    \033[1;35mFury\033[0m: 統括  \033[1;31mJARVIS\033[0m: 管理  \033[1;32mBruce\033[0m: 品質  \033[1;36mStrange\033[0m: レビュー              \033[1;33m┃\033[0m"
+    echo -e "\033[1;33m  ┃\033[0m    \033[1;34mTony\033[0m: 開発  \033[1;34mPeter\033[0m: 開発  \033[1;33mCap\033[0m: テスト  \033[1;33mMarvel\033[0m: テスト  \033[1;35mShuri\033[0m: 発案  \033[1;33m┃\033[0m"
     echo -e "\033[1;33m  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\033[0m"
     echo ""
 }
@@ -547,7 +512,7 @@ INITIAL_PANE=$(tmux display-message -t "${TMUX_AVENGERS}:agents" -p '#{pane_id}'
 # Agent Teams が teammateMode: tmux で pane を作るたび発火する
 # move-pane は直接 tmux コマンドとして実行（run-shell 内では動かない）
 # カウンターベース: チームメイト数に達したらフック自動解除
-EXPECTED_TEAMMATES=$((2 + ASHIGARU_COUNT))  # jarvis(1) + bruce(1) + workers(N)
+EXPECTED_TEAMMATES=${TEAM_MEMBER_COUNT}  # jarvis + bruce + strange + tony + peter + cap + marvel + shuri
 MOVE_COUNTER="${STATUS_DIR}/.pane_move_count"
 echo "0" > "${MOVE_COUNTER}"
 
@@ -605,24 +570,20 @@ done
 if [ "$READY" = true ]; then
     log_success "  └─ Fury、起動完了"
 
-    # Worker spawn 指示を動的に構成（tony / peter / cap / marvel を順に割当）
-    WORKER_SPAWN=""
-    for i in $(seq 1 "$ASHIGARU_COUNT"); do
-        case $(( (i - 1) % 4 )) in
-            0) W_JA="Tony Stark（tony）"; W_FILE="tony_stark.md" ;;
-            1) W_JA="Peter Parker（peter）"; W_FILE="peter_parker.md" ;;
-            2) W_JA="Captain America（cap）"; W_FILE="captain_america.md" ;;
-            3) W_JA="Captain Marvel（marvel）"; W_FILE="captain_marvel.md" ;;
-        esac
-        WORKER_SPAWN="${WORKER_SPAWN}
-- ${W_JA}: ${AVENGERS_ROOT}/instructions/${W_FILE} を読ませよ"
-    done
+    # 固定8名の spawn 指示
+    MEMBER_SPAWN="- JARVIS（jarvis）: ${AVENGERS_ROOT}/instructions/jarvis.md を読ませよ。mode は delegate にせよ。
+- Bruce Banner（bruce）: ${AVENGERS_ROOT}/instructions/bruce_banner.md を読ませよ。
+- Doctor Strange（strange）: ${AVENGERS_ROOT}/instructions/doctor_strange.md を読ませよ。
+- Tony Stark（tony）: ${AVENGERS_ROOT}/instructions/tony_stark.md を読ませよ。
+- Peter Parker（peter）: ${AVENGERS_ROOT}/instructions/peter_parker.md を読ませよ。
+- Captain America（cap）: ${AVENGERS_ROOT}/instructions/captain_america.md を読ませよ。
+- Captain Marvel（marvel）: ${AVENGERS_ROOT}/instructions/captain_marvel.md を読ませよ。
+- Shuri（shuri）: ${AVENGERS_ROOT}/instructions/shuri.md を読ませよ。Fury 直属。"
 
     if [ "$RESUME_MODE" = true ]; then
         # ═══════════════════════════════════════════════════════════════════
         # resume モード: 前回セッションを引き継ぎ、チームだけ再構成
         # ═══════════════════════════════════════════════════════════════════
-        # 未完了タスクファイルの参照を構成
         PENDING_TASKS_REF=""
         if [ -f "${STATUS_DIR}/pending_tasks.yaml" ]; then
             PENDING_TASKS_REF="
@@ -637,8 +598,7 @@ if [ "$READY" = true ]; then
 Fury の状況認識ファイル ${STATUS_DIR}/fury_context.md を読んで前回の状況を把握せよ。
 
 TeamCreate でチーム ${TEAM_NAME} を作成し、以下のチームメイトを Task で spawn せよ:
-- JARVIS（jarvis）: ${AVENGERS_ROOT}/instructions/jarvis.md を読ませよ。mode は delegate にせよ。
-- Bruce（bruce）: ${AVENGERS_ROOT}/instructions/bruce_banner.md を読ませよ。${WORKER_SPAWN}
+${MEMBER_SPAWN}
 ${PENDING_TASKS_REF}
 全員が起動したら、Hayato の指示を待て。"
 
@@ -653,8 +613,7 @@ ${PENDING_TASKS_REF}
 プロジェクトデータディレクトリは ${AVENGERS_DATA_DIR} である。
 
 TeamCreate でチーム ${TEAM_NAME} を作成し、以下のチームメイトを Task で spawn せよ:
-- JARVIS（jarvis）: ${AVENGERS_ROOT}/instructions/jarvis.md を読ませよ。mode は delegate にせよ。
-- Bruce（bruce）: ${AVENGERS_ROOT}/instructions/bruce_banner.md を読ませよ。${WORKER_SPAWN}
+${MEMBER_SPAWN}
 
 次のファイルを読み込んでプロジェクト概要を把握せよ。
 CLAUDE.md

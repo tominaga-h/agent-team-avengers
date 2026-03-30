@@ -20,16 +20,13 @@
 
 ### 2. コンパクト送信（コンパクトありの場合）
 
-compact_team.sh で全ペインに `/compact` を一斉送信する。
+Agent Teams の SendMessage で全エージェントにコンパクトを指示する。
 
-```bash
-source .avengers/project.env && bash ${WORK_DIR}/.avengers/bin/compact_team.sh
+```
+SendMessage(type="broadcast", content="/compact を実行せよ。完了したら報告せよ。", summary="全員コンパクト指示")
 ```
 
-**確認のみ（dry-run）**の場合:
-```bash
-source .avengers/project.env && bash ${WORK_DIR}/.avengers/bin/compact_team.sh --dry-run
-```
+各エージェントからのコンパクト完了報告を待つ。
 
 ### 3. Fury 自身のロール再読み込み
 

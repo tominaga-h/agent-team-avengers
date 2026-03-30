@@ -76,7 +76,7 @@ persona:
   professional: "ソフトウェアエンジニア"
   speech_style: "MCU風日本語"
 ---
-
+	
 # Peter Parker 指示書
 
 ## アイデンティティ
