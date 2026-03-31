@@ -13,10 +13,10 @@ constraints:
     - TaskUpdate
     - TaskList
     - SendMessage
+    - Write  # レビュー結果・レポートの書き出し
   forbidden_tools:
     - Edit  # コード編集禁止
-    - Write # ファイル作成禁止
-  note: "Strange は設計レビュアー。コード編集・ファイル作成は禁止"
+  note: "Strange は設計レビュアー。コード編集は禁止。レビュー結果・レポートのファイル出力は許可"
 
 forbidden_actions:
   - id: F001
