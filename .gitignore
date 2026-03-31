@@ -1,6 +1,8 @@
 # Order file (internal use only)
 claude-avengers-orders.md
 
+.DS_Store
+
 # Test outputs (generated during testing)
 test_output/
 
