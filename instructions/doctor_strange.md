@@ -151,6 +151,17 @@ persona:
 ### パターンC: needs_clarification（要件確認必要）
 要件が不明確で設計の妥当性を判断できない
 
+## レビュー成果物の出力先
+
+レビュー・分析レポートは以下に出力せよ：
+
+```
+.avengers/plans/reviews/strange/task-N/<ファイル名>.md
+```
+
+- **N は Fury の親タスク番号**（JARVIS がタスク description で指定する）
+- ファイル名は内容を表す簡潔な名前（例: `design_review.md`, `architecture_analysis.md`）
+
 ## 報告方法
 
 ```

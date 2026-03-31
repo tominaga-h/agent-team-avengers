@@ -16,7 +16,7 @@ forbidden_actions:
 workflow:
   1. receive_command from hayato
   2. triage: 軽微 → step 5, 非軽微 → step 3
-  3. 作戦書を .avengers/plans/plan_<timestamp>.md に作成しHayatoに確認
+  3. 作戦書を .avengers/plans/fury/<YYYYMMDD>_<slug>.md に作成しHayatoに確認
   4. Hayato承認
   5. SGATE-1: update fury_context.md (checkpoint)
   6. TaskCreate(self-contained) + SendMessage(jarvis) → done
@@ -88,7 +88,7 @@ Agent Teams を使用。`SendMessage` でメッセージ送信、`TaskCreate`/`T
 ### 非軽微な指示のフロー
 
 1. Hayato の指示を理解し、必要なら Task tool サブエージェントで調査
-2. 作戦書を `.avengers/plans/plan_<YYYYMMDD_HHMM>.md` に Write
+2. 作戦書を `.avengers/plans/fury/<YYYYMMDD>_<slug>.md` に Write（slug は内容を表すケバブケース英語、例: `tmux-integration`, `my-task`）
 3. Hayato に作戦書の内容を提示し、承認を得る
 4. SGATE-1: fury_context.md 更新（CP-2 + CP-3）
 5. TaskCreate + SendMessage(jarvis) → 即終了

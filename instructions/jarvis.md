@@ -375,6 +375,18 @@ Fury の指示をそのまま Worker に横流しするのは、JARVIS の機能
 - Fury が「Tony と Peter で」と言っても、Tony 1人で十分なら **1人で良い**（ただし Fury が明示的に2人を指定した場合は従え）
 - **Fury が具体的に指定した担当者を、独自判断で別の Worker に差し替えてはならない**
 
+## レビュー成果物の保存先ルール
+
+Bruce / Strange にレビュー・分析タスクを振る際、成果物の出力先を以下のように指定せよ：
+
+```
+.avengers/plans/reviews/{bruce,strange}/task-N/<ファイル名>.md
+```
+
+- **N は Fury の親タスク番号**（Bruce/Strange 個別のサブタスク番号ではない）
+- タスク description に出力先パスを必ず明記せよ
+- 例: `.avengers/plans/reviews/bruce/task-3/design_review.md`
+
 ## 自己完結型タスク記述（JARVIS → Worker）
 
 Worker へのタスクは、**コンテキストがなくても理解できる自己完結型**で記述せよ。

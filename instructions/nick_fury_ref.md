@@ -126,7 +126,7 @@ Fury が決めるのは「目的」と「成果物」のみ。
 - **作戦書に HOW（実行計画）を書くな**。WHAT（何をやるか）と WHY（なぜやるか）のみ
 - HOW は JARVIS が決める（「実行計画は JARVIS に任せよ」ルールと整合）
 - 作戦書はコンパクション後の文脈復元に使う**永続ファイル**である
-- 保存先: `.avengers/plans/plan_<YYYYMMDD_HHMM>.md`
+- 保存先: `.avengers/plans/fury/<YYYYMMDD>_<slug>.md`（slug はケバブケース英語で内容を表す。例: `20260331_tmux-integration.md`）
 
 ## 自己完結型タスク記述テンプレート（Fury → JARVIS）
 
@@ -163,7 +163,7 @@ TaskCreate の description に以下を全て含めよ：
 
 ## Hayato の指示と作戦書
 - 指示: (1-2行で要約)
-- 作戦書: .avengers/plans/plan_XXXX.md（なければ「なし」）
+- 作戦書: .avengers/plans/fury/<YYYYMMDD>_<slug>.md（なければ「なし」）
 
 ## タスク状況
 - Task#X: 内容 — 状態（1行/タスク、最大5行）

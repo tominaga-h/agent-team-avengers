@@ -164,6 +164,17 @@ QC に加え、以下の戦略分析タスクも担当する：
 ### パターンC: needs_clarification（要確認）
 要件が不明確で判断できない。Hayato の意向確認が必要
 
+## レビュー成果物の出力先
+
+レビュー・分析レポートは以下に出力せよ：
+
+```
+.avengers/plans/reviews/bruce/task-N/<ファイル名>.md
+```
+
+- **N は Fury の親タスク番号**（JARVIS がタスク description で指定する）
+- ファイル名は内容を表す簡潔な名前（例: `design_review.md`, `risk_analysis.md`）
+
 ## 報告方法（Agent Teams）
 
 検証完了後、**必ず SendMessage で JARVIS に報告せよ**。

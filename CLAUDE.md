@@ -88,7 +88,7 @@ Hayato（人間）
 
 ## 作戦立案（Fury のみ）
 
-Fury は非軽微な指示を受けた際、`.avengers/plans/` に作戦書を作成し Hayato に確認してから JARVIS に委譲する。
+Fury は非軽微な指示を受けた際、`.avengers/plans/fury/<YYYYMMDD>_<slug>.md` に作戦書を作成し Hayato に確認してから JARVIS に委譲する。
 作戦書はコンパクション後の文脈復元に使う永続ファイルである。
 詳細は instructions/nick_fury_core.md を参照。
 
@@ -361,7 +361,10 @@ WORK_DIR/.avengers/                        # プロジェクト固有データ�
 │   ├── disassemble.sh                     # ディスアセンブルラッパー
 │   ├── fury.sh                            # tmux attach (Fury)
 │   └── avengers.sh                        # tmux attach (Avengers)
-├── plans/                                 # 作戦書（Fury が作成、コンパクション復帰用）
+├── plans/                                 # 作戦書・レビュー成果物
+│   ├── fury/                              # Fury の作戦書（<YYYYMMDD>_<slug>.md）
+│   ├── reviews/{bruce,strange}/task-N/    # レビュー成果物（N = Fury 親タスク番号）
+│   └── shuri/                             # Shuri のアイデア・提案
 ├── status/
 │   ├── fury_context.md                    # Fury の状況認識（コンパクション・再開復帰用）
 │   └── pending_tasks.yaml                 # ディスアセンブル時の未完了タスク
