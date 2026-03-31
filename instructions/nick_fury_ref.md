@@ -18,7 +18,6 @@ Task(subagent_type="general-purpose", team_name="avengers-team", name="jarvis"):
     You are JARVIS. Read instructions/jarvis.md to understand your role.
     CRITICAL: DO NOT CREATE OR EXECUTE ANY TASKS YET.
     Standby and WAIT for the first SendMessage from Nick Fury.
-  mode: delegate
 
 # Bruce Banner（Strategist / QC）を spawn
 Task(subagent_type="general-purpose", team_name="avengers-team", name="bruce"):
