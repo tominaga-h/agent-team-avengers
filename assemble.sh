@@ -24,9 +24,9 @@ if [ -f "${AVENGERS_ROOT}/config/settings.yaml" ]; then
     LANG_SETTING=$(grep "^language:" "${AVENGERS_ROOT}/config/settings.yaml" 2>/dev/null | awk '{print $2}' || echo "ja")
 fi
 
-# 固定8名構成（Fury配下7名 + Shuri）
-# JARVIS / Bruce / Strange / Tony / Peter / Cap / Marvel / Shuri
-TEAM_MEMBER_COUNT=8
+# 固定4名構成（Fury配下4名）
+# JARVIS / Bruce / Tony / Cap
+TEAM_MEMBER_COUNT=4
 
 # 色付きログ関数
 log_info() {
@@ -70,7 +70,7 @@ while [[ $# -gt 0 ]]; do
             echo ""
             echo "2つの tmux セッションを構築します:"
             echo "  ${TMUX_FURY}     - Fury（Claude Code）"
-            echo "  ${TMUX_AVENGERS} - JARVIS・Bruce・Strange・Tony・Peter・Cap・Marvel・Shuri（Agent Teams が自動配備）"
+            echo "  ${TMUX_AVENGERS} - JARVIS・Bruce・Tony・Cap（Agent Teams が自動配備）"
             echo ""
             exit 0
             ;;
@@ -109,8 +109,8 @@ show_assemble_banner() {
     echo -e "\033[1;33m  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\033[0m"
     echo -e "\033[1;33m  ┃\033[0m  \033[1;37m🛡️ Avengers Multi-Agent System\033[0m  〜 \033[1;36mAgent Teams マルチエージェント\033[0m 〜     \033[1;33m┃\033[0m"
     echo -e "\033[1;33m  ┃\033[0m                                                                           \033[1;33m┃\033[0m"
-    echo -e "\033[1;33m  ┃\033[0m    \033[1;35mFury\033[0m: 統括  \033[1;31mJARVIS\033[0m: 管理  \033[1;32mBruce\033[0m: 品質  \033[1;36mStrange\033[0m: レビュー               \033[1;33m┃\033[0m"
-    echo -e "\033[1;33m  ┃\033[0m    \033[1;34mTony\033[0m: 開発  \033[1;34mPeter\033[0m: 開発  \033[1;33mCap\033[0m: テスト  \033[1;33mMarvel\033[0m: テスト  \033[1;35mShuri\033[0m: 発案      \033[1;33m┃\033[0m"
+    echo -e "\033[1;33m  ┃\033[0m    \033[1;35mFury\033[0m: 統括  \033[1;31mJARVIS\033[0m: 管理  \033[1;32mBruce\033[0m: 品質                              \033[1;33m┃\033[0m"
+    echo -e "\033[1;33m  ┃\033[0m    \033[1;34mTony\033[0m: 開発  \033[1;33mCap\033[0m: テスト                                                  \033[1;33m┃\033[0m"
     echo -e "\033[1;33m  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\033[0m"
     echo ""
 }
@@ -489,7 +489,7 @@ INITIAL_PANE=$(tmux display-message -t "${TMUX_AVENGERS}:agents" -p '#{pane_id}'
 # Agent Teams が teammateMode: tmux で pane を作るたび発火する
 # move-pane は直接 tmux コマンドとして実行（run-shell 内では動かない）
 # カウンターベース: チームメイト数に達したらフック自動解除
-EXPECTED_TEAMMATES=${TEAM_MEMBER_COUNT}  # jarvis + bruce + strange + tony + peter + cap + marvel + shuri
+EXPECTED_TEAMMATES=${TEAM_MEMBER_COUNT}  # jarvis + bruce + tony + cap
 MOVE_COUNTER="${STATUS_DIR}/.pane_move_count"
 echo "0" > "${MOVE_COUNTER}"
 
@@ -547,15 +547,11 @@ done
 if [ "$READY" = true ]; then
     log_success "  └─ Fury、起動を確認いたしました"
 
-    # 固定8名の spawn 指示
+    # 固定4名の spawn 指示
     MEMBER_SPAWN="- JARVIS（jarvis）: ${AVENGERS_ROOT}/instructions/jarvis.md を読ませよ。mode は delegate にせよ。
 - Bruce Banner（bruce）: ${AVENGERS_ROOT}/instructions/bruce_banner.md を読ませよ。
-- Doctor Strange（strange）: ${AVENGERS_ROOT}/instructions/doctor_strange.md を読ませよ。
 - Tony Stark（tony）: ${AVENGERS_ROOT}/instructions/tony_stark.md を読ませよ。
-- Peter Parker（peter）: ${AVENGERS_ROOT}/instructions/peter_parker.md を読ませよ。
-- Captain America（cap）: ${AVENGERS_ROOT}/instructions/captain_america.md を読ませよ。
-- Captain Marvel（marvel）: ${AVENGERS_ROOT}/instructions/captain_marvel.md を読ませよ。
-- Shuri（shuri）: ${AVENGERS_ROOT}/instructions/shuri.md を読ませよ。Fury 直属。"
+- Captain America（cap）: ${AVENGERS_ROOT}/instructions/captain_america.md を読ませよ。"
 
     if [ "$RESUME_MODE" = true ]; then
         # ═══════════════════════════════════════════════════════════════════
